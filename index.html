@@ -3,21 +3,23 @@
 <head>
     <meta charset="utf-8" />
     <title>test</title>
-    <script>var exports = {};</script>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
 
 <body>
 
     <img id="diam" src="batch.png" style="display:none" />
     <script type="module" src="js/main.js"></script>
-    
+
     <div id="divMap">
-    <canvas id="cnv"></canvas>
+        <canvas id="cnv"></canvas>
     </div>
-    <div id="info">
-        WorldTime: <a id="worldTime">0</a>
-        MousePos: <a id="mousePos"></a>
+    <div id="terminal">
+        WorldTime: <span id="worldTime">0</span>
+        MousePos: <span id="mousePos"></span>
+        PlayerPos: <span id="playerPos"></span>
+        <div id="log"></div>
+        <input id="commandLine" type="text" />
     </div>
 </body>
 

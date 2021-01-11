@@ -1,0 +1,66 @@
+@font-face { font-family: SHPinscher-Regular; src: url('SHPinscher-Regular.otf'); } 
+
+body {
+  
+  margin:0;
+  /* overflow:hidden; */
+  font-family: SHPinscher-Regular;
+  font-smooth: never;
+  -webkit-font-smoothing : none;
+}
+
+#divMap {
+}
+#cnv {
+  /* cursor: none; */
+  z-index: -1;
+  position: fixed;
+  float: true;
+  width: 100%;
+  height: 100%;
+  background-color: darkgrey;
+  image-rendering: optimizeSpeed; /* Older versions of FF          */
+  image-rendering: -moz-crisp-edges; /* FF 6.0+                       */
+  image-rendering: -webkit-optimize-contrast; /* Safari                        */
+  image-rendering: -o-crisp-edges; /* OS X & Windows Opera (12.02+) */
+  image-rendering: pixelated; /* Awesome future-browsers       */
+  -ms-interpolation-mode: nearest-neighbor; /* IE                            */
+}
+
+span {
+  padding-left: 10px;
+  padding-right: 20px;
+}
+
+#terminal {
+  display: none;
+  max-height: 50%;
+  height: 50%;
+  position: relative;
+  background-color: rgba(255,255,255,0.5);
+}
+#log {
+  max-height: 90%;
+  overflow-y: hidden;
+  overflow-x:hidden;
+  margin-left: 20px;
+}
+#log p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-block-start:0px;
+  margin-block-end: 0px;
+  text-shadow: 0px 0px 4px #FFFFFF;
+}
+
+#commandLine {
+  position: absolute;
+  bottom:0;
+  font-family: SHPinscher-Regular;
+  font-smooth: never;
+  -webkit-font-smoothing : none;
+  width:100%;
+  background-color:rgba(0, 0, 0, 50);
+    color:white;
+
+}

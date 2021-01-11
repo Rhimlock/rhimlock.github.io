@@ -1,4 +1,4 @@
-import { canvas } from "../helper/htmlElements.js";
+import { canvas, divTerminal } from "../helper/htmlElements.js";
 import { Point } from "../helper/point.js";
 const zoom = 0.3;
 export const tileSize = 16;
@@ -10,6 +10,7 @@ export const gl = canvas.getContext("webgl2", {
     preserveDrawingBuffer: false
 }) as WebGL2RenderingContext;
 if (!gl) {
+    divTerminal.innerHTML = "webgl2 context cout not be initialed";
     throw new Error("webgl2 context could not be initialized");
 }
 initGL();

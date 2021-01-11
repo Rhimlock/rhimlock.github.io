@@ -4,14 +4,17 @@ import { input } from "./helper/input.js";
 import { Timer } from "./helper/timer.js";
 import { Point } from "./helper/point.js";
 import { Entity } from "./logic/entity.js";
-import { divMousePos, divTime } from "./helper/htmlElements.js";
+import { spanMouse, spanPlayer, spanTime } from "./helper/htmlElements.js";
+import { terminal } from "./helper/terminal.js";
 const img = document.getElementById("diam");
 const batch = new SpriteBatch(10, img);
 const ent = new Entity(batch.createSprite());
 ent.pos.x = 100;
 ent.pos.y = 100;
+terminal.show();
 const tick = (elapsed) => {
-    divTime.innerHTML = Math.round(timer.elapsedTime * 0.001).toString();
+    spanTime.innerHTML = Math.round(timer.elapsedTime * 0.001).toString();
+    spanPlayer.innerHTML = `x: ${Math.round(ent.sprite.x)} , y: ${Math.round(ent.sprite.y)}`;
     handleInput();
     ent.update(elapsed * 0.001);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -33,7 +36,7 @@ function handleInput() {
 }
 window.onmousemove = (ev) => {
     const pos = getCoords(ev.clientX, ev.clientY);
-    divMousePos.innerHTML = `x: ${Math.round(pos.x)} , y: ${Math.round(pos.y)}`;
+    spanMouse.innerHTML = `x: ${Math.round(pos.x)} , y: ${Math.round(pos.y)}`;
 };
 window.onmousedown = (ev) => {
     if (ev.button === 1) {
