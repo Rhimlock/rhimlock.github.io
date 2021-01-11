@@ -1,0 +1,14 @@
+{
+  "name": "tstest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf ./out tsc && tsc -p tsconfig.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "type": "module"
+}
