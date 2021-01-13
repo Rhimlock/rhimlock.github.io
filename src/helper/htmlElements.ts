@@ -5,4 +5,4 @@ export const spanMouse = document.getElementById("mousePos") as HTMLParagraphEle
 export const spanPlayer = document.getElementById("playerPos") as HTMLParagraphElement;
 export const divTerminal = document.getElementById("terminal") as HTMLDivElement;
 export const divLog = document.getElementById("log") as HTMLDivElement;
-export const inputCommandline = document.getElementById("commandLine") as HTMLInputElement;
+export const commandLine = document.getElementById("commandLine") as HTMLInputElement;

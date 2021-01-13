@@ -1,16 +1,20 @@
+import { TypedArray } from "../helper/typedArray.js";
 import { gl } from "./gl.js";
 
 export class VBO {
     public id: WebGLBuffer | null;
     public data: ArrayBufferView;
     public type: number;
-    public bytesPerElement: number;
     public changed = false;
-    constructor(data: ArrayBufferView) {
+    private bytesPerVertex: number;
+    private verticesPerElement : number;
+    
+    constructor(data: ArrayBufferView, verticesPerElement : number) {
         this.id = gl.createBuffer();
         this.data = data;
         this.type = lookupType(data);
-        this.bytesPerElement = lookupBytesPerElement(data);
+        this.bytesPerVertex = lookupBytesPerElement(data);
+        this.verticesPerElement = verticesPerElement;
         this.update();
     }
 
@@ -24,19 +28,17 @@ export class VBO {
         if (this.changed) {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.id);
             gl.bufferData(gl.ARRAY_BUFFER, this.data, gl.STATIC_DRAW);
-            gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.data, 0, length * this.bytesPerElement);
+            gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.data, 0, length * this.bytesPerVertex);
             gl.bindBuffer(gl.ARRAY_BUFFER, null);
             this.changed = false;
         }
     }
 
-    get int8Array() { return this.data as Int8Array };
-    get int16Array() { return this.data as Int16Array };
-    get int32Array() { return this.data as Int32Array };
-    get uInt8Array() { return this.data as Uint8Array };
-    get uInt16Array() { return this.data as Uint16Array };
-    get uInt32Array() { return this.data as Uint32Array };
-    get float32Array() { return this.data as Float32Array };
+    getVertex(n: number, offset : number) { return (this.data as TypedArray)[n * this.verticesPerElement + offset] }
+    setVertex(v: number, n: number, offset : number ) {
+        this.changed = true;
+        (this.data as TypedArray)[n * this.verticesPerElement + offset] = v;
+    }
 }
 
 function lookupType(data: ArrayBufferView): number {

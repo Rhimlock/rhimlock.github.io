@@ -1,4 +1,4 @@
-import { inputCommandline } from "./htmlElements.js";
+import { commandLine } from "./htmlElements.js";
 import { terminal } from "./terminal.js";
 class Input {
     constructor() {
@@ -12,7 +12,10 @@ class Input {
             attack: ' ',
             terminal: '#',
             enter: 'Enter',
-            escape: 'Escape'
+            escape: 'Escape',
+            click: 'mouse0',
+            middleClick: 'mouse1',
+            rightClick: 'mouse2'
         };
     }
     get up() { return this._map.get(this.keys.up); }
@@ -21,17 +24,20 @@ class Input {
     get right() { return this._map.get(this.keys.right); }
     get attack() { return this._map.get(this.keys.attack); }
     set(key, pressed) {
-        this._map.set(key, pressed);
+        if (Object.values(this.keys).includes(key)) {
+            this._map.set(key, pressed);
+        }
     }
-    call(key) {
-        const f = this._calls.get(key);
-        if (f && document.activeElement !== inputCommandline) {
+    call(ev) {
+        const f = this._calls.get(ev.key || "mouse" + ev.button);
+        if (f && document.activeElement !== commandLine) {
             f();
+            ev.preventDefault();
         }
     }
     executeCommandline() {
-        terminal.log(inputCommandline.value);
-        inputCommandline.value = '';
+        terminal.log(commandLine.value);
+        commandLine.value = '';
     }
     bindKeys(keys) {
         this.keys = keys;
@@ -44,32 +50,43 @@ class Input {
             this._calls.set(key, functionToCall);
         }
     }
+    onKeyDown(ev) {
+        if (Object.values(this.keys).includes(ev.key)) {
+            this._map.set(ev.key, true);
+        }
+    }
+    onKeyUp(ev) {
+        if (Object.values(this.keys).includes(ev.key)) {
+            this._map.set(ev.key, false);
+        }
+    }
 }
 export const input = new Input();
-input.bindCall(terminal.toggleDisplay, input.keys.terminal, terminal);
+input.bindCall(terminal.show, input.keys.terminal, terminal);
+input.bindCall(terminal.hide, input.keys.escape, terminal);
 window.onkeydown = (ev) => {
     input.set(ev.key, true);
+    input.call(ev);
 };
 window.onkeyup = (ev) => {
     input.set(ev.key, false);
 };
-window.onkeypress = (ev) => {
-    input.call(ev.key);
-    ev.stopPropagation();
-};
 window.onmousedown = (ev) => {
     input.set("mouse" + ev.button, true);
+    input.call(ev);
 };
 window.onmouseup = (ev) => {
     input.set("mouse" + ev.button, false);
 };
-inputCommandline.onkeydown = (ev) => {
+commandLine.onkeydown = (ev) => {
     switch (ev.key) {
         case input.keys.escape:
             terminal.hide();
+            ev.preventDefault();
             break;
         case input.keys.enter:
             input.executeCommandline();
+            ev.preventDefault();
             break;
     }
     ev.stopPropagation();

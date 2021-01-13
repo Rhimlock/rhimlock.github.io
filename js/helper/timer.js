@@ -13,6 +13,9 @@ export class Timer {
     stop() {
         this.running = false;
     }
+    toggle() {
+        this.running ? this.stop() : this.start();
+    }
     init(timestamp) {
         this.lastTime = timestamp;
         requestAnimationFrame(this.frame.bind(this));

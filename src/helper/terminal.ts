@@ -1,13 +1,17 @@
-import { divTerminal, divLog, inputCommandline } from "./htmlElements.js";
+import { divTerminal, divLog, commandLine } from "./htmlElements.js";
 
 class Terminal {
 
     show() {
-        divTerminal.style.display = "block";
-        inputCommandline.focus();
+        divTerminal.className = "terminal_visible";
+        commandLine.focus();
     }
     hide() {
-        divTerminal.style.display = "none";
+        if (divTerminal.className !== "terminal_hidden") {
+
+                divTerminal.className = "terminal_hidden";
+                commandLine.blur();
+            }
     }
     toggleDisplay() {
         if (divTerminal.style.display === "none") {
@@ -26,6 +30,9 @@ class Terminal {
         const p = document.createElement("p");
         p.innerHTML = txt;
         divLog.appendChild(p);
+        this.showLastLine();
+    }
+    showLastLine() {
         divLog.scrollTop = divLog.scrollHeight;
     }
 }

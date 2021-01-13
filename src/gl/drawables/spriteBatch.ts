@@ -1,4 +1,5 @@
-import { gl, view } from "../gl.js";
+import { view } from "../../helper/view.js";
+import { gl } from "../gl.js";
 import { Program } from "../program.js";
 import { Texture } from "../texture.js";
 import { VAO } from "../vao.js";
@@ -16,14 +17,15 @@ export class SpriteBatch implements Drawable {
   maxSprites: number;
 
   constructor(maxSprites: number, img: HTMLImageElement) {
-    this.vboPos = new VBO(new Int16Array(maxSprites * Sprite.ELEMENTS_PER_POSITION));
-    this.vboTex = new VBO(new Int16Array(maxSprites * Sprite.ELEMENTS_PER_TEXTURE));
+    this.vboPos = new VBO(new Float32Array(maxSprites * Sprite.ELEMENTS_PER_POSITION), Sprite.ELEMENTS_PER_POSITION);
+    this.vboTex = new VBO(new Int16Array(maxSprites * Sprite.ELEMENTS_PER_TEXTURE), Sprite.ELEMENTS_PER_TEXTURE);
     this.maxSprites = maxSprites;
     this.tex = new Texture(img);
 
     this.vao = new VAO([this.vboPos, this.vboTex], this.program.attributes);
     gl.uniform1i(this.program.uniforms.uTex, this.tex.no);
     gl.uniform2fv(this.program.uniforms.uTexInv, this.tex.sizeInv);
+    gl.uniform1f(this.program.uniforms.uTileSize, view.tileSize);
   }
 
   createSprite(): Sprite {
@@ -58,12 +60,10 @@ export class SpriteBatch implements Drawable {
       2 / gl.drawingBufferWidth,
       2 / gl.drawingBufferHeight
     );
-
     gl.drawArrays(gl.POINTS, 0, this.sprites.length);
     gl.bindVertexArray(null);
   }
 }
-
 
 const vert = `#version 300 es
   
@@ -74,8 +74,9 @@ precision mediump float;
   uniform vec2 uView;
   uniform vec2 uResInv;
   uniform vec2 uTexInv;
+  uniform float uTileSize;
 void main() {
-  vec2 v = (aVert.xy + uView) * uResInv;
+  vec2 v = round((aVert.xy - uView.xy) * uTileSize)* uResInv ;
   v.y *= -1.0;
   v += vec2(-1.0,1.0);
   gl_Position = vec4(v, v.y, 1.0);

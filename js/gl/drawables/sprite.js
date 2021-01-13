@@ -4,41 +4,16 @@ export class Sprite {
         this.vboTex = vboTex;
         this.i = spriteIndex;
     }
-    get x() { return this.vboPos.int16Array[this.i * Sprite.ELEMENTS_PER_POSITION]; }
-    ;
-    get y() { return this.vboPos.int16Array[this.i * Sprite.ELEMENTS_PER_POSITION + 1]; }
-    ;
-    get tx() { return this.vboTex.int16Array[this.i * Sprite.ELEMENTS_PER_TEXTURE]; }
-    ;
-    get ty() { return this.vboTex.int16Array[this.i * Sprite.ELEMENTS_PER_TEXTURE + 1]; }
-    ;
-    get size() { return this.vboTex.int16Array[this.i * Sprite.ELEMENTS_PER_TEXTURE + 2]; }
-    ;
-    set x(v) {
-        this.vboPos.changed = true;
-        this.vboPos.int16Array[this.i * Sprite.ELEMENTS_PER_POSITION] = v;
-    }
-    ;
-    set y(v) {
-        this.vboPos.changed = true;
-        this.vboPos.int16Array[this.i * Sprite.ELEMENTS_PER_POSITION + 1] = v;
-    }
-    ;
-    set tx(v) {
-        this.vboTex.changed = true;
-        this.vboTex.int16Array[this.i * Sprite.ELEMENTS_PER_TEXTURE] = v;
-    }
-    ;
-    set ty(v) {
-        this.vboTex.changed = true;
-        this.vboTex.int16Array[this.i * Sprite.ELEMENTS_PER_TEXTURE + 1] = v;
-    }
-    ;
-    set size(v) {
-        this.vboTex.changed = true;
-        this.vboTex.int16Array[this.i * Sprite.ELEMENTS_PER_TEXTURE + 2] = v;
-    }
-    ;
+    get x() { return this.vboPos.getVertex(this.i, 0); }
+    get y() { return this.vboPos.getVertex(this.i, 1); }
+    get tx() { return this.vboTex.getVertex(this.i, 0); }
+    get ty() { return this.vboTex.getVertex(this.i, 1); }
+    get size() { return this.vboTex.getVertex(this.i, 2); }
+    set x(v) { this.vboPos.setVertex(v, this.i, 0); }
+    set y(v) { this.vboPos.setVertex(v, this.i, 1); }
+    set tx(v) { this.vboTex.setVertex(v, this.i, 0); }
+    set ty(v) { this.vboTex.setVertex(v, this.i, 1); }
+    set size(v) { this.vboTex.setVertex(v, this.i, 2); }
     changeIndex(i) {
         const spr = new Sprite(this.vboPos, this.vboTex, this.i);
         this.i = i;

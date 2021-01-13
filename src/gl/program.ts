@@ -9,7 +9,8 @@ export interface Attribute {
 interface Uniforms {
   uResInv: WebGLUniformLocation | null,
   uTexInv: WebGLUniformLocation | null,
-  uTex: WebGLUniformLocation | null
+  uTex: WebGLUniformLocation | null,
+  uTileSize: WebGLUniformLocation | null,
   uView: WebGLUniformLocation | null
 }
 

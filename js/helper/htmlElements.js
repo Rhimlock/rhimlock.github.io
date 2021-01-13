@@ -4,5 +4,5 @@ export const spanMouse = document.getElementById("mousePos");
 export const spanPlayer = document.getElementById("playerPos");
 export const divTerminal = document.getElementById("terminal");
 export const divLog = document.getElementById("log");
-export const inputCommandline = document.getElementById("commandLine");
+export const commandLine = document.getElementById("commandLine");
 //# sourceMappingURL=htmlElements.js.map

@@ -1,15 +1,19 @@
-@font-face { font-family: SHPinscher-Regular; src: url('SHPinscher-Regular.otf'); } 
+@font-face { font-family: Minimal3x5; src: url('Minimal3x5.ttf'); } 
 
 body {
-  
+  background-color: black;
   margin:0;
   /* overflow:hidden; */
-  font-family: SHPinscher-Regular;
+  font-family: Minimal3x5;
   font-smooth: never;
+  font-size:27px;
   -webkit-font-smoothing : none;
+  text-shadow: 0px 0px 4px #FFFFFF;
 }
 
 #divMap {
+  width:2000px;
+  height:2000px;
 }
 #cnv {
   /* cursor: none; */
@@ -27,40 +31,78 @@ body {
   -ms-interpolation-mode: nearest-neighbor; /* IE                            */
 }
 
-span {
-  padding-left: 10px;
-  padding-right: 20px;
+#terminal {
+  position: fixed;
+  display: none;
+  top:0px;
+  width:100%;
+  max-height: 30%;
+  
+  background-color:rgba(0, 0, 0, 0.25);
+}
+.terminal_visible {
+  display:block !important;
+  height: 50%;  
+  animation-name: terminal_show;
+  animation-duration: 2s;
 }
 
-#terminal {
-  display: none;
-  max-height: 50%;
-  height: 50%;
-  position: relative;
-  background-color: rgba(255,255,255,0.5);
+.terminal_hidden {
+  display: block !important;
+  height:0px;
+  overflow: hidden;
+  animation-name: terminal_hide;
+  animation-duration: 0.5s;
 }
+
+@keyframes terminal_show {
+  0%   {height: 0px;}
+  100% {height: 50%;}
+}
+@keyframes terminal_hide {
+  0%   {height: 50%;}
+  100% {height: 0px;}
+}
+#info {
+  
+  background-color:rgba(0, 0, 0, 0.25);
+}
+#info span {
+  padding-left: 10px;
+  padding-right: 20px;
+  width:50px;
+}
+
 #log {
-  max-height: 90%;
+  position: relative;
+  width:100%;
+  height: 100%;
+  margin-left: 20px;
+  margin-top:2px;
   overflow-y: hidden;
   overflow-x:hidden;
-  margin-left: 20px;
 }
+
 #log p {
+  position: relative;
   margin-top: 0px;
   margin-bottom: 0px;
   margin-block-start:0px;
   margin-block-end: 0px;
-  text-shadow: 0px 0px 4px #FFFFFF;
 }
 
 #commandLine {
-  position: absolute;
-  bottom:0;
-  font-family: SHPinscher-Regular;
-  font-smooth: never;
+  top:100%;
+  left:0px;
+  font-family:inherit;
+  font-smooth: inherit;
+  font-size:inherit;
   -webkit-font-smoothing : none;
   width:100%;
-  background-color:rgba(0, 0, 0, 50);
-    color:white;
-
+  height:32px;
+  background-color:rgba(0, 0, 0, 0.5);
+  color:white;
+  padding-left:20px;
+  
 }
+

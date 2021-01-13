@@ -1,11 +1,16 @@
 export class Point {
-    public x: number;
-    public y: number;
+    private _x: number;
+    private _y: number;
 
     public constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
+        this._x = x;
+        this._y = y;
     }
+
+    get x() { return this._x};
+    get y() { return this._y};
+    set x(v : number) {this._x = v;}
+    set y(v : number) {this._y = v;}
 
     diff(p: Point): Point {
         return (new Point(p.x - this.x, p.y - this.y));
@@ -16,7 +21,7 @@ export class Point {
         return Math.sqrt(d.x * d.x + d.y * d.y);
     }
 
-    length(): number {
+    get length() : number {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
@@ -29,7 +34,7 @@ export class Point {
     }
 
     normalized() : Point {
-        const length = this.length();
+        const length = this.length;
         return new Point (this.x / length, this.y / length);
     }
 }

@@ -1,11 +1,12 @@
 import { gl } from "./gl.js";
 export class VBO {
-    constructor(data) {
+    constructor(data, verticesPerElement) {
         this.changed = false;
         this.id = gl.createBuffer();
         this.data = data;
         this.type = lookupType(data);
-        this.bytesPerElement = lookupBytesPerElement(data);
+        this.bytesPerVertex = lookupBytesPerElement(data);
+        this.verticesPerElement = verticesPerElement;
         this.update();
     }
     update() {
@@ -17,25 +18,16 @@ export class VBO {
         if (this.changed) {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.id);
             gl.bufferData(gl.ARRAY_BUFFER, this.data, gl.STATIC_DRAW);
-            gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.data, 0, length * this.bytesPerElement);
+            gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.data, 0, length * this.bytesPerVertex);
             gl.bindBuffer(gl.ARRAY_BUFFER, null);
             this.changed = false;
         }
     }
-    get int8Array() { return this.data; }
-    ;
-    get int16Array() { return this.data; }
-    ;
-    get int32Array() { return this.data; }
-    ;
-    get uInt8Array() { return this.data; }
-    ;
-    get uInt16Array() { return this.data; }
-    ;
-    get uInt32Array() { return this.data; }
-    ;
-    get float32Array() { return this.data; }
-    ;
+    getVertex(n, offset) { return this.data[n * this.verticesPerElement + offset]; }
+    setVertex(v, n, offset) {
+        this.changed = true;
+        this.data[n * this.verticesPerElement + offset] = v;
+    }
 }
 function lookupType(data) {
     switch (data.constructor.name) {
