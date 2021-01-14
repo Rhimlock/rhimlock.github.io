@@ -5,4 +5,6 @@ export const spanPlayer = document.getElementById("playerPos");
 export const divTerminal = document.getElementById("terminal");
 export const divLog = document.getElementById("log");
 export const commandLine = document.getElementById("commandLine");
+export const divMap = document.getElementById("divMap");
+export const spanWorldPos = document.getElementById("worldPos");
 //# sourceMappingURL=htmlElements.js.map

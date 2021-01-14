@@ -29,5 +29,8 @@ export class Point {
         const length = this.length;
         return new Point(this.x / length, this.y / length);
     }
+    toString() {
+        return `x: ${Math.round(this.x * 100) / 100} / y: ${Math.round(this.y * 100) / 100}`;
+    }
 }
 //# sourceMappingURL=point.js.map

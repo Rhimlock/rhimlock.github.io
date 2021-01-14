@@ -1,11 +1,12 @@
 import { Point } from "../../helper/point.js";
+import { terminal } from "../../helper/terminal.js";
 export class Entity extends Point {
     constructor(sprite) {
         super(0, 0);
         this.target = null;
         this.sprite = sprite;
         this.dir = new Point(0, 0);
-        this.speed = 1;
+        this.speed = 5;
     }
     updatePos(dir) {
         this.dir = dir;
@@ -21,6 +22,7 @@ export class Entity extends Point {
     set y(v) { this.sprite.y = v; }
     ;
     moveTo(destination) {
+        terminal.log(destination.x, destination.y);
         this.target = destination;
     }
     update(time) {

@@ -21,8 +21,8 @@ function initGL() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 }
 function updateSize() {
-    gl.canvas.width = canvas.clientWidth * view.zoom;
-    gl.canvas.height = canvas.clientHeight * view.zoom;
+    gl.canvas.width = canvas.clientWidth / view.zoom;
+    gl.canvas.height = canvas.clientHeight / view.zoom;
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     terminal.showLastLine();
 }

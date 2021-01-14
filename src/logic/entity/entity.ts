@@ -1,5 +1,6 @@
 import { Sprite } from "../../gl/drawables/sprite.js";
 import { Point } from "../../helper/point.js";
+import { terminal } from "../../helper/terminal.js";
 
 export class Entity extends Point {
     sprite: Sprite;
@@ -11,7 +12,7 @@ export class Entity extends Point {
         super(0,0);
         this.sprite = sprite;
         this.dir = new Point(0, 0);
-        this.speed = 1;
+        this.speed = 5;
     }
 
     private updatePos(dir: Point) {
@@ -27,6 +28,7 @@ export class Entity extends Point {
     set y(v:number) {this.sprite.y = v};
 
     moveTo(destination: Point) {
+        terminal.log(destination.x, destination.y);
         this.target = destination;
     }
 
