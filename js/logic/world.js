@@ -16,10 +16,16 @@ export class World {
         }
         divMap.style.width = "" + (width * view.tileSize * view.zoom);
         divMap.style.height = "" + (height * view.tileSize * view.zoom);
-        const ent = new Entity(this.spriteBatch.createSprite(), player);
-        ent.x = 10;
-        ent.y = 10;
+        this.createEntity(10, 10, player);
+        player.world = this;
+    }
+    createEntity(x, y, controller) {
+        const ent = new Entity(this.spriteBatch.createSprite());
+        ent.x = x;
+        ent.y = y;
         this.entities.push(ent);
+        controller.addEntity(ent);
+        return ent;
     }
     update(elapsedTime) {
         player.update(elapsedTime);

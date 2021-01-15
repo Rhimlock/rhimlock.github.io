@@ -1,19 +1,15 @@
 import { Sprite } from "../../gl/drawables/sprite.js";
 import { Point } from "../../helper/point.js";
-import { terminal } from "../../helper/terminal.js";
-import { Controller } from "../controller/controller.js";
 
 export class Entity extends Point {
     sprite: Sprite;
-    controller : Controller;
     dir: Point;
     speed: number;
     target: Point | null = null;
+    distance : number = 0;
 
-    constructor(sprite: Sprite, controller : Controller) {
-        super(0,0);
-        this.controller = controller;
-        controller.addEntity(this);
+    constructor(sprite: Sprite, x : number = 0, y: number = 0) {
+        super(x,y);
         this.sprite = sprite;
         this.dir = new Point(0, 0);
         this.speed = 5;
@@ -35,11 +31,16 @@ export class Entity extends Point {
         this.target = destination;
     }
 
+    setTarget(target : Point, distance : number = 0) {
+        this.target = target;
+        this.distance = distance;
+    }
+
     update(time: number) {
         if (this.target) {   
             const dir = new Point(this.x, this.y).diff(this.target);
-            this.updatePos(dir.scale(this.speed * time / dir.length));
-            if (dir.length < this.dir.length) this.target = null;
+            
+            if (dir.length > this.distance) this.updatePos(dir.scale(this.speed * time / dir.length));
         }
     }
 }

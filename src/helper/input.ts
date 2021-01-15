@@ -76,6 +76,11 @@ class Input {
     onKeyDown(ev: KeyboardEvent) {
         if (Object.values(this.keys).includes(ev.key)) {
             this._map.set(ev.key,true);
+            this.call(ev);
+
+            if (ev.target == document.body) {
+                ev.preventDefault();
+              }
         }
 
     }
@@ -93,18 +98,11 @@ export const mousePos = new Point(0,0);
 input.bindCall(terminal.show,input.keys.terminal, terminal);
 input.bindCall(terminal.hide,input.keys.escape, terminal);
 
-window.onkeydown = (ev: KeyboardEvent) => {
-    input.set(ev.key, true);
-    input.call(ev);
-}
-
-window.onkeyup = (ev: KeyboardEvent) => {
-    input.set(ev.key, false);
-}
+window.onkeydown = input.onKeyDown.bind(input);
+window.onkeyup = input.onKeyUp.bind(input);
 
 window.onmousedown = (ev: MouseEvent) => {
     input.set("mouse" + ev.button, true);
-
     input.call(ev);
 }
 

@@ -1,10 +1,9 @@
 import { Point } from "../../helper/point.js";
 export class Entity extends Point {
-    constructor(sprite, controller) {
-        super(0, 0);
+    constructor(sprite, x = 0, y = 0) {
+        super(x, y);
         this.target = null;
-        this.controller = controller;
-        controller.addEntity(this);
+        this.distance = 0;
         this.sprite = sprite;
         this.dir = new Point(0, 0);
         this.speed = 5;
@@ -25,12 +24,15 @@ export class Entity extends Point {
     moveTo(destination) {
         this.target = destination;
     }
+    setTarget(target, distance = 0) {
+        this.target = target;
+        this.distance = distance;
+    }
     update(time) {
         if (this.target) {
             const dir = new Point(this.x, this.y).diff(this.target);
-            this.updatePos(dir.scale(this.speed * time / dir.length));
-            if (dir.length < this.dir.length)
-                this.target = null;
+            if (dir.length > this.distance)
+                this.updatePos(dir.scale(this.speed * time / dir.length));
         }
     }
 }

@@ -1,8 +1,10 @@
 import { input, mousePos } from '../../helper/input.js';
 import { Point } from '../../helper/point.js';
 import { Entity } from '../entity/entity.js';
+import { World } from '../world.js';
 import { Controller } from './controller.js';
 class Player implements Controller{
+    world : World | null = null;
     entities: Entity[] = [];
     constructor() {
     }
@@ -16,9 +18,9 @@ class Player implements Controller{
         if (this.entities.length > 0) {
             const pos = new Point(mousePos.x, mousePos.y);
                 this.entities[0]?.moveTo(pos);
-            
         }
     }
+
     update(elapsedTime : number) {
         if (this.entities.length > 0) {
             const diff = new Point(
@@ -34,7 +36,19 @@ class Player implements Controller{
             this.entities.forEach(e => e.update(elapsedTime));
         }
     }
+    
+    createEnt() {
+        console.log("createEnt");
+        const ent = this.world?.createEntity(mousePos.x,mousePos.y,this);
+        if (this.entities.length > 1) {
+            if (this.entities[0] && ent) {
+                ent.setTarget(this.entities[0],2);
+            }
+        }
+        
+    }
 }
 
 export const player = new Player();
-input.bindCall(player.mouseClick,"mouse0",player);
+input.bindCall(player.mouseClick,input.keys.click,player);
+input.bindCall(player.createEnt,input.keys.enter,player);

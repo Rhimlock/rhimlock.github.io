@@ -2,6 +2,7 @@ import { input, mousePos } from '../../helper/input.js';
 import { Point } from '../../helper/point.js';
 class Player {
     constructor() {
+        this.world = null;
         this.entities = [];
     }
     addEntity(entity) {
@@ -28,7 +29,17 @@ class Player {
             this.entities.forEach(e => e.update(elapsedTime));
         }
     }
+    createEnt() {
+        console.log("createEnt");
+        const ent = this.world?.createEntity(mousePos.x, mousePos.y, this);
+        if (this.entities.length > 1) {
+            if (this.entities[0] && ent) {
+                ent.setTarget(this.entities[0], 2);
+            }
+        }
+    }
 }
 export const player = new Player();
-input.bindCall(player.mouseClick, "mouse0", player);
+input.bindCall(player.mouseClick, input.keys.click, player);
+input.bindCall(player.createEnt, input.keys.enter, player);
 //# sourceMappingURL=player.js.map
