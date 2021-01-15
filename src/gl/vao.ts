@@ -1,6 +1,6 @@
 import { gl } from "./gl.js";
+import { Attribute } from "./shader/attribute.js";
 import { VBO } from "./vbo.js";
-import { Attribute } from "./program"
 
 export class VAO {
     id: WebGLVertexArrayObject | null;

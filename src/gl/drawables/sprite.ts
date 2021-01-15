@@ -7,9 +7,9 @@ export class Sprite {
     public static ELEMENTS_PER_COLOR = 4;
     private vboPos: VBO;
     private vboTex: VBO;
-    private vboColor: VBO;
+    private vboColor: VBO | null;
     private i: number;
-    constructor(vboPos: VBO, vboTex: VBO, vboColor: VBO, spriteIndex: number) {
+    constructor(vboPos: VBO, vboTex: VBO, vboColor: VBO | null, spriteIndex: number) {
         this.vboPos = vboPos;
         this.vboTex = vboTex;
         this.vboColor = vboColor;
@@ -23,10 +23,10 @@ export class Sprite {
     get size() { return this.vboTex.getVertex(this.i, 2) as number }
     get color() {
         return new Color(
-            this.vboColor.getVertex(this.i, 0) as number,
-            this.vboColor.getVertex(this.i, 1) as number,
-            this.vboColor.getVertex(this.i, 2) as number,
-            this.vboColor.getVertex(this.i, 3) as number
+            this.vboColor?.getVertex(this.i, 0) as number,
+            this.vboColor?.getVertex(this.i, 1) as number,
+            this.vboColor?.getVertex(this.i, 2) as number,
+            this.vboColor?.getVertex(this.i, 3) as number
         );
     }
 
@@ -36,10 +36,10 @@ export class Sprite {
     set ty(v: number) { this.vboTex.setVertex(v, this.i, 1); }
     set size(v: number) { this.vboTex.setVertex(v, this.i, 2); }
     set color(v: Color) {
-        this.vboColor.setVertex(v.r, this.i, 0);
-        this.vboColor.setVertex(v.g, this.i, 1);
-        this.vboColor.setVertex(v.b, this.i, 2);
-        this.vboColor.setVertex(v.a, this.i, 3);
+        this.vboColor?.setVertex(v.r, this.i, 0);
+        this.vboColor?.setVertex(v.g, this.i, 1);
+        this.vboColor?.setVertex(v.b, this.i, 2);
+        this.vboColor?.setVertex(v.a, this.i, 3);
 
     }
 

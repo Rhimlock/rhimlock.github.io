@@ -12,7 +12,7 @@ export class Sprite {
     get ty() { return this.vboTex.getVertex(this.i, 1); }
     get size() { return this.vboTex.getVertex(this.i, 2); }
     get color() {
-        return new Color(this.vboColor.getVertex(this.i, 0), this.vboColor.getVertex(this.i, 1), this.vboColor.getVertex(this.i, 2), this.vboColor.getVertex(this.i, 3));
+        return new Color(this.vboColor?.getVertex(this.i, 0), this.vboColor?.getVertex(this.i, 1), this.vboColor?.getVertex(this.i, 2), this.vboColor?.getVertex(this.i, 3));
     }
     set x(v) { this.vboPos.setVertex(v, this.i, 0); }
     set y(v) { this.vboPos.setVertex(v, this.i, 1); }
@@ -20,10 +20,10 @@ export class Sprite {
     set ty(v) { this.vboTex.setVertex(v, this.i, 1); }
     set size(v) { this.vboTex.setVertex(v, this.i, 2); }
     set color(v) {
-        this.vboColor.setVertex(v.r, this.i, 0);
-        this.vboColor.setVertex(v.g, this.i, 1);
-        this.vboColor.setVertex(v.b, this.i, 2);
-        this.vboColor.setVertex(v.a, this.i, 3);
+        this.vboColor?.setVertex(v.r, this.i, 0);
+        this.vboColor?.setVertex(v.g, this.i, 1);
+        this.vboColor?.setVertex(v.b, this.i, 2);
+        this.vboColor?.setVertex(v.a, this.i, 3);
     }
     changeIndex(i) {
         const spr = new Sprite(this.vboPos, this.vboTex, this.vboColor, this.i);

@@ -1,0 +1,43 @@
+import { gl } from "../gl.js";
+export function fetchAttributes(id) {
+    const attributes = [];
+    for (let i = 0; i < gl.getProgramParameter(id, gl.ACTIVE_ATTRIBUTES); i++) {
+        const info = gl.getActiveAttrib(id, i);
+        if (info) {
+            attributes.push({
+                id: gl.getAttribLocation(id, info.name),
+                size: lookupSize(info.type),
+                info: info
+            });
+        }
+    }
+    return attributes;
+}
+function lookupSize(type) {
+    let size = -1;
+    switch (type) {
+        case gl.FLOAT:
+        case gl.UNSIGNED_INT:
+        case gl.INT:
+        case gl.SAMPLER_2D:
+            size = 1;
+            break;
+        case gl.FLOAT_VEC2:
+            size = 2;
+            break;
+        case gl.FLOAT_VEC3:
+            size = 3;
+            break;
+        case gl.FLOAT_VEC4:
+            size = 4;
+            break;
+    }
+    if (size < 0) {
+        throw {
+            name: "ShaderError",
+            message: "unable to lookup length of type: " + type
+        };
+    }
+    return size;
+}
+//# sourceMappingURL=attribute.js.map

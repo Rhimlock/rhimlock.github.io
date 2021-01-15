@@ -8,3 +8,4 @@ export const divLog = document.getElementById("log") as HTMLDivElement;
 export const commandLine = document.getElementById("commandLine") as HTMLInputElement;
 export const divMap = document.getElementById("divMap") as HTMLDivElement;
 export const spanWorldPos = document.getElementById("worldPos") as HTMLSpanElement;
+export const imgOrks = document.getElementById("orks") as HTMLImageElement;

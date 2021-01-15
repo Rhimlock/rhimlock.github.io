@@ -1,0 +1,1 @@
+{"version":3,"file":"baseShader.js","sourceRoot":"","sources":["../../../src/gl/shader/baseShader.ts"],"names":[],"mappings":"AAAA,MAAM,UAAU,kBAAkB,CAAC,uBAAgC,EAAE,kBAA2B;IAC9F,OAAO;;;;;;MAMH,oBAAoB;;;;;;;;;;;;MAYpB,kBAAkB;IACpB,CAAC;AAEL,CAAC;AAED,oBAAoB,CAAC,UAAU,CAAC,CAAA;AAEhC,MAAM,IAAI,GAAG;;;;;;;;;;;;;CAaZ,CAAC"}

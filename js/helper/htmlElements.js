@@ -7,4 +7,5 @@ export const divLog = document.getElementById("log");
 export const commandLine = document.getElementById("commandLine");
 export const divMap = document.getElementById("divMap");
 export const spanWorldPos = document.getElementById("worldPos");
+export const imgOrks = document.getElementById("orks");
 //# sourceMappingURL=htmlElements.js.map

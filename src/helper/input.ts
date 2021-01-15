@@ -1,5 +1,7 @@
 import { commandLine } from "./htmlElements.js";
+import { Point } from "./point.js";
 import { terminal } from "./terminal.js";
+import { view } from "./view.js";
 
 interface KeyBinding {
     up: string
@@ -86,6 +88,8 @@ class Input {
 
 
 export const input = new Input();
+export const mousePos = new Point(0,0);
+
 input.bindCall(terminal.show,input.keys.terminal, terminal);
 input.bindCall(terminal.hide,input.keys.escape, terminal);
 
@@ -106,6 +110,12 @@ window.onmousedown = (ev: MouseEvent) => {
 
 window.onmouseup = (ev: MouseEvent) => {
     input.set("mouse" + ev.button, false);
+}
+
+window.onmousemove = (ev: MouseEvent) => {
+    const pos = view.convertPos(ev.clientX, ev.clientY);
+    mousePos.x = pos.x;
+    mousePos.y = pos.y;
 }
 
 commandLine.onkeydown = (ev: KeyboardEvent) => {

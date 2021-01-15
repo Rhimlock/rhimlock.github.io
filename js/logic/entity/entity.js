@@ -1,9 +1,10 @@
 import { Point } from "../../helper/point.js";
-import { terminal } from "../../helper/terminal.js";
 export class Entity extends Point {
-    constructor(sprite) {
+    constructor(sprite, controller) {
         super(0, 0);
         this.target = null;
+        this.controller = controller;
+        controller.addEntity(this);
         this.sprite = sprite;
         this.dir = new Point(0, 0);
         this.speed = 5;
@@ -22,12 +23,11 @@ export class Entity extends Point {
     set y(v) { this.sprite.y = v; }
     ;
     moveTo(destination) {
-        terminal.log(destination.x, destination.y);
         this.target = destination;
     }
     update(time) {
         if (this.target) {
-            const dir = new Point(this.sprite.x, this.sprite.y).diff(this.target);
+            const dir = new Point(this.x, this.y).diff(this.target);
             this.updatePos(dir.scale(this.speed * time / dir.length));
             if (dir.length < this.dir.length)
                 this.target = null;
