@@ -4,7 +4,7 @@ class View {
     x = 0;
     y = 0;
     zoom = 3;
-    tileSize = 16;
+    tileSize = 8;
 
     convertPos(clientX: number, clientY : number) : Point {
         return new Point(

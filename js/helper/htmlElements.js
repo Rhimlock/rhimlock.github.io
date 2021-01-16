@@ -1,11 +1,18 @@
-export const canvas = document.getElementById("cnv");
-export const spanTime = document.getElementById("worldTime");
-export const spanMouse = document.getElementById("mousePos");
-export const spanPlayer = document.getElementById("playerPos");
-export const divTerminal = document.getElementById("terminal");
-export const divLog = document.getElementById("log");
-export const commandLine = document.getElementById("commandLine");
-export const divMap = document.getElementById("divMap");
-export const spanWorldPos = document.getElementById("worldPos");
-export const imgOrks = document.getElementById("orks");
+export const dom = {
+    canvas: document.getElementById("canvas"),
+    world: document.getElementById("world"),
+    terminal: document.getElementById("terminal"),
+    log: document.getElementById("log"),
+    commandLine: document.getElementById("commandLine"),
+    orks: document.getElementById("orks"),
+    worldTime: document.getElementById("worldTime"),
+    mousePos: document.getElementById("mousePos"),
+    playerPos: document.getElementById("playerPos"),
+    worldPos: document.getElementById("worldPos"),
+};
+Object.keys(dom).forEach(key => {
+    if (!document.getElementById(key)) {
+        throw new Error(`HTMLElement '${key}' not found`);
+    }
+});
 //# sourceMappingURL=htmlElements.js.map

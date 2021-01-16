@@ -1,7 +1,7 @@
-import { canvas } from "../helper/htmlElements.js";
+import { dom } from "../helper/htmlElements.js";
 import { terminal } from "../helper/terminal.js";
 import { view } from "../helper/view.js";
-export const gl = canvas.getContext("webgl2", {
+export const gl = dom.canvas.getContext("webgl2", {
     antialias: false,
     depth: true,
     alpha: false,
@@ -21,8 +21,8 @@ function initGL() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 }
 function updateSize() {
-    gl.canvas.width = canvas.clientWidth / view.zoom;
-    gl.canvas.height = canvas.clientHeight / view.zoom;
+    gl.canvas.width = dom.canvas.clientWidth / view.zoom;
+    gl.canvas.height = dom.canvas.clientHeight / view.zoom;
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     terminal.showLastLine();
 }

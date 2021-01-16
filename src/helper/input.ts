@@ -1,4 +1,4 @@
-import { commandLine } from "./htmlElements.js";
+import { dom } from "./htmlElements.js";
 import { Point } from "./point.js";
 import { terminal } from "./terminal.js";
 import { view } from "./view.js";
@@ -49,15 +49,15 @@ class Input {
     }
     call(ev: KeyboardEvent | MouseEvent) {
         const f = this._calls.get((ev as KeyboardEvent).key || "mouse" + (ev as MouseEvent).button) as Function;
-        if(f && document.activeElement !== commandLine) {
+        if(f && document.activeElement !== dom.commandLine) {
             f();
             ev.preventDefault();
         }
     }
 
     executeCommandline() {
-        terminal.log(commandLine.value);
-        commandLine.value = '';
+        terminal.log(dom.commandLine.value);
+        dom.commandLine.value = '';
     }
 
     bindKeys(keys : KeyBinding) {
@@ -116,10 +116,13 @@ window.onmousemove = (ev: MouseEvent) => {
     mousePos.y = pos.y;
 }
 
-commandLine.onkeydown = (ev: KeyboardEvent) => {
+dom.commandLine.onkeydown = (ev: KeyboardEvent) => {
     switch(ev.key) {
         case input.keys.escape: terminal.hide(); ev.preventDefault();  break;
         case input.keys.enter: input.executeCommandline();ev.preventDefault(); break;
     }
     ev.stopPropagation();
+}
+dom.world.onmousedown =  () => {
+    terminal.hide();
 }

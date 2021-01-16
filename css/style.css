@@ -11,11 +11,7 @@ body {
   text-shadow: 0px 0px 4px #FFFFFF;
 }
 
-#divMap {
-  width:2000px;
-  height:2000px;
-}
-#cnv {
+#canvas {
   /* cursor: none; */
   z-index: -1;
   position: fixed;

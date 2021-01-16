@@ -30,12 +30,7 @@ function generateVertSrc(srcDeclaration: string, srcProcessing: string): string 
   
   precision mediump float;
     in vec2 aVert;
-    in vec3 aTex;
     ${srcDeclaration}
-    //in vec4 aColor;
-    //out vec4 vColor;
-    //out vec4 vTex;
-    //uniform vec2 uTexInv;
     uniform vec2 uView;
     uniform vec2 uResInv;
     uniform float uTileSize;
@@ -45,9 +40,6 @@ function generateVertSrc(srcDeclaration: string, srcProcessing: string): string 
     v += vec2(-1.0,1.0);
     gl_Position = vec4(v, v.y, 1.0);
     ${srcProcessing}
-    //gl_PointSize = aTex.z;
-    //vTex = vec4(aTex.xy * aTex.z * uTexInv,aTex.zz * uTexInv);
-    //vColor = aColor / 256.0;
   }`;
 }
 

@@ -1,16 +1,15 @@
 import { player } from "../logic/controller/player.js";
-import { spanMouse, spanPlayer, spanTime, spanWorldPos } from "./htmlElements.js";
+import { dom } from "./htmlElements.js";
 import { mousePos } from "./input.js";
 import { Point } from "./point.js";
 
 class Info{
 
     update(worldTime : number) {
-
-        spanTime.innerHTML = Math.round(worldTime*0.001).toString();
-        spanPlayer.innerHTML = `x: ${Math.round(player.x)} , y: ${Math.round(player.y)}`;
-        spanWorldPos.innerHTML = (new Point(window.pageXOffset, window.pageYOffset )).toString();
-        spanMouse.innerHTML = mousePos.toString();
+        dom.worldTime.innerHTML = Math.round(worldTime*0.001).toString();
+        dom.playerPos.innerHTML = `x: ${Math.round(player.x)} , y: ${Math.round(player.y)}`;
+        dom.worldPos.innerHTML = (new Point(window.pageXOffset, window.pageYOffset )).toString();
+        dom.mousePos.innerHTML = mousePos.toString();
     }
 }
 

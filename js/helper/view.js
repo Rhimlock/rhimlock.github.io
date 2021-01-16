@@ -4,7 +4,7 @@ class View {
         this.x = 0;
         this.y = 0;
         this.zoom = 3;
-        this.tileSize = 16;
+        this.tileSize = 8;
     }
     convertPos(clientX, clientY) {
         return new Point((clientX + window.pageXOffset - this.tileSize * 0.5 * this.zoom) / (this.zoom * this.tileSize), (clientY + window.pageYOffset - this.tileSize * 0.5 * this.zoom) / (this.zoom * this.tileSize));

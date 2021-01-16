@@ -1,4 +1,4 @@
-import { commandLine } from "./htmlElements.js";
+import { dom } from "./htmlElements.js";
 import { Point } from "./point.js";
 import { terminal } from "./terminal.js";
 import { view } from "./view.js";
@@ -32,14 +32,14 @@ class Input {
     }
     call(ev) {
         const f = this._calls.get(ev.key || "mouse" + ev.button);
-        if (f && document.activeElement !== commandLine) {
+        if (f && document.activeElement !== dom.commandLine) {
             f();
             ev.preventDefault();
         }
     }
     executeCommandline() {
-        terminal.log(commandLine.value);
-        commandLine.value = '';
+        terminal.log(dom.commandLine.value);
+        dom.commandLine.value = '';
     }
     bindKeys(keys) {
         this.keys = keys;
@@ -85,7 +85,7 @@ window.onmousemove = (ev) => {
     mousePos.x = pos.x;
     mousePos.y = pos.y;
 };
-commandLine.onkeydown = (ev) => {
+dom.commandLine.onkeydown = (ev) => {
     switch (ev.key) {
         case input.keys.escape:
             terminal.hide();
@@ -97,5 +97,8 @@ commandLine.onkeydown = (ev) => {
             break;
     }
     ev.stopPropagation();
+};
+dom.world.onmousedown = () => {
+    terminal.hide();
 };
 //# sourceMappingURL=input.js.map

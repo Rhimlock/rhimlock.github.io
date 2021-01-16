@@ -1,11 +1,20 @@
+export const dom = {
+    canvas: document.getElementById("canvas") as HTMLCanvasElement,
+    world: document.getElementById("world") as HTMLDivElement,
 
-export const canvas = document.getElementById("cnv") as HTMLCanvasElement;
-export const spanTime = document.getElementById("worldTime") as HTMLSpanElement;
-export const spanMouse = document.getElementById("mousePos") as HTMLSpanElement;
-export const spanPlayer = document.getElementById("playerPos") as HTMLSpanElement;
-export const divTerminal = document.getElementById("terminal") as HTMLDivElement;
-export const divLog = document.getElementById("log") as HTMLDivElement;
-export const commandLine = document.getElementById("commandLine") as HTMLInputElement;
-export const divMap = document.getElementById("divMap") as HTMLDivElement;
-export const spanWorldPos = document.getElementById("worldPos") as HTMLSpanElement;
-export const imgOrks = document.getElementById("orks") as HTMLImageElement;
+    terminal: document.getElementById("terminal") as HTMLDivElement,
+    log: document.getElementById("log") as HTMLDivElement,
+    commandLine: document.getElementById("commandLine") as HTMLInputElement,
+    orks: document.getElementById("orks") as HTMLImageElement,
+
+    worldTime: document.getElementById("worldTime") as HTMLSpanElement,
+    mousePos: document.getElementById("mousePos") as HTMLSpanElement,
+    playerPos: document.getElementById("playerPos") as HTMLSpanElement,
+    worldPos: document.getElementById("worldPos") as HTMLSpanElement,
+}
+
+Object.keys(dom).forEach(key => {
+    if(!document.getElementById(key)) {
+        throw new Error (`HTMLElement '${key}' not found`);
+    }
+})

@@ -11,7 +11,7 @@ export class SpriteBatch {
         this.program = new Program(vertDeclaration, vertProcessing, fragDeclaration, fragProcessing);
         this.sprites = [];
         this.vboPos = new VBO(new Float32Array(maxSprites * Sprite.ELEMENTS_PER_POSITION), Sprite.ELEMENTS_PER_POSITION);
-        this.vboTex = new VBO(new Uint8Array(maxSprites * Sprite.ELEMENTS_PER_TEXTURE), Sprite.ELEMENTS_PER_TEXTURE);
+        this.vboTex = new VBO(new Int8Array(maxSprites * Sprite.ELEMENTS_PER_TEXTURE), Sprite.ELEMENTS_PER_TEXTURE);
         this.buffers = [this.vboPos, this.vboTex];
         if (useColors) {
             this.vboColor = new VBO(new Uint8Array(maxSprites * Sprite.ELEMENTS_PER_COLOR), Sprite.ELEMENTS_PER_COLOR);
@@ -51,6 +51,7 @@ export class SpriteBatch {
     }
 }
 const vertDeclaration = `
+    in vec4 aTex;
     in vec4 aColor;
     out vec4 vColor;
     out vec4 vTex;
@@ -58,7 +59,7 @@ const vertDeclaration = `
 `;
 const vertProcessing = `
     gl_PointSize = aTex.z;
-    vTex = vec4(aTex.xy * aTex.z * uTexInv,aTex.zz * uTexInv);
+    vTex = vec4(aTex.xy * aTex.z * uTexInv, aTex.z * uTexInv.x, aTex.w);
     vColor = aColor / 256.0;
 `;
 const fragDeclaration = `
@@ -67,8 +68,13 @@ const fragDeclaration = `
   in vec4 vTex;
 `;
 const fragProcessing = `
-  outColor = texture(uTex,vTex.xy + gl_PointCoord * vTex.zw);
+vec2 t = vTex.xy  + gl_PointCoord * vTex.z;
+if (vTex.w > 0.0) {
+  t.x = vTex.x - gl_PointCoord.x * vTex.z + vTex.z;
+}
+  outColor = texture(uTex,t);
 
+  // outColor = texture(uTex,vTex.xy + gl_PointCoord * vTex.z);
   if (outColor.a <= 0.1) discard;
   outColor.rgb += vColor.rgb * vColor.a;
 `;
