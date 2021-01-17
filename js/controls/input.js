@@ -1,23 +1,6 @@
-import { dom } from "./htmlElements.js";
-import { Point } from "./point.js";
+import { dom } from "../helper/htmlElements.js";
 import { terminal } from "./terminal.js";
-import { view } from "./view.js";
-class KeyBinding {
-    constructor() {
-        this.up = 'w';
-        this.down = 's';
-        this.left = 'a';
-        this.right = 'd';
-        this.attack = ' ';
-        this.terminal = '#';
-        this.enter = 'Enter';
-        this.escape = 'Escape';
-        this.pause = 'p';
-        this.click = 'mouse0';
-        this.middleClick = 'mouse1';
-        this.rightClick = 'mouse2';
-    }
-}
+import { KeyBinding } from "./keybindings.js";
 class Input {
     constructor() {
         this._map = new Map();
@@ -72,23 +55,10 @@ class Input {
     }
 }
 export const input = new Input();
-export const mousePos = new Point(0, 0);
-input.bindCall(terminal.show, input.keys.terminal, terminal);
-input.bindCall(terminal.hide, input.keys.escape, terminal);
 window.onkeydown = input.onKeyDown.bind(input);
 window.onkeyup = input.onKeyUp.bind(input);
-window.onmousedown = (ev) => {
-    input.set("mouse" + ev.button, true);
-    input.call(ev);
-};
-window.onmouseup = (ev) => {
-    input.set("mouse" + ev.button, false);
-};
-window.onmousemove = (ev) => {
-    const pos = view.convertPos(ev.clientX, ev.clientY);
-    mousePos.x = pos.x;
-    mousePos.y = pos.y;
-};
+input.bindCall(terminal.show, input.keys.terminal, terminal);
+input.bindCall(terminal.hide, input.keys.escape, terminal);
 dom.commandLine.onkeydown = (ev) => {
     switch (ev.key) {
         case input.keys.escape:
@@ -101,8 +71,5 @@ dom.commandLine.onkeydown = (ev) => {
             break;
     }
     ev.stopPropagation();
-};
-dom.world.onmousedown = () => {
-    terminal.hide();
 };
 //# sourceMappingURL=input.js.map

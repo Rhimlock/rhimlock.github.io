@@ -1,7 +1,7 @@
 import { gl } from "./gl/gl.js";
-import { input } from "./helper/input.js";
+import { input } from "./controls/input.js";
 import { Timer } from "./helper/timer.js";
-import { info } from "./helper/info.js";
+import { info } from "./controls/info.js";
 import { World } from "./logic/world.js";
 const world = new World(100, 100);
 const tick = (elapsedTime) => {
@@ -11,5 +11,5 @@ const tick = (elapsedTime) => {
 };
 const timer = new Timer(tick, 0);
 timer.start();
-input.bindCall(timer.toggle, input.keys.middleClick, timer);
+input.bindCall(timer.toggle, input.keys.pause, timer);
 //# sourceMappingURL=main.js.map

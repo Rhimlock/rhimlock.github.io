@@ -1,5 +1,5 @@
 import { dom } from "../helper/htmlElements.js";
-import { terminal } from "../helper/terminal.js";
+import { terminal } from "../controls/terminal.js";
 import { view } from "../helper/view.js";
 export const gl = dom.canvas.getContext("webgl2", {
     antialias: false,

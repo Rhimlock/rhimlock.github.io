@@ -1,4 +1,5 @@
-import { input, mousePos } from '../../helper/input.js';
+import { input } from '../../controls/input.js';
+import { mousePos } from '../../controls/mouse.js';
 import { Point } from '../../helper/point.js';
 class Player {
     constructor() {
@@ -41,5 +42,5 @@ class Player {
 }
 export const player = new Player();
 input.bindCall(player.mouseClick, input.keys.click, player);
-input.bindCall(player.createEnt, input.keys.enter, player);
+input.bindCall(player.createEnt, input.keys.middleClick, player);
 //# sourceMappingURL=player.js.map

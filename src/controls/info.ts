@@ -1,10 +1,12 @@
 import { player } from "../logic/controller/player.js";
-import { dom } from "./htmlElements.js";
-import { mousePos } from "./input.js";
-import { Point } from "./point.js";
+import { dom } from "../helper/htmlElements.js";
+import { Point } from "../helper/point.js";
 import { terminal } from "./terminal.js";
+import { mousePos } from "./mouse.js";
+
 class Info {
-    update(worldTime) {
+
+    update(worldTime: number) {
         if (terminal.isVisible()) {
             dom.worldTime.innerHTML = Math.round(worldTime * 0.001).toString();
             dom.playerPos.innerHTML = `x: ${Math.round(player.x)} , y: ${Math.round(player.y)}`;
@@ -13,5 +15,5 @@ class Info {
         }
     }
 }
+
 export const info = new Info();
-//# sourceMappingURL=info.js.map

@@ -1,33 +1,36 @@
-import { dom } from "./htmlElements.js";
+import { dom} from "../helper/htmlElements.js";
+
 class Terminal {
+
     show() {
         dom.terminal.className = "terminal_visible";
         dom.commandLine.focus();
     }
+
     hide() {
         if (this.isVisible()) {
-            dom.terminal.className = "terminal_hidden";
-            dom.commandLine.blur();
-        }
+                dom.terminal.className = "terminal_hidden";
+                dom.commandLine.blur();
+            }
     }
+
     toggleDisplay() {
         if (dom.terminal.style.display === "none") {
             this.show();
-        }
-        else {
+        } else {
             this.hide();
         }
     }
-    isVisible() {
+
+    isVisible() : boolean {
         return (dom.terminal.className === "terminal_visible");
     }
-    log(...data) {
+    log(...data: any[]) {
         let txt = '';
         data.forEach(element => {
-            if (txt.length > 0)
-                txt += "; ";
-            txt += element;
-        });
+            if (txt.length > 0) txt += "; ";
+           txt += element;
+        })
         const p = document.createElement("p");
         p.innerHTML = txt;
         dom.log.appendChild(p);
@@ -38,4 +41,3 @@ class Terminal {
     }
 }
 export const terminal = new Terminal();
-//# sourceMappingURL=terminal.js.map
