@@ -2,11 +2,13 @@ import { input } from '../../controls/input.js';
 import { mousePos } from '../../controls/mouse.js';
 import { Point } from '../../helper/point.js';
 import { Entity } from '../entity/entity.js';
+import { Flock } from '../flock/flock.js';
 import { World } from '../world.js';
 import { Controller } from './controller.js';
 class Player implements Controller{
     world : World | null = null;
     entities: Entity[] = [];
+    flock : Flock = new Flock();
     constructor() {
     }
     addEntity(entity: Entity): void {
@@ -23,6 +25,15 @@ class Player implements Controller{
     }
 
     update(elapsedTime : number) {
+        this.flock.run(elapsedTime);
+        this.flock.boids.forEach((b,i) => {
+            const ent = this.entities[i+1];
+            if (ent) {
+                ent.setTarget(b.position,0);
+                // ent.x = b.position.x;
+                // ent.y = b.position.y;
+            }
+        })
         if (this.entities.length > 0) {
             const diff = new Point(
                 input.left ? -1 : 0,
@@ -34,13 +45,13 @@ class Player implements Controller{
 
                 this.entities[0]?.moveTo(this.entities[0]?.add(diff));
             }
-            this.entities.forEach(e => e.update(elapsedTime));
+            this.entities.forEach(e => e.update(elapsedTime, this.world));
         }
     }
     
     createEnt() {
-        console.log("createEnt");
         const ent = this.world?.createEntity(mousePos.x,mousePos.y,this);
+        this.flock.addBoid(ent?.x || 0, ent?.y || 0);
         if (this.entities.length > 1) {
             if (this.entities[0] && ent) {
                 ent.setTarget(this.entities[0],2);

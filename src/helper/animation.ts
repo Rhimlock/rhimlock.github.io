@@ -18,11 +18,10 @@ export class Animation {
             this.currentTime = this.currentTime % 1;
         }
         let i = Math.floor(this.frames.length * this.currentTime);
-        // const i = Math.min(this.frames.length - 1, Math.round(this.currentTime * (this.frames.length - 1)));
         const frame = this.frames[i];
         if (frame && frame != this.currentFrame) {
             this.currentFrame = frame;
-            sprite.tx = frame.x / 16;
+            sprite.tx = frame.x;
         }
     }
 }

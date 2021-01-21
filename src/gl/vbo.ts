@@ -6,14 +6,12 @@ export class VBO {
     public data: ArrayBufferView;
     public type: number;
     public changed = false;
-    // private bytesPerVertex: number;
     private verticesPerElement : number;
     
     constructor(data: ArrayBufferView, verticesPerElement : number) {
         this.id = gl.createBuffer();
         this.data = data;
         this.type = lookupType(data);
-        // this.bytesPerVertex = lookupBytesPerElement(data);
         this.verticesPerElement = verticesPerElement;
         this.update();
     }
@@ -31,10 +29,12 @@ export class VBO {
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
     }
 
-    getVertex(n: number, offset : number) { return (this.data as TypedArray)[n * this.verticesPerElement + offset] }
-    setVertex(v: number, n: number, offset : number ) {
+    getVertex(n: number, offset : number) { 
+        return (this.data as TypedArray)[n * this.verticesPerElement + offset] 
+    }
+    setVertex(v: number, index: number, offset : number ) {
         this.changed = true;
-        (this.data as TypedArray)[n * this.verticesPerElement + offset] = v;
+        (this.data as TypedArray)[index * this.verticesPerElement + offset] = v;
     }
 }
 

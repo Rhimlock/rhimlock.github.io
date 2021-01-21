@@ -1,5 +1,6 @@
 import { SpriteBatch } from "../gl/drawables/spriteBatch.js";
 import { dom} from "../helper/htmlElements.js";
+import { Point } from "../helper/point.js";
 import { view } from "../helper/view.js";
 import { Controller } from "./controller/controller.js";
 import { player } from "./controller/player.js";
@@ -32,11 +33,22 @@ export class World {
         this.entities.push(ent);
         controller.addEntity(ent);
         return ent;
-
     }
 
+    getEntitiesAt(p: Point, distance : number, ignore : Entity | null = null) {
+        const found = this.entities.filter(e => {
+            if (e !== ignore) {
+                const d = p.diff(e).length;
+                if (d + 1< distance) {
+                    return true;
+                }
+            }
+            return false;
+        })
+        return found;
+    }
     update(elapsedTime: number) {
         player.update(elapsedTime);
-        this.spriteBatch.draw();
+        this.spriteBatch.draw(elapsedTime * 0.001);
     }
 }

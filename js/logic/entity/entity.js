@@ -1,4 +1,5 @@
 import { Animation, Frame } from "../../helper/animation.js";
+import { Color } from "../../helper/color.js";
 import { Point } from "../../helper/point.js";
 export class Entity extends Point {
     constructor(sprite, x = 0, y = 0) {
@@ -10,13 +11,13 @@ export class Entity extends Point {
         this.speed = 2;
         this.animation = new Animation();
         this.animation.addFrame(new Frame(0, 0));
-        this.animation.addFrame(new Frame(16, 0));
-        this.animation.addFrame(new Frame(32, 0));
-        this.animation.addFrame(new Frame(48, 0));
-        this.animation.addFrame(new Frame(64, 0));
-        this.animation.addFrame(new Frame(80, 0));
-        this.animation.addFrame(new Frame(96, 0));
-        this.animation.addFrame(new Frame(112, 0));
+        this.animation.addFrame(new Frame(1, 0));
+        this.animation.addFrame(new Frame(2, 0));
+        this.animation.addFrame(new Frame(3, 0));
+        this.animation.addFrame(new Frame(4, 0));
+        this.animation.addFrame(new Frame(5, 0));
+        this.animation.addFrame(new Frame(6, 0));
+        this.animation.addFrame(new Frame(7, 0));
     }
     updatePos(dir) {
         this.dir = dir;
@@ -38,7 +39,8 @@ export class Entity extends Point {
         this.target = target;
         this.distance = distance;
     }
-    update(time) {
+    update(time, world = null) {
+        this.sprite.color = new Color(time * 255, 0, 0, 255);
         this.animation.update(time, this.sprite);
         switch (Math.sign(this.dir.x)) {
             case -1:
@@ -48,11 +50,16 @@ export class Entity extends Point {
                 this.sprite.flipped = false;
                 break;
         }
-        if (this.target) {
-            const dir = new Point(this.x, this.y).diff(this.target);
+        if (this.target && world) {
+            let dir = new Point(this.x, this.y).diff(this.target);
             if (dir.length > this.distance) {
+                dir = dir.scale(this.speed * time / dir.length);
                 this.sprite.ty = 1;
-                this.updatePos(dir.scale(this.speed * time / dir.length));
+                const b = world.getEntitiesAt(this.add(dir), 1, this);
+                if (b.length > 0) {
+                    dir = new Point(-dir.y, dir.x);
+                }
+                this.updatePos(dir);
             }
             else {
                 this.sprite.ty = 0;

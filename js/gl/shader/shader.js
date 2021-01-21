@@ -29,7 +29,7 @@ function generateVertSrc(srcDeclaration, srcProcessing) {
     uniform vec2 uResInv;
     uniform float uTileSize;
   void main() {
-    vec2 v = round((aVert.xy - uView.xy ) * uTileSize )* uResInv ;
+    vec2 v = round(aVert.xy - uView.xy * uTileSize )* uResInv ;
     v.y *= -1.0;
     v += vec2(-1.0,1.0);
     gl_Position = vec4(v, v.y, 1.0);

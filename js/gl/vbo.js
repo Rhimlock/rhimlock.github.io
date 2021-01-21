@@ -19,10 +19,12 @@ export class VBO {
         gl.bufferSubData(gl.ARRAY_BUFFER, 0, this.data, 0, n);
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
     }
-    getVertex(n, offset) { return this.data[n * this.verticesPerElement + offset]; }
-    setVertex(v, n, offset) {
+    getVertex(n, offset) {
+        return this.data[n * this.verticesPerElement + offset];
+    }
+    setVertex(v, index, offset) {
         this.changed = true;
-        this.data[n * this.verticesPerElement + offset] = v;
+        this.data[index * this.verticesPerElement + offset] = v;
     }
 }
 function lookupType(data) {

@@ -7,7 +7,7 @@ export interface Uniforms {
     uTileSize: WebGLUniformLocation | null,
     uView: WebGLUniformLocation | null,
     uLayer: WebGLUniformLocation | null,
-    uTimeElapsed: WebGLUniformLocation | null,
+    uProgress: WebGLUniformLocation | null,
 }
 
 export interface LooseUniforms {

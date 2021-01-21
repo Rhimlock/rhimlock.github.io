@@ -42,7 +42,8 @@ export class SpriteBatch implements Drawable {
     }
     const spr = new Sprite(this.vboPos, this.vboTex, this.vboColor, this.sprites.length);
 
-    spr.size = 16;
+    spr.size = 2;
+    spr.ty = 0;
     this.sprites.push(spr);
     return spr;
   }
@@ -55,7 +56,7 @@ export class SpriteBatch implements Drawable {
     }
   }
 
-  draw(): void {
+  draw(progress : number): void {
     this.buffers.forEach(b => b.updateSub(this.sprites.length));
     gl.useProgram(this.program.id);
     gl.bindVertexArray(this.vao.id);
@@ -65,6 +66,7 @@ export class SpriteBatch implements Drawable {
       2 / gl.drawingBufferWidth,
       2 / gl.drawingBufferHeight
     );
+    gl.uniform1f(this.program.uniforms.uProgress, progress);
     gl.drawArrays(gl.POINTS, 0, this.sprites.length);
     gl.bindVertexArray(null);
   }
@@ -79,8 +81,8 @@ const vertDeclaration = `
 `;
 
 const vertProcessing = `
-    gl_PointSize = aTex.z;
-    vTex = vec4(aTex.xy * aTex.z * uTexInv, aTex.z * uTexInv.x, aTex.w);
+    gl_PointSize = aTex.z ;
+    vTex = vec4(aTex.xy * aTex.z * uTexInv, aTex.z  * uTexInv.x, aTex.w);
     vColor = aColor / 256.0;
 `;
 
@@ -91,13 +93,12 @@ const fragDeclaration = `
 `;
 
 const fragProcessing = `
-vec2 t = vTex.xy  + gl_PointCoord * vTex.z;
+vec2 t = (vTex.xy + gl_PointCoord) * vTex.z ;
 if (vTex.w > 0.0) {
-  t.x = vTex.x - gl_PointCoord.x * vTex.z + vTex.z;
+  t.x = (vTex.x - gl_PointCoord.x) * vTex.z + vTex.z;
 }
   outColor = texture(uTex,t);
 
-  // outColor = texture(uTex,vTex.xy + gl_PointCoord * vTex.z);
   if (outColor.a <= 0.1) discard;
   outColor.rgb += vColor.rgb * vColor.a;
 `;

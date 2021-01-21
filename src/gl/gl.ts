@@ -18,7 +18,7 @@ window.onresize = updateSize;
 window.onscroll = view.updatePos.bind(view);
 
 function initGL() {
-    gl.clearColor(0.5, 0.5, 0.5, 1.0);
+    gl.clearColor(0.2, 0.2, 0.2, 1.0);
     gl.enable(gl.DEPTH_TEST);
     gl.clear(gl.COLOR_BUFFER_BIT);
 }

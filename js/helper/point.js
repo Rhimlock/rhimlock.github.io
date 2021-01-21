@@ -13,7 +13,13 @@ export class Point {
         return (new Point(p.x - this.x, p.y - this.y));
     }
     get length() {
-        return Math.round(Math.sqrt(this.x * this.x + this.y * this.y));
+        return (Math.sqrt(this.x * this.x + this.y * this.y));
+    }
+    get normalized() {
+        if (this.length > 0) {
+            return this.scale(1 / this.length);
+        }
+        return this;
     }
     scale(n) {
         return new Point(this.x * n, this.y * n);

@@ -1,4 +1,5 @@
 import { Color } from "../../helper/color.js";
+import { view } from "../../helper/view.js";
 import { VBO } from "../vbo.js";
 
 export class Sprite {
@@ -16,11 +17,12 @@ export class Sprite {
         this.i = spriteIndex;
     }
 
-    get x() { return this.vboPos.getVertex(this.i, 0) as number }
-    get y() { return this.vboPos.getVertex(this.i, 1) as number }
-    get tx() { return this.vboTex.getVertex(this.i, 0) as number }
-    get ty() { return this.vboTex.getVertex(this.i, 1) as number }
-    get size() { return this.vboTex.getVertex(this.i, 2) as number }
+    get x() { return this.vboPos.getVertex(this.i, 0) as number / view.tileSize}
+    get y() { return this.vboPos.getVertex(this.i, 1) as number / view.tileSize }
+
+    get tx() { return this.vboTex.getVertex(this.i, 0) as number/ view.tileSize }
+    get ty() { return this.vboTex.getVertex(this.i, 1) as number / view.tileSize}
+    get size() { return this.vboTex.getVertex(this.i, 2) as number/ view.tileSize }
     get flipped() {return this.vboTex.getVertex(this.i, 3) as any as boolean }
     get color() {
         return new Color(
@@ -31,12 +33,14 @@ export class Sprite {
         );
     }
 
-    set x(v: number) { this.vboPos.setVertex(v, this.i, 0); }
-    set y(v: number) { this.vboPos.setVertex(v, this.i, 1); }
-    set tx(v: number) { this.vboTex.setVertex(v, this.i, 0); }
-    set ty(v: number) { this.vboTex.setVertex(v, this.i, 1); }
-    set size(v: number) { this.vboTex.setVertex(v, this.i, 2); }
+    set x(v: number) { this.vboPos.setVertex(v  * view.tileSize, this.i, 0); }
+    set y(v: number) { this.vboPos.setVertex(v  * view.tileSize, this.i, 1); }
+
+    set tx(v: number) { this.vboTex.setVertex(v * view.tileSize, this.i, 0); }
+    set ty(v: number) { this.vboTex.setVertex(v * view.tileSize, this.i, 1); }
+    set size(v: number) { this.vboTex.setVertex(v * view.tileSize, this.i, 2); }
     set flipped(v: boolean) {this.vboTex.setVertex(v? 1 : 0, this.i, 3)}
+    
     set color(v: Color) {
         this.vboColor?.setVertex(v.r, this.i, 0);
         this.vboColor?.setVertex(v.g, this.i, 1);
@@ -53,5 +57,7 @@ export class Sprite {
         this.tx = spr.tx;
         this.ty = spr.ty;
         this.size = spr.size;
+        this.flipped = spr.flipped;
+        this.color = spr.color;
     }
 }

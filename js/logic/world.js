@@ -27,9 +27,21 @@ export class World {
         controller.addEntity(ent);
         return ent;
     }
+    getEntitiesAt(p, distance, ignore = null) {
+        const found = this.entities.filter(e => {
+            if (e !== ignore) {
+                const d = p.diff(e).length;
+                if (d + 1 < distance) {
+                    return true;
+                }
+            }
+            return false;
+        });
+        return found;
+    }
     update(elapsedTime) {
         player.update(elapsedTime);
-        this.spriteBatch.draw();
+        this.spriteBatch.draw(elapsedTime * 0.001);
     }
 }
 //# sourceMappingURL=world.js.map

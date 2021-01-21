@@ -17,7 +17,15 @@ export class Point {
     }
 
     get length(): number {
-        return Math.round(Math.sqrt(this.x * this.x + this.y * this.y));
+        return (Math.sqrt(this.x * this.x + this.y * this.y));
+    }
+
+    get normalized() : Point {
+
+        if (this.length  > 0) {
+            return this.scale(1 / this.length);
+        }
+        return this;
     }
 
     scale(n: number) {

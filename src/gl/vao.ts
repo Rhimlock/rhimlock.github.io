@@ -17,4 +17,23 @@ export class VAO {
         });
         gl.bindVertexArray(null);
     }
+
+    blub(baos : BufferAttributeObject[]) {
+        baos.forEach(b => {
+            gl.bindBuffer(gl.ARRAY_BUFFER, b.buffer.id);
+            b.attributes.forEach(a => {
+                gl.enableVertexAttribArray(a.id);
+                gl.vertexAttribPointer(a.id, a.size, b.buffer.type, false, 0,0);
+
+            });
+        });
+    }
+}
+
+export class BufferAttributeObject {
+    buffer:VBO
+    attributes:Attribute[] = []
+    constructor (buffer : VBO) {
+        this.buffer = buffer;
+    }
 }
