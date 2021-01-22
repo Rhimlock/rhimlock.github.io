@@ -5,9 +5,10 @@ export class ActiveObject extends BaseObject {
     direction = new Point(0, 0);
     destination: Point | null = null;
     flipped = false;
-    speed = 2;
+    speed = 10;
 
     update(elapsedTime: number, objects: BaseObject[]) {
+        
         if (this.destination) {
             const dir = this.getVectorTo(this.destination);
             const distance = dir.length;
@@ -39,6 +40,8 @@ export class ActiveObject extends BaseObject {
                                 break
                             }
                         }
+                        dir.add(new Point(x,y));
+                        dir.resize(0.5);
 
                     }
                 });

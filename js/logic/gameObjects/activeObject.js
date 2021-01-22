@@ -6,7 +6,7 @@ export class ActiveObject extends BaseObject {
         this.direction = new Point(0, 0);
         this.destination = null;
         this.flipped = false;
-        this.speed = 2;
+        this.speed = 4;
     }
     update(elapsedTime, objects) {
         if (this.destination) {
@@ -39,7 +39,8 @@ export class ActiveObject extends BaseObject {
                                 break;
                             }
                         }
-                        console.log(dir.normalized.toString());
+                        dir.add(new Point(x, y));
+                        dir.resize(0.5);
                     }
                 });
                 this.direction = dir;

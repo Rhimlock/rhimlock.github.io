@@ -5,7 +5,8 @@
         "name": "Launch Chromium against localhost",
         "type": "chrome",
         "request": "launch",
-        "preLaunchTask": "tsc: build - tsconfig.json",
+        "preLaunchTask": "StartServer",
+            "postDebugTask": "StopServer",
         "url": "http://localhost:5500/",
         "sourceMaps": true,
         "webRoot": "${workspaceRoot}",
@@ -14,14 +15,6 @@
           "--remote-debugging-port=9222",
           "--user-data-dir=~/Projects/Secret/.chromium-cache/"
         ]
-      },
-      {
-        "name": "Attach to Chromium",
-        "type": "chrome",
-        "request": "attach",
-        "port": 9222,
-        "sourceMaps": true,
-        "webRoot": "${workspaceRoot}/app"
       }
     ]
   }

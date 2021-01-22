@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "typescript",
+            "tsconfig": "tsconfig.json",
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "StartServer",
+            "type": "process",
+            "command": "${input:startServer} && tsc: watch - tsconfig.json"
+        },
+        {
+            "label": "StopServer",
+            "type": "process",
+            "command": "${input:stopServer}"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "startServer",
+            "type": "command",
+            "command": "extension.liveServer.goOnline"
+        },
+        {
+            "id": "stopServer",
+            "type": "command",
+            "command": "extension.liveServer.goOffline"
+        }
+    ]
+}

@@ -5,5 +5,9 @@
         "js/": true,
         "*/Projects/*": true
 
-    }
+    },
+    "liveServer.settings.ChromeDebuggingAttachment": true,
+    "liveServer.settings.CustomBrowser": "chromium",
+    "liveServer.settings.host": "localhost",
+    "liveServer.settings.NoBrowser": true
 }
