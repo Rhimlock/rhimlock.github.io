@@ -56,6 +56,7 @@ export class Point {
     toString() {
         return `x: ${Math.round(this.x * 100) / 100} / y: ${Math.round(this.y * 100) / 100}`
     }
+    
     turn(vec : Point) {
         const per = vec.x*this.y - this.x * vec.y;
         return (Math.sign(per));
