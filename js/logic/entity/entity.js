@@ -42,6 +42,7 @@ export class Entity extends Point {
     update(time, world = null) {
         this.sprite.color = new Color(time * 255, 0, 0, 255);
         this.animation.update(time, this.sprite);
+        console.log(this.toString(), this.target?.toString());
         switch (Math.sign(this.dir.x)) {
             case -1:
                 this.sprite.flipped = true;
@@ -52,19 +53,34 @@ export class Entity extends Point {
         }
         if (this.target && world) {
             let dir = new Point(this.x, this.y).diff(this.target);
-            if (dir.length > this.distance) {
+            if (dir.length > 0.04 || dir.length === 0) {
+                dir = this.calcNewDir(dir, world);
                 dir = dir.scale(this.speed * time / dir.length);
                 this.sprite.ty = 1;
-                const b = world.getEntitiesAt(this.add(dir), 1, this);
-                if (b.length > 0) {
-                    dir = new Point(-dir.y, dir.x);
-                }
                 this.updatePos(dir);
             }
             else {
+                this.updatePos(new Point(0, 0));
+                this.target = null;
                 this.sprite.ty = 0;
             }
         }
+    }
+    calcNewDir(dir, world) {
+        const ents = world.getEntitiesAt(this.add(dir), this.sprite.size, this);
+        let d = new Point(0, 0);
+        if (ents) {
+            ents.forEach(e => {
+                d = d.add(e.diff(this).normalized);
+            });
+            d = d.scale(1 / ents.length);
+            d = d.add(dir);
+            d = d.normalized;
+        }
+        else {
+            d = dir.normalized;
+        }
+        return dir;
     }
 }
 //# sourceMappingURL=entity.js.map

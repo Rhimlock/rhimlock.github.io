@@ -1,7 +1,9 @@
 import { Color } from "../../helper/color.js";
+import { Point } from "../../helper/point.js";
 import { view } from "../../helper/view.js";
-export class Sprite {
+export class Sprite extends Point {
     constructor(vboPos, vboTex, vboColor, spriteIndex) {
+        super(0, 0);
         this.vboPos = vboPos;
         this.vboTex = vboTex;
         this.vboColor = vboColor;

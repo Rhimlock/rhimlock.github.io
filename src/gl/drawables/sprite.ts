@@ -1,8 +1,9 @@
 import { Color } from "../../helper/color.js";
+import { Point } from "../../helper/point.js";
 import { view } from "../../helper/view.js";
 import { VBO } from "../vbo.js";
 
-export class Sprite {
+export class Sprite extends Point {
     public static ELEMENTS_PER_POSITION = 2;
     public static ELEMENTS_PER_TEXTURE = 4;
     public static ELEMENTS_PER_COLOR = 4;
@@ -11,13 +12,14 @@ export class Sprite {
     private vboColor: VBO | null;
     private i: number;
     constructor(vboPos: VBO, vboTex: VBO, vboColor: VBO | null, spriteIndex: number) {
+        super(0,0);
         this.vboPos = vboPos;
         this.vboTex = vboTex;
         this.vboColor = vboColor;
         this.i = spriteIndex;
     }
 
-    get x() { return this.vboPos.getVertex(this.i, 0) as number / view.tileSize}
+    get x() { return this.vboPos.getVertex(this.i, 0) as number / view.tileSize }
     get y() { return this.vboPos.getVertex(this.i, 1) as number / view.tileSize }
 
     get tx() { return this.vboTex.getVertex(this.i, 0) as number/ view.tileSize }

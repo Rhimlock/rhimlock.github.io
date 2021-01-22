@@ -36,7 +36,7 @@ class Input {
         this.keys = keys;
     }
 
-    bindCall(functionToCall: Function, key: string, context: any | null) {
+    bindCall(functionToCall: Function, key: string, context: any | null = null) {
         if (context) {
             this._calls.set(key, functionToCall.bind(context));
         } else {

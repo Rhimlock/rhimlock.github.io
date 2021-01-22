@@ -1,3 +1,4 @@
+import { Point } from "../../helper/point.js";
 import { view } from "../../helper/view.js";
 import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
@@ -24,11 +25,13 @@ export class SpriteBatch {
         gl.uniform2fv(this.program.uniforms.uTexInv, this.tex.sizeInv);
         gl.uniform1f(this.program.uniforms.uTileSize, view.tileSize);
     }
-    createSprite() {
+    createSprite(p = new Point(0, 0)) {
         if (this.sprites.length === this.maxSprites) {
             throw 'batchError: could not create new Sprite';
         }
         const spr = new Sprite(this.vboPos, this.vboTex, this.vboColor, this.sprites.length);
+        spr.x = p.x;
+        spr.y = p.y;
         spr.size = 2;
         spr.ty = 0;
         this.sprites.push(spr);

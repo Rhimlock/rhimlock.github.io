@@ -26,12 +26,13 @@ class Terminal {
         data.forEach(element => {
             if (txt.length > 0)
                 txt += "; ";
-            txt += element;
+            txt += element.toString();
         });
         const p = document.createElement("p");
         p.innerHTML = txt;
         dom.log.appendChild(p);
         this.showLastLine();
+        console.log(data);
     }
     showLastLine() {
         dom.log.scrollTop = dom.log.scrollHeight;
