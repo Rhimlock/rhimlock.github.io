@@ -39,7 +39,6 @@ export class ActiveObject extends BaseObject {
                                 break
                             }
                         }
-                        console.log(dir.normalized.toString());
 
                     }
                 });
