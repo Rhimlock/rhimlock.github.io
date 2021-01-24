@@ -18,23 +18,48 @@ export class Point {
 
     get normalized() : Point {
         if (this.length  > 0) {
-            return this.getMultiply(1 / this.length);
+            return this.getResized(1 / this.length);
         }
         return this;
+    }
+
+    get inverted() : Point {
+        return new Point(-this.x, -this.y);
+    }
+
+    get rotatedLeft() : Point {
+        return new Point(this.y, - this.x);
+    }
+
+    get rotatedRight() : Point {
+        return new Point(- this.y, this.x);
     }
 
     resize(factor : number) {
         this.x *= factor;
         this.y *= factor;
+        return this;
     }
 
-    add(p: Point) {
-        this.x += p.x;
-        this.y += p.y;
+    move(offset: Point) {
+        this.x += offset.x;
+        this.y += offset.y;
+        return this;
     }
-    sub(p: Point) {
-        this.x -= p.x;
-        this.y -= p.y;
+
+    rotateLeft() {
+        const x = this.x;
+        const y = this.y;
+        this.x = y;
+        this.y = -x;
+        return this;
+    }
+
+    rotateRight() {
+        const x = this.x;
+        const y = this.y;
+        this.x = -y;
+        this.y = x;
     }
 
     getVectorTo(p: Point) {
@@ -45,11 +70,7 @@ export class Point {
         return new Point(p.x + this.x, p.y + this.y); 
     }
 
-    getScalar(p: Point) {
-        return (this.x * p.y + this.y * p.x);
-    }
-
-    getMultiply(factor : number) {
+    getResized(factor : number) {
         return new Point(this.x * factor, this.y * factor);
     }
 
@@ -57,8 +78,9 @@ export class Point {
         return `x: ${Math.round(this.x * 100) / 100} / y: ${Math.round(this.y * 100) / 100}`
     }
     
-    turn(vec : Point) {
+    checkAngle(vec : Point) {
         const per = vec.x*this.y - this.x * vec.y;
         return (Math.sign(per));
     }
+
 }
