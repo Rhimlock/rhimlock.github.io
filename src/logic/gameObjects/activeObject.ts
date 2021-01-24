@@ -1,12 +1,27 @@
+import { Sprite } from "../../gl/drawables/sprite.js";
+import { Animation, Frame } from "../../helper/animation.js";
 import { Point } from "../../helper/point.js";
 import { BaseObject } from "./baseObject.js";
 
 export class ActiveObject extends BaseObject {
-    direction = new Point(0, 0);
+    direction = new Point(1, 0);
     destination: Point | null = null;
     flipped = false;
-    speed = 10;
+    speed = 4;
     squad: ActiveObject[] = [];
+    animation = new Animation();
+
+    constructor(sprite : Sprite) {
+        super(sprite);
+        this.animation.addFrame(new Frame(0,1));
+        this.animation.addFrame(new Frame(1,1));
+        this.animation.addFrame(new Frame(2,1));
+        this.animation.addFrame(new Frame(3,1));
+        this.animation.addFrame(new Frame(4,1));
+        this.animation.addFrame(new Frame(5,1));
+        this.animation.addFrame(new Frame(6,1));
+        this.animation.addFrame(new Frame(7,1));
+    }
 
     addSquaddy(squaddy: ActiveObject) {
         this.squad.push(squaddy);
@@ -16,13 +31,15 @@ export class ActiveObject extends BaseObject {
 
 
     update(elapsedTime: number, objects: BaseObject[]) {
-
+        this.animation.update(elapsedTime,this.sprite);
+        this.sprite.ty = 0;
         if (this.destination) {
+            this.sprite.ty = 1;
             const dir = this.getVectorTo(this.destination);
             const distance = dir.length;
-            if (distance < 0.5) {
+            if (distance < 0.2) {
+                this.direction = dir;
                 this.destination = null;
-                this.direction = new Point(0, 0);
             } else {
                 dir.resize(this.speed / distance * elapsedTime);
 
@@ -47,12 +64,12 @@ export class ActiveObject extends BaseObject {
                 }
                 if (this.flipped !== this.sprite.flipped) this.sprite.flipped = this.flipped;
             }
-            this.move(this.direction);
-            if (this.direction.length > 0) {
-                this.squad.forEach((e, n) => {
-                    e.destination = this.getSum(this.calcGlobalSquaddieOffset(n + 1));              
-                })
+            if (this.destination) {
+                this.move(this.direction);
             }
+            this.squad.forEach((e, n) => {
+                e.destination = this.getSum(this.calcGlobalSquaddieOffset(n + 1));              
+            })
 
         }
     }
