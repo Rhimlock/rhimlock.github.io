@@ -35,7 +35,6 @@ class Terminal {
         p.innerHTML = txt;
         dom.log.appendChild(p);
         this.showLastLine();
-        console.log(data);
     }
     showLastLine() {
         dom.log.scrollTop = dom.log.scrollHeight;

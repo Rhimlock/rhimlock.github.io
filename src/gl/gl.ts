@@ -1,7 +1,7 @@
 import { dom } from "../helper/htmlElements.js";
 import { terminal } from "../controls/terminal.js";
 import { view } from "../helper/view.js";
-export const gl = dom.canvas.getContext("webgl2", {
+export var gl = dom.canvas.getContext("webgl2", {
     antialias: false,
     depth: true,
     alpha: false,

@@ -16,8 +16,8 @@ player.sprite.color = new Color(255, 0, 0, 255);
 const tick = (elapsedTime) => {
     info.update(timer.elapsedTime);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    player.update(elapsedTime * 0.001, []);
-    dummies.forEach(d => d.update(elapsedTime * 0.001, []));
+    player.update(elapsedTime * 0.001);
+    dummies.forEach(d => d.update(elapsedTime * 0.001));
     batch.draw(elapsedTime);
 };
 const timer = new Timer(tick, 0);

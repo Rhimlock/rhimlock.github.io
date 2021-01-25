@@ -19,8 +19,8 @@ player.sprite.color = new Color(255,0,0,255);
 const tick = (elapsedTime: number) => {
     info.update(timer.elapsedTime);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    player.update(elapsedTime * 0.001, []);
-    dummies.forEach(d => d.update(elapsedTime * 0.001, []));
+    player.update(elapsedTime * 0.001);
+    dummies.forEach(d => d.update(elapsedTime * 0.001));
     batch.draw(elapsedTime);
 }
 
@@ -31,7 +31,6 @@ const createDummy = () => {
     const dummy = new ActiveObject(batch.createSprite(mousePos));
     player.addSquaddy(dummy);
     dummies.push(dummy);
-    // dummy.destination = player;
 }
 
 input.bindCall(timer.toggle,input.keys.pause,timer);
