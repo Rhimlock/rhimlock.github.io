@@ -1,7 +1,7 @@
 import { Sprite } from "../../gl/drawables/sprite.js";
 import { Animation, Frame } from "../../helper/animation.js";
 import { Point } from "../../helper/point.js";
-import { Regiment } from "../regiment.js";
+import { Squad } from "../squads/squad.js";
 import { BaseObject } from "./baseObject.js";
 
 export class ActiveObject extends BaseObject {
@@ -9,7 +9,7 @@ export class ActiveObject extends BaseObject {
     destination: Point | null = null;
     flipped = false;
     speed = 4;
-    squad: Regiment | null = null;
+    squad: Squad | null = null;
     animation = new Animation();
 
     constructor(sprite : Sprite) {
@@ -22,16 +22,6 @@ export class ActiveObject extends BaseObject {
         this.animation.addFrame(new Frame(5,1));
         this.animation.addFrame(new Frame(6,1));
         this.animation.addFrame(new Frame(7,1));
-    }
-
-    addSquaddy(squaddy: ActiveObject) {
-        if (!this.squad) {
-            this.squad = new Regiment();
-            this.squad.leader = this;
-        }
-        if (this.squad) {
-            squaddy.destination = this.squad.getGlobalPosition(this.squad.addMember(squaddy) -1);
-        }
     }
 
     update(elapsedTime: number) {
@@ -56,16 +46,9 @@ export class ActiveObject extends BaseObject {
             if (this.destination) {
                 this.move(this.direction);
             }
-            if (this.squad) {
-                this.squad.members.forEach((m,i) => {
-                    m.destination = this.squad?.getGlobalPosition(i) || m.destination;
-                })
-            }
-
         }
-    }
-    collidesWith(dir: Point, o: BaseObject) {
-        return (this.getSum(dir).getVectorTo(o).length < this.size + o.size);
+        
+        this.squad?.update();
     }
 }
 

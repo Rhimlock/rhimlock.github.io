@@ -1,33 +1,36 @@
-import { Point } from "../helper/point.js";
-import { ActiveObject } from "./gameObjects/activeObject.js";
-
+import { Point } from "../../helper/point.js";
 export class Regiment {
-    leader : ActiveObject | null = null;
-    members : ActiveObject [] = [];
-    offsets : Point[] = [];
-    width: number = 5;
-
-    setLeader(m : ActiveObject) {
+    constructor() {
+        this.leader = null;
+        this.members = [];
+        this.offsets = [];
+        this.width = 5;
+    }
+    update() {
+        this.members.forEach((m, i) => {
+            m.destination = this.getGlobalPosition(i) || m.destination;
+        });
+    }
+    setLeader(m) {
         if (this.leader !== m) {
             this.leader = m;
             let i = this.members.indexOf(m);
             if (i < 0) {
-                i = this.addMember(m) -1;
+                i = this.addMember(m) - 1;
             }
             if (i > 0) {
-                this.swapPositions(0,i);
-            } 
+                this.swapPositions(0, i);
+            }
         }
     }
-    addMember(m : ActiveObject) : number {
+    addMember(m) {
         const n = this.members.push(m);
         if (n > this.offsets.length) {
             this.offsets.push(this.calcMemberOffset(n));
         }
         return n;
     }
-   
-    swapPositions(i1: number, i2: number) {
+    swapPositions(i1, i2) {
         if (this.members[i1] && this.members[i2]) {
             const tmp1 = this.members[i1];
             const tmp2 = this.members[i2];
@@ -35,40 +38,34 @@ export class Regiment {
                 this.members[i1] = tmp2;
                 this.members[i2] = tmp1;
             }
-        }                
+        }
     }
-
     refreshOffsets() {
         this.offsets = [];
         for (let i = 0; i < this.members.length; ++i) {
             this.offsets.push(this.calcMemberOffset(i));
         }
     }
-
-    getGlobalPosition(n : number) : Point {
+    getGlobalPosition(n) {
         let offset = this.offsets[n];
         if (this.leader && offset) {
             let dir = this.leader.direction.normalized;
-            offset =  dir.rotatedLeft.resize(offset.x).getSum(
-                dir.inverted.resize(offset.y)
-            )
-            console.log(this.leader.getSum(offset).toString());
+            offset = dir.rotatedLeft.resize(offset.x).getSum(dir.inverted.resize(offset.y));
             return this.leader.getSum(offset);
-        } 
+        }
         const m = this.members[n];
         if (m) {
             return m;
         }
-        return new Point (-1,-1);
-         
+        return new Point(-1, -1);
     }
-
-    calcMemberOffset(n : number) {
+    calcMemberOffset(n) {
         const offset = new Point(0, 0);
         offset.y = Math.floor(n / this.width);
         offset.x = (n % this.width) % 2;
         n = n % this.width;
-        offset.x = (n % 2) ? - Math.ceil(n / 2) : n / 2;
+        offset.x = (n % 2) ? -Math.ceil(n / 2) : n / 2;
         return offset;
     }
 }
+//# sourceMappingURL=regiment.js.map

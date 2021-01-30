@@ -10,7 +10,7 @@ export class Point {
     set x(v) { this._x = v; }
     set y(v) { this._y = v; }
     get length() { return (Math.sqrt(this.x * this.x + this.y * this.y)); }
-    get normalized() { return this.getResized(1 / this.length); }
+    get normalized() { return this.length > 0 ? this.getResized(1 / this.length) : this; }
     get inverted() { return new Point(-this.x, -this.y); }
     get rotatedLeft() { return new Point(this.y, -this.x); }
     get rotatedRight() { return new Point(-this.y, this.x); }
