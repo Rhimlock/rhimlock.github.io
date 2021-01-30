@@ -59,7 +59,6 @@ export class Regiment implements Squad {
     getGlobalPosition(n : number) : Point {
         let offset = this.offsets[n];
         
-        console.log(offset?.toString());
         if (this.leader && offset) {
             let dir = this.leader.direction.normalized;
             offset =  dir.rotatedLeft.resize(offset.x).getSum(

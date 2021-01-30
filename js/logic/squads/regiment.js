@@ -49,7 +49,6 @@ export class Regiment {
     }
     getGlobalPosition(n) {
         let offset = this.offsets[n];
-        console.log(offset?.toString());
         if (this.leader && offset) {
             let dir = this.leader.direction.normalized;
             offset = dir.rotatedLeft.resize(offset.x).getSum(dir.inverted.resize(offset.y));
