@@ -1,12 +1,13 @@
 import { Point } from "../../helper/point.js";
 export class Regiment {
-    constructor() {
-        this.leader = null;
+    constructor(leader) {
         this.members = [];
         this.offsets = [];
         this.width = 5;
+        this.leader = leader;
     }
     update() {
+        this.refreshOffsets();
         this.members.forEach((m, i) => {
             m.destination = this.getGlobalPosition(i) || m.destination;
         });
@@ -43,11 +44,12 @@ export class Regiment {
     refreshOffsets() {
         this.offsets = [];
         for (let i = 0; i < this.members.length; ++i) {
-            this.offsets.push(this.calcMemberOffset(i));
+            this.offsets.push(this.calcMemberOffset(i + 1));
         }
     }
     getGlobalPosition(n) {
         let offset = this.offsets[n];
+        console.log(offset?.toString());
         if (this.leader && offset) {
             let dir = this.leader.direction.normalized;
             offset = dir.rotatedLeft.resize(offset.x).getSum(dir.inverted.resize(offset.y));
@@ -65,6 +67,9 @@ export class Regiment {
         offset.x = (n % this.width) % 2;
         n = n % this.width;
         offset.x = (n % 2) ? -Math.ceil(n / 2) : n / 2;
+        if (this.leader.direction.x < 0) {
+            offset.x *= -1;
+        }
         return offset;
     }
 }

@@ -3,12 +3,16 @@ import { ActiveObject } from "../gameObjects/activeObject.js";
 import { Squad } from "./squad.js";
 
 export class Regiment implements Squad {
-    leader : ActiveObject | null = null;
+    leader : ActiveObject;
     members : ActiveObject [] = [];
     offsets : Point[] = [];
     width: number = 5;
 
+    constructor(leader: ActiveObject) {
+        this.leader = leader;
+    }
     update(): void {
+        this.refreshOffsets();
         this.members.forEach((m,i) => {
             m.destination = this.getGlobalPosition(i) || m.destination;
         })
@@ -48,12 +52,14 @@ export class Regiment implements Squad {
     refreshOffsets() {
         this.offsets = [];
         for (let i = 0; i < this.members.length; ++i) {
-            this.offsets.push(this.calcMemberOffset(i));
+            this.offsets.push(this.calcMemberOffset(i+1));
         }
     }
 
     getGlobalPosition(n : number) : Point {
         let offset = this.offsets[n];
+        
+        console.log(offset?.toString());
         if (this.leader && offset) {
             let dir = this.leader.direction.normalized;
             offset =  dir.rotatedLeft.resize(offset.x).getSum(
@@ -75,6 +81,9 @@ export class Regiment implements Squad {
         offset.x = (n % this.width) % 2;
         n = n % this.width;
         offset.x = (n % 2) ? - Math.ceil(n / 2) : n / 2;
+        if (this.leader.direction.x < 0) {
+             offset.x *= -1;
+        }
         return offset;
     }
 }
