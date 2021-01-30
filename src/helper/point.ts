@@ -12,30 +12,13 @@ export class Point {
     set x(v: number) { this._x = v; }
     set y(v: number) { this._y = v; }
 
-    get length(): number {
-        return (Math.sqrt(this.x * this.x + this.y * this.y));
-    }
+    get length() { return (Math.sqrt(this.x * this.x + this.y * this.y)); }
+    get normalized() { return this.getResized(1 / this.length); }
+    get inverted() { return new Point(-this.x, -this.y); }
+    get rotatedLeft() { return new Point(this.y, - this.x); }
+    get rotatedRight() { return new Point(- this.y, this.x); }
 
-    get normalized() : Point {
-        if (this.length  > 0) {
-            return this.getResized(1 / this.length);
-        }
-        return this;
-    }
-
-    get inverted() : Point {
-        return new Point(-this.x, -this.y);
-    }
-
-    get rotatedLeft() : Point {
-        return new Point(this.y, - this.x);
-    }
-
-    get rotatedRight() : Point {
-        return new Point(- this.y, this.x);
-    }
-
-    resize(factor : number) {
+    resize(factor: number) {
         this.x *= factor;
         this.y *= factor;
         return this;
@@ -67,19 +50,19 @@ export class Point {
     }
 
     getSum(p: Point) {
-        return new Point(p.x + this.x, p.y + this.y); 
+        return new Point(p.x + this.x, p.y + this.y);
     }
 
-    getResized(factor : number) {
+    getResized(factor: number) {
         return new Point(this.x * factor, this.y * factor);
     }
 
     toString() {
         return `x: ${Math.round(this.x * 100) / 100} / y: ${Math.round(this.y * 100) / 100}`
     }
-    
-    checkAngle(vec : Point) {
-        const per = vec.x*this.y - this.x * vec.y;
+
+    checkAngle(vec: Point) {
+        const per = vec.x * this.y - this.x * vec.y;
         return (Math.sign(per));
     }
 

@@ -34,7 +34,6 @@ export class ActiveObject extends BaseObject {
         }
     }
 
-
     update(elapsedTime: number) {
         this.animation.update(elapsedTime,this.sprite);
         this.sprite.ty = 0;
@@ -59,7 +58,6 @@ export class ActiveObject extends BaseObject {
             }
             if (this.squad) {
                 this.squad.members.forEach((m,i) => {
-
                     m.destination = this.squad?.getGlobalPosition(i) || m.destination;
                 })
             }
@@ -69,23 +67,5 @@ export class ActiveObject extends BaseObject {
     collidesWith(dir: Point, o: BaseObject) {
         return (this.getSum(dir).getVectorTo(o).length < this.size + o.size);
     }
-
-    // calcGlobalSquaddieOffset(n: number) {
-    //     let offset = this.calcLocalSquaddieOffset(n);
-    //     const x = offset.x;
-    //     const dir = this.direction.length > 0 ? this.direction : new Point(1.0,0);
-    //     offset = dir.inverted.normalized.resize(offset.y);
-    //     offset.move(dir.normalized.rotateLeft().resize(x));
-    //     return offset; 
-    // }
-    // calcLocalSquaddieOffset(n : number) {
-    //     const w = Math.max(5, Math.ceil(Math.sqrt(this.squad.length)));
-    //     const offset = new Point(0, 0);
-    //     offset.y = Math.floor(n / w);
-    //     offset.x = (n % w) % 2;
-    //     n = n % w;
-    //     offset.x = (n % 2) ? - Math.ceil(n / 2) : n / 2;
-    //     return offset;
-    // }
 }
 

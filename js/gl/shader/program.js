@@ -3,12 +3,12 @@ import { fetchAttributes } from "./attribute.js";
 import { Shader } from "./shader.js";
 import { fetchUniforms } from "./uniforms.js";
 export class Program {
-    constructor(vertDeclaration, vertProcessing, fragDeclaration, fragProcessing) {
+    constructor(srcVertexShader, srcFragmentShader) {
         this.attributes = [];
         this.uniforms = {};
         this.id = gl.createProgram();
-        this.vert = new Shader(gl.VERTEX_SHADER, vertDeclaration, vertProcessing);
-        this.frag = new Shader(gl.FRAGMENT_SHADER, fragDeclaration, fragProcessing);
+        this.vert = new Shader(gl.VERTEX_SHADER, srcVertexShader);
+        this.frag = new Shader(gl.FRAGMENT_SHADER, srcFragmentShader);
         if (this.id && this.vert.id && this.frag.id) {
             gl.attachShader(this.id, this.vert.id);
             gl.attachShader(this.id, this.frag.id);

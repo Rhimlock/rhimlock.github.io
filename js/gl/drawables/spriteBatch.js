@@ -9,7 +9,7 @@ import { Sprite } from "./sprite.js";
 export class SpriteBatch {
     constructor(maxSprites, img, useColors = false) {
         this.vboColor = null;
-        this.program = new Program(vertDeclaration, vertProcessing, fragDeclaration, fragProcessing);
+        this.program = new Program(vertexShader, fragmentShader);
         this.sprites = [];
         this.vboPos = new VBO(new Float32Array(maxSprites * Sprite.ELEMENTS_PER_POSITION), Sprite.ELEMENTS_PER_POSITION);
         this.vboTex = new VBO(new Int8Array(maxSprites * Sprite.ELEMENTS_PER_TEXTURE), Sprite.ELEMENTS_PER_TEXTURE);
@@ -55,31 +55,44 @@ export class SpriteBatch {
         gl.bindVertexArray(null);
     }
 }
-const vertDeclaration = `
-    in vec4 aTex;
-    in vec4 aColor;
-    out vec4 vColor;
-    out vec4 vTex;
-    uniform vec2 uTexInv;
-`;
-const vertProcessing = `
-    gl_PointSize = aTex.z ;
-    vTex = vec4(aTex.xy * aTex.z * uTexInv, aTex.z  * uTexInv.x, aTex.w);
-    vColor = aColor / 256.0;
-`;
-const fragDeclaration = `
-  uniform sampler2D uTex;
-  in vec4 vColor;
-  in vec4 vTex;
-`;
-const fragProcessing = `
-vec2 t = (vTex.xy + gl_PointCoord) * vTex.z ;
-if (vTex.w > 0.0) {
-  t.x = (vTex.x - gl_PointCoord.x) * vTex.z + vTex.z;
+const vertexShader = `#version 300 es  
+precision mediump float;
+  in vec2 aVert;
+  in vec4 aTex;
+  in vec4 aColor;
+  out vec4 vColor;
+  out vec4 vTex;
+  uniform vec2 uTexInv;
+  uniform vec2 uView;
+  uniform vec2 uResInv;
+  uniform float uTileSize;
+
+void main() {
+  vec2 v = round(aVert.xy - uView.xy * uTileSize )* uResInv ;
+  v.y *= -1.0;
+  v += vec2(-1.0,1.0);
+  gl_Position = vec4(v, v.y, 1.0);
+  gl_PointSize = aTex.z ;
+  vTex = vec4(aTex.xy * aTex.z * uTexInv, aTex.z  * uTexInv.x, aTex.w);
+  vColor = aColor / 256.0;
 }
+`;
+const fragmentShader = `#version 300 es    
+precision mediump float;
+uniform sampler2D uTex;
+in vec4 vColor;
+in vec4 vTex;
+out vec4 outColor;
+
+void main() {    
+  vec2 t = (vTex.xy + gl_PointCoord) * vTex.z ;
+  if (vTex.w > 0.0) {
+    t.x = (vTex.x - gl_PointCoord.x) * vTex.z + vTex.z;
+  }
   outColor = texture(uTex,t);
 
   if (outColor.a <= 0.1) discard;
   outColor.rgb += vColor.rgb * vColor.a;
+}
 `;
 //# sourceMappingURL=spriteBatch.js.map

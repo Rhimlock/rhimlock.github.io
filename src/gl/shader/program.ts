@@ -10,10 +10,10 @@ export class Program {
   frag: Shader;
   attributes = [] as Attribute[];
   uniforms = {} as Uniforms;
-  constructor(vertDeclaration: string, vertProcessing: string, fragDeclaration: string, fragProcessing: string) {
+  constructor(srcVertexShader: string, srcFragmentShader: string) {
     this.id = gl.createProgram();
-    this.vert = new Shader(gl.VERTEX_SHADER, vertDeclaration, vertProcessing);
-    this.frag = new Shader(gl.FRAGMENT_SHADER, fragDeclaration, fragProcessing);
+    this.vert = new Shader(gl.VERTEX_SHADER, srcVertexShader);
+    this.frag = new Shader(gl.FRAGMENT_SHADER, srcFragmentShader);
     if (this.id && this.vert.id && this.frag.id) {
       gl.attachShader(this.id, this.vert.id);
       gl.attachShader(this.id, this.frag.id);
