@@ -10,6 +10,7 @@ import { dom } from "./helper/htmlElements.js";
 import { mousePos } from "./controls/mouse.js";
 import { Color } from "./helper/color.js";
 import { Regiment } from "./logic/squads/regiment.js";
+import { Point } from "./helper/point.js";
 
 const batch = new SpriteBatch(200, dom.orks, true);
 const player = new ActiveObject(batch.createSprite());
@@ -18,10 +19,20 @@ player.x = 8;
 player.y = 8;
 player.sprite.color = new Color(255,0,0,255);
 player.squad = new Regiment(player);
-
+info.player = player;
 const tick = (elapsedTime: number) => {
     info.update(timer.elapsedTime);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    
+    const dir = new Point(0,0);
+    if (input.left) dir.x = -1;
+    if (input.right) dir.x = 1;
+    if (input.up) dir.y = -1;
+    if (input.down) dir.y = 1;
+    if (dir.length !== 0) {
+
+        player.destination = player.getSum(dir);
+    
+    }gl.clear(gl.COLOR_BUFFER_BIT);
     player.update(elapsedTime * 0.001);
     dummies.forEach(d => d.update(elapsedTime * 0.001));
     batch.draw(elapsedTime);

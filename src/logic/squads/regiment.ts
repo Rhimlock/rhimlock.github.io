@@ -22,18 +22,16 @@ export class Regiment implements Squad {
         if (this.leader !== m) {
             this.leader = m;
             let i = this.members.indexOf(m);
-            if (i < 0) {
-                i = this.addMember(m) -1;
-            }
-            if (i > 0) {
-                this.swapPositions(0,i);
+            if (i >= 0) {
+                this.swapPositions(this.members.length-1,i);
+                this.members.pop();
             } 
         }
     }
     addMember(m : ActiveObject) : number {
         const n = this.members.push(m);
         if (n > this.offsets.length) {
-            this.offsets.push(this.calcMemberOffset(n));
+            this.offsets.push(this.calcMemberOffset(n-1));
         }
         return n;
     }
@@ -68,6 +66,8 @@ export class Regiment implements Squad {
         } 
         const m = this.members[n];
         if (m) {
+            
+        console.log(n, m.toString());
             return m;
         }
         return new Point (-1,-1);
