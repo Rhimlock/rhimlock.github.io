@@ -14,16 +14,11 @@ export class ActiveObject extends BaseObject {
         this.animation.addFrame(new Frame(1, 1));
         this.animation.addFrame(new Frame(2, 1));
         this.animation.addFrame(new Frame(3, 1));
-        this.animation.addFrame(new Frame(4, 1));
-        this.animation.addFrame(new Frame(5, 1));
-        this.animation.addFrame(new Frame(6, 1));
-        this.animation.addFrame(new Frame(7, 1));
+        this.sprite.flipped = false;
     }
     update(elapsedTime) {
         this.animation.update(elapsedTime, this.sprite);
-        this.sprite.ty = 0;
         if (this.destination) {
-            this.sprite.ty = 1;
             const dir = this.getVectorTo(this.destination);
             const distance = dir.length;
             if (distance < 0.2) {
@@ -33,17 +28,29 @@ export class ActiveObject extends BaseObject {
             else {
                 dir.resize(this.speed / distance * elapsedTime);
                 this.direction = dir;
-                switch (Math.sign(dir.x)) {
-                    case -1:
-                        this.flipped = true;
-                        break;
-                    case 1: this.flipped = false;
-                }
-                if (this.flipped !== this.sprite.flipped)
-                    this.sprite.flipped = this.flipped;
             }
             if (this.destination) {
                 this.move(this.direction);
+            }
+        }
+        if (Math.abs(this.direction.y) > Math.abs(this.direction.x)) {
+            switch (Math.sign(this.direction.y)) {
+                case -1:
+                    this.sprite.ty = 0;
+                    break;
+                case 1:
+                    this.sprite.ty = 2;
+                    break;
+            }
+        }
+        else {
+            switch (Math.sign(this.direction.x)) {
+                case -1:
+                    this.sprite.ty = 3;
+                    break;
+                case 1:
+                    this.sprite.ty = 1;
+                    break;
             }
         }
         this.squad?.update();

@@ -16,7 +16,7 @@ for (let i = 0; i < arr.length; i++) {
     arr[i] = Math.round(Math.random() * 8);
 }
 const tilemap = new TileMap(arr, new Vec2([1024, 1024]), dom.tiles);
-const batch = new SpriteBatch(200, dom.orks, true);
+const batch = new SpriteBatch(200, dom.humans, true);
 const player = new ActiveObject(batch.createSprite());
 const dummies = [];
 player.x = 8;
