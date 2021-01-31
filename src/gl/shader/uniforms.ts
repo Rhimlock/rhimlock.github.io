@@ -8,6 +8,7 @@ export interface Uniforms {
     uView: WebGLUniformLocation | null,
     uLayer: WebGLUniformLocation | null,
     uProgress: WebGLUniformLocation | null,
+    uMapSize: WebGLUniformLocation | null,
 }
 
 export interface LooseUniforms {

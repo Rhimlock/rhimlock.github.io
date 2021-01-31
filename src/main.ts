@@ -11,7 +11,14 @@ import { mousePos } from "./controls/mouse.js";
 import { Color } from "./helper/color.js";
 import { Regiment } from "./logic/squads/regiment.js";
 import { Point } from "./helper/point.js";
+import { TileMap } from "./gl/drawables/tilemap.js";
+import { Vec2 } from "./interfaces/vec2.js";
 
+const arr = new Uint8Array(1024*1024);
+for (let i = 0; i < arr.length; i++) {
+    arr[i] = Math.round(Math.random() * 8);
+}
+const tilemap = new TileMap(arr, new Vec2([1024,1024]),dom.tiles);
 const batch = new SpriteBatch(200, dom.orks, true);
 const player = new ActiveObject(batch.createSprite());
 const dummies : ActiveObject[] = [];
@@ -36,6 +43,7 @@ const tick = (elapsedTime: number) => {
     player.update(elapsedTime * 0.001);
     dummies.forEach(d => d.update(elapsedTime * 0.001));
     batch.draw(elapsedTime);
+    tilemap.draw(elapsedTime);
 }
 
 const timer = new Timer(tick, 0);

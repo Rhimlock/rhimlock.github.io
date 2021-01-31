@@ -12,11 +12,15 @@ export function fetchAttributes(id: WebGLProgram) {
     for (let i = 0; i < gl.getProgramParameter(id, gl.ACTIVE_ATTRIBUTES); i++) {
         const info = gl.getActiveAttrib(id, i);
         if (info) {
-            attributes.push({
-                id: gl.getAttribLocation(id, info.name),
-                size: lookupSize(info.type),
-                info: info
-            });
+            const location = gl.getAttribLocation(id, info.name);
+            if (location >= 0) {
+                attributes.push({
+                    id: location,
+                    size: lookupSize(info.type),
+                    info: info
+                });
+            }
+           
         }
     }
     return attributes;

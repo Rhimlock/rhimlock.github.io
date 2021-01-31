@@ -5,6 +5,7 @@ export const dom = {
     log: document.getElementById("log"),
     commandLine: document.getElementById("commandLine"),
     orks: document.getElementById("orks"),
+    tiles: document.getElementById("tiles"),
     worldTime: document.getElementById("worldTime"),
     mousePos: document.getElementById("mousePos"),
     playerPos: document.getElementById("playerPos"),
