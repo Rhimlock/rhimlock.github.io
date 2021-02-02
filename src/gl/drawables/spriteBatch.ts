@@ -81,10 +81,10 @@ export class SpriteBatch implements Drawable {
 const vertexShader = `#version 300 es  
 precision mediump float;
   in vec2 aVert;
-  in vec4 aTex;
+  in vec3 aTex;
   in vec4 aColor;
   out vec4 vColor;
-  out vec4 vTex;
+  out vec3 vTex;
   uniform vec2 uTexInv;
   uniform vec2 uView;
   uniform vec2 uResInv;
@@ -96,7 +96,7 @@ void main() {
   v += vec2(-1.0,1.0);
   gl_Position = vec4(v, v.y, 1.0);
   gl_PointSize = aTex.z ;
-  vTex = vec4(aTex.xy * aTex.z * uTexInv, aTex.z  * uTexInv.x, aTex.w);
+  vTex = vec3(aTex.xy * aTex.z * uTexInv, aTex.z  * uTexInv.x);
   vColor = aColor / 256.0;
 }
 `;
@@ -105,14 +105,11 @@ const fragmentShader = `#version 300 es
 precision mediump float;
 uniform sampler2D uTex;
 in vec4 vColor;
-in vec4 vTex;
+in vec3 vTex;
 out vec4 outColor;
 
 void main() {    
   vec2 t = (vTex.xy + gl_PointCoord) * vTex.z ;
-  if (vTex.w > 0.0) {
-    t.x = (vTex.x - gl_PointCoord.x) * vTex.z + vTex.z;
-  }
   outColor = texture(uTex,t);
 
   if (outColor.a <= 0.1) discard;

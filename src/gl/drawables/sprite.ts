@@ -5,7 +5,7 @@ import { VBO } from "../vbo.js";
 
 export class Sprite extends Point {
     public static ELEMENTS_PER_POSITION = 2;
-    public static ELEMENTS_PER_TEXTURE = 4;
+    public static ELEMENTS_PER_TEXTURE = 3;
     public static ELEMENTS_PER_COLOR = 4;
     private vboPos: VBO;
     private vboTex: VBO;
@@ -25,7 +25,6 @@ export class Sprite extends Point {
     get tx() { return this.vboTex.getVertex(this.i, 0) as number/ view.tileSize }
     get ty() { return this.vboTex.getVertex(this.i, 1) as number / view.tileSize}
     get size() { return this.vboTex.getVertex(this.i, 2) as number/ view.tileSize }
-    get flipped() {return this.vboTex.getVertex(this.i, 3) as any as boolean }
     get color() {
         return new Color(
             this.vboColor?.getVertex(this.i, 0) as number,
@@ -41,7 +40,6 @@ export class Sprite extends Point {
     set tx(v: number) { this.vboTex.setVertex(v * view.tileSize, this.i, 0); }
     set ty(v: number) { this.vboTex.setVertex(v * view.tileSize, this.i, 1); }
     set size(v: number) { this.vboTex.setVertex(v * view.tileSize, this.i, 2); }
-    set flipped(v: boolean) {this.vboTex.setVertex(v? 1 : 0, this.i, 3)}
     
     set color(v: Color) {
         this.vboColor?.setVertex(v.r, this.i, 0);
@@ -59,7 +57,6 @@ export class Sprite extends Point {
         this.tx = spr.tx;
         this.ty = spr.ty;
         this.size = spr.size;
-        this.flipped = spr.flipped;
         this.color = spr.color;
     }
 }

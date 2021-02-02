@@ -18,7 +18,6 @@ export class ActiveObject extends BaseObject {
         this.animation.addFrame(new Frame(1,1));
         this.animation.addFrame(new Frame(2,1));
         this.animation.addFrame(new Frame(3,1));
-        this.sprite.flipped = false;
         // this.animation.addFrame(new Frame(4,1));
         // this.animation.addFrame(new Frame(5,1));
         // this.animation.addFrame(new Frame(6,1));

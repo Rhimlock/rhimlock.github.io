@@ -14,7 +14,6 @@ export class Sprite extends Point {
     get tx() { return this.vboTex.getVertex(this.i, 0) / view.tileSize; }
     get ty() { return this.vboTex.getVertex(this.i, 1) / view.tileSize; }
     get size() { return this.vboTex.getVertex(this.i, 2) / view.tileSize; }
-    get flipped() { return this.vboTex.getVertex(this.i, 3); }
     get color() {
         return new Color(this.vboColor?.getVertex(this.i, 0), this.vboColor?.getVertex(this.i, 1), this.vboColor?.getVertex(this.i, 2), this.vboColor?.getVertex(this.i, 3));
     }
@@ -23,7 +22,6 @@ export class Sprite extends Point {
     set tx(v) { this.vboTex.setVertex(v * view.tileSize, this.i, 0); }
     set ty(v) { this.vboTex.setVertex(v * view.tileSize, this.i, 1); }
     set size(v) { this.vboTex.setVertex(v * view.tileSize, this.i, 2); }
-    set flipped(v) { this.vboTex.setVertex(v ? 1 : 0, this.i, 3); }
     set color(v) {
         this.vboColor?.setVertex(v.r, this.i, 0);
         this.vboColor?.setVertex(v.g, this.i, 1);
@@ -38,11 +36,10 @@ export class Sprite extends Point {
         this.tx = spr.tx;
         this.ty = spr.ty;
         this.size = spr.size;
-        this.flipped = spr.flipped;
         this.color = spr.color;
     }
 }
 Sprite.ELEMENTS_PER_POSITION = 2;
-Sprite.ELEMENTS_PER_TEXTURE = 4;
+Sprite.ELEMENTS_PER_TEXTURE = 3;
 Sprite.ELEMENTS_PER_COLOR = 4;
 //# sourceMappingURL=sprite.js.map
