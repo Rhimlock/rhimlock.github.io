@@ -15,7 +15,7 @@
         {
             "label": "StartServer",
             "type": "process",
-            "command": "tsc & ${input:startServer} "
+            "command": "tsc & tsc -p tsconfig.json & ${input:startServer} "
         },
         {
             "label": "StopServer",

@@ -21,6 +21,7 @@ export function lookupActiveInfoTypeSize(type) {
         case gl.FLOAT_VEC4:
         case gl.INT_VEC4:
         case gl.UNSIGNED_INT_VEC4:
+        case gl.FLOAT_MAT4:
             size = 4;
             break;
     }

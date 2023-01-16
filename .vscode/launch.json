@@ -1,14 +1,13 @@
   {
     "version": "0.2.0",
     "configurations": [
-
       {
         "type": "firefox",
         "request": "launch",
         "reAttach": true,
         "name": "Launch Firefox",
         "preLaunchTask": "StartServer",
-            "postDebugTask": "StopServer",
+        "postDebugTask": "StopServer",
         "url": "http://localhost:5500/index.html",
         "webRoot": "${workspaceFolder}"
       },
@@ -17,7 +16,7 @@
         "type": "chrome",
         "request": "launch",
         "preLaunchTask": "StartServer",
-            "postDebugTask": "StopServer",
+        "postDebugTask": "StopServer",
         "url": "http://localhost:5500/",
         "sourceMaps": true,
         "webRoot": "${workspaceRoot}",
