@@ -14,8 +14,8 @@ export class Program {
         if (err)
             throw `linkingError: ${err}`;
         this.initAttributes();
-        this.initUniforms();
         this.initUniformBlocks();
+        this.initUniforms();
     }
     compileShader(type, src) {
         const shader = gl.createShader(type);
@@ -31,21 +31,27 @@ export class Program {
         const n = gl.getProgramParameter(this.id, gl.ACTIVE_ATTRIBUTES);
         for (let i = 0; i < n; ++i) {
             const info = gl.getActiveAttrib(this.id, i);
-            info.location = gl.getAttribLocation(this.id, info.name);
-            info.typeSize = lookupActiveInfoTypeSize(info.type);
-            this.attributes.push(info);
+            this.attributes.push({
+                name: info.name,
+                location: gl.getAttribLocation(this.id, info.name),
+                size: lookupActiveInfoTypeSize(info.type),
+                type: info.type
+            });
         }
     }
     initUniforms() {
         const n = gl.getProgramParameter(this.id, gl.ACTIVE_UNIFORMS);
         for (let i = 0; i < n; ++i) {
             const info = gl.getActiveUniform(this.id, i);
-            info.typeSize = lookupActiveInfoTypeSize(info.type);
-            info.location = gl.getUniformLocation(this.id, info.name);
-            if (!info.location) {
-                info.block = gl.getActiveUniforms(this.id, [i], gl.UNIFORM_BLOCK_INDEX)[0];
-            }
-            this.uniforms.push(info);
+            const uniform = {
+                name: info.name,
+                location: gl.getUniformLocation(this.id, info.name),
+                size: lookupActiveInfoTypeSize(info.type),
+                type: info.type,
+                block: this.uniformBlocks[gl.getActiveUniforms(this.id, [i], gl.UNIFORM_BLOCK_INDEX)[0]]
+            };
+            this.uniforms.push(uniform);
+            uniform.block?.uniforms.push(uniform);
         }
     }
     initUniformBlocks() {
@@ -53,10 +59,9 @@ export class Program {
         for (let i = 0; i < n; ++i) {
             const block = {
                 name: gl.getActiveUniformBlockName(this.id, i),
+                index: i,
                 size: gl.getActiveUniformBlockParameter(this.id, i, gl.UNIFORM_BLOCK_DATA_SIZE),
-                vars: this.uniforms.filter(u => {
-                    return (u.block === i);
-                })
+                uniforms: []
             };
             this.uniformBlocks.push(block);
         }

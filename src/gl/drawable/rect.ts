@@ -1,4 +1,4 @@
-import { Program } from "../../program.js";
+import { Program } from "../program.js";
 
 export class Rect {
     program: Program;
@@ -10,8 +10,8 @@ export class Rect {
     }
 }
 
-const srcVertexShader = await fetch('vert.glsl')
+const srcVertexShader = await fetch('shaders/rect.vert.glsl')
     .then(result => result.text());
 
-const srcFragmentShader = await fetch('frag.glsl')
+const srcFragmentShader = await fetch('shaders/rect.frag.glsl')
 .then(result => result.text());

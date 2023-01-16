@@ -7,8 +7,8 @@ export class Rect {
         console.log(this.program);
     }
 }
-const srcVertexShader = await fetch('rect.vert.glsl')
+const srcVertexShader = await fetch('shaders/rect.vert.glsl')
     .then(result => result.text());
-const srcFragmentShader = await fetch('rect.frag.glsl')
+const srcFragmentShader = await fetch('shaders/rect.frag.glsl')
     .then(result => result.text());
 //# sourceMappingURL=rect.js.map

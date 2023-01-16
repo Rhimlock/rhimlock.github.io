@@ -27,7 +27,7 @@ export function lookupActiveInfoTypeSize(type: number): number {
             break;
     }
     if (size < 0) {
-        throw {
+       throw {
             name: "ActiveInfoError",
             message: "unable to lookup length of type: " + type
         };
