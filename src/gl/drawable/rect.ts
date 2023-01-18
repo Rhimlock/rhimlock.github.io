@@ -18,7 +18,7 @@ export class Rect {
     initVao(): WebGLVertexArrayObject {
         const vao = gl.createVertexArray() as WebGLVertexArrayObject;
         gl.bindVertexArray(vao);
-        this.program.attributes.forEach((a) => {
+        Object.values(this.program.attributes).forEach((a) => {
             gl.enableVertexAttribArray(a.location);
             gl.vertexAttribPointer(
                 a.location,

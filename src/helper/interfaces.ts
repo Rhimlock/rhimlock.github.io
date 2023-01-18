@@ -3,7 +3,7 @@ export interface Block {
   name: string
   index: number
   size: number
-  uniforms: ActiveInfo[]
+  uniforms: ActiveInfoCollection
 }
 
 export interface ActiveInfo { 
@@ -11,4 +11,8 @@ export interface ActiveInfo {
   location: number
   type: GLenum
   size: number 
+}
+
+export interface ActiveInfoCollection {
+  [key : string] : ActiveInfo
 }

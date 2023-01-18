@@ -1,4 +1,4 @@
-import { Block, ActiveInfo } from "../helper/interfaces.js";
+import { Block, ActiveInfoCollection } from "../helper/interfaces.js";
 import { lookupActiveInfoTypeSize } from "../helper/lookup.js";
 import { gl } from "./gl.js";
 
@@ -6,9 +6,9 @@ export class Program {
   id: WebGLProgram;
   vert: WebGLShader;
   frag: WebGLShader;
-  attributes = [] as ActiveInfo[];
-  uniforms = [] as ActiveInfo[];
-  uniformBlocks = [] as Block[];
+  attributes: ActiveInfoCollection;
+  uniforms: ActiveInfoCollection;
+  uniformBlocks: Block[];
 
   constructor(srcVertexShader: string, srcFragmentShader: string) {
     this.id = gl.createProgram() as WebGLProgram;
@@ -40,14 +40,19 @@ export class Program {
   getActiveInfos(pname: number, getActiveInfo: Function, getLocation: Function) {
     let infos = [...new Array(gl.getProgramParameter(this.id, pname))];
     infos = infos.map((_, i) => getActiveInfo.call(gl, this.id, i));
-    return infos.map(info => ({
-        name: info.name,
-        location: getLocation.call(gl, this.id, info.name) as number,
-        size: lookupActiveInfoTypeSize(info.type),
-        type: info.type
-      })
-      );
-   
+    infos = infos.map(info => ({
+      name: info.name,
+      location: getLocation.call(gl, this.id, info.name) as number,
+      size: lookupActiveInfoTypeSize(info.type),
+      type: info.type
+    })
+    );
+    return infos.reduce((obj, item) => ({
+      ...obj,
+      [item.name]: item
+
+    }), {});
+
   }
 
   getUniformBlocks() {
@@ -56,16 +61,20 @@ export class Program {
       const name = gl.getActiveUniformBlockName(this.id, i) as string;
       const index = gl.getUniformBlockIndex(this.id, name);
       const uniformIndices = gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES) as Uint32Array;
-      //const uniformOffsets = gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_OFFSET);
-      const uniforms = this.uniforms.filter((_,i) => uniformIndices.includes( i));
-
+      // const uniformOffsets = gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_OFFSET);
+      // const uniformNames = gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_BLOCK)
+      const uniforms = Object.values(this.uniforms).filter((_,i) => uniformIndices.includes(i));
       return {
         name: name,
         index: index,
         size: gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_BLOCK_DATA_SIZE),
-        uniforms: uniforms
+        uniforms: uniforms.reduce((obj, item) => ({
+          ...obj,
+          [item.name]: item
+
+        }), {}) 
       };
     }
     );
-    }
+  }
 }
