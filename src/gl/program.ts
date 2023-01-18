@@ -1,3 +1,4 @@
+import { Block, ActiveInfo } from "../helper/interfaces.js";
 import { lookupActiveInfoTypeSize } from "../helper/lookup.js";
 import { gl } from "./gl.js";
 
@@ -5,8 +6,8 @@ export class Program {
   id: WebGLProgram;
   vert: WebGLShader;
   frag: WebGLShader;
-  attributes = [] as Attribute[];
-  uniforms = [] as Uniform[];
+  attributes = [] as ActiveInfo[];
+  uniforms = [] as ActiveInfo[];
   uniformBlocks = [] as Block[];
 
   constructor(srcVertexShader: string, srcFragmentShader: string) {
@@ -20,9 +21,9 @@ export class Program {
     const err = gl.getProgramInfoLog(this.id);
     if (err) throw `linkingError: ${err}`;
 
-    this.initAttributes();
-    this.initUniformBlocks();
-    this.initUniforms();
+    this.attributes = this.getActiveInfos(gl.ACTIVE_ATTRIBUTES, gl.getActiveAttrib, gl.getAttribLocation);
+    this.uniforms = this.getActiveInfos(gl.ACTIVE_UNIFORMS, gl.getActiveUniform, gl.getUniformLocation);
+    this.uniformBlocks = this.getUniformBlocks();
   }
 
   compileShader(type: number, src: string) {
@@ -35,72 +36,36 @@ export class Program {
     return shader;
   }
 
-  initAttributes() {
-    const n = gl.getProgramParameter(this.id, gl.ACTIVE_ATTRIBUTES);
-    for (let i = 0; i < n; ++i) {
-      const info = gl.getActiveAttrib(this.id, i) as WebGLActiveInfo;
-      this.attributes.push({
+  //used for ACTIVE_ATTRIBUTES and ACTIVE_UNIFORMS
+  getActiveInfos(pname: number, getActiveInfo: Function, getLocation: Function) {
+    let infos = [...new Array(gl.getProgramParameter(this.id, pname))];
+    infos = infos.map((_, i) => getActiveInfo.call(gl, this.id, i));
+    return infos.map(info => ({
         name: info.name,
-        location: gl.getAttribLocation(this.id, info.name),
+        location: getLocation.call(gl, this.id, info.name) as number,
         size: lookupActiveInfoTypeSize(info.type),
         type: info.type
-      });
-    }
-
+      })
+      );
+   
   }
-  initUniforms() {
-    const n = gl.getProgramParameter(this.id, gl.ACTIVE_UNIFORMS);
-    for (let i = 0; i < n; ++i) {
-      const info = gl.getActiveUniform(this.id, i) as WebGLActiveInfo;
-      const uniform = {
-        name: info.name,
-        location: gl.getUniformLocation(this.id, info.name),
-        size: lookupActiveInfoTypeSize(info.type),
-        type: info.type,
-        block: this.uniformBlocks[gl.getActiveUniforms(this.id, [i], gl.UNIFORM_BLOCK_INDEX)[0]]
+
+  getUniformBlocks() {
+    let blocks = [...new Array(gl.getProgramParameter(this.id, gl.ACTIVE_UNIFORM_BLOCKS))];
+    return blocks.map((_, i) => {
+      const name = gl.getActiveUniformBlockName(this.id, i) as string;
+      const index = gl.getUniformBlockIndex(this.id, name);
+      const uniformIndices = gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES) as Uint32Array;
+      //const uniformOffsets = gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_OFFSET);
+      const uniforms = this.uniforms.filter((_,i) => uniformIndices.includes( i));
+
+      return {
+        name: name,
+        index: index,
+        size: gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_BLOCK_DATA_SIZE),
+        uniforms: uniforms
       };
-      this.uniforms.push(uniform);
-      uniform.block?.uniforms.push(uniform);
-
     }
-
-  }
-
-  initUniformBlocks() {
-    const n = gl.getProgramParameter(this.id, gl.ACTIVE_UNIFORM_BLOCKS);
-    for (let i = 0; i < n; ++i) {
-      const block = {
-        name: gl.getActiveUniformBlockName(this.id, i) as string,
-        index: i,
-        size: gl.getActiveUniformBlockParameter(this.id, i, gl.UNIFORM_BLOCK_DATA_SIZE),
-        uniforms: []
-        
-      };
-      this.uniformBlocks.push(block);
+    );
     }
-
-  }
 }
-
-interface Attribute {
-  name: string;
-  type: GLenum;
-  size: number;
-  location: number;
-}
-
-interface Uniform {
-  name: string;
-  type: GLenum;
-  size: number;
-  location: WebGLUniformLocation | null;
-  block: Block | undefined;
-}
-
-interface Block {
-  name: string;
-  index: number;
-  size: number;
-  uniforms: Uniform[];
-}
-

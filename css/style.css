@@ -1,4 +1,4 @@
-@font-face { font-family: PixelFont; src: url('PixelFont.ttf'); } 
+@font-face { font-family: PixelFont; src: url('Boxy-Bold.ttf'); } 
 
 body {
   background-color: black;
@@ -8,7 +8,8 @@ body {
   font-smooth: never;
   font-size:27px;
   -webkit-font-smoothing : none;
-  text-shadow: 0px 0px 4px #FFFFFF;
+  color: white;
+
 }
 
 #canvas {
@@ -18,13 +19,8 @@ body {
   float: true;
   width: 100%;
   height: 100%;
-  background-color: darkgrey;
-  image-rendering: optimizeSpeed; /* Older versions of FF          */
-  image-rendering: -moz-crisp-edges; /* FF 6.0+                       */
-  image-rendering: -webkit-optimize-contrast; /* Safari                        */
-  image-rendering: -o-crisp-edges; /* OS X & Windows Opera (12.02+) */
-  image-rendering: pixelated; /* Awesome future-browsers       */
-  -ms-interpolation-mode: nearest-neighbor; /* IE                            */
+  background-color: black; 
+  image-rendering:pixelated;            
 }
 
 #terminal {

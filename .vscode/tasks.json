@@ -2,15 +2,17 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "typescript",
-            "tsconfig": "tsconfig.json",
-            "problemMatcher": [
-                "$tsc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "label": "buildAndStartServer",
+            "dependsOn": [
+                "build",
+                "StartServer"
+            ]
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "npm run build"
+
         },
         {
             "label": "StartServer",

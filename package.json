@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf ./js tsc && tsc -p tsconfig.json",
-    "watch": "rm -rf ./js tsc && tsc -p tsconfig.json --watch"
+    "build": "rm -rf ./js && tsc -p tsconfig.json",
+    "watch": "rm -rf ./js && tsc -p tsconfig.json --watch"
   },
   "author": "",
   "license": "ISC",
