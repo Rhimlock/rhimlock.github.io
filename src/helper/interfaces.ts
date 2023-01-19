@@ -16,3 +16,13 @@ export interface ActiveInfo {
 export interface ActiveInfoCollection {
   [key : string] : ActiveInfo
 }
+
+export interface VertexAttrib {
+  name: string
+  location?: number
+  size?: number
+  type: GLenum
+  normalized?: boolean
+  stride?: number
+  offset?: number
+}

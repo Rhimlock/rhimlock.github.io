@@ -1,52 +1,60 @@
 import { Buffer } from "../buffer.js";
 import { gl } from "../gl.js";
 import { Program } from "../program.js";
+import { shaders } from "../shaders.js";
 
-export class Rect {
-    program: Program
+const program = new Program(shaders.rect?.vert as string, shaders.rect?.frag as string);
+
+program.initAttributes( [
+    {
+        name: 'pos',
+        type: gl.SHORT,
+    },
+    {
+        name: 'size',
+        type: gl.UNSIGNED_BYTE
+    }
+]);
+
+export class Rect{
+    data: DataView
+    index = -1
     buffer: Buffer
-    vao: WebGLVertexArrayObject
-    x = 0
-    y = 0
-    size = 1
-    constructor() {
-        this.program = new Program(srcVertexShader, srcFragmentShader);
-        this.buffer = new Buffer(1);
-        this.vao = this.initVao();
+    constructor(buffer: Buffer, x = 0, y = 0, size = 0 ) {
+        this.buffer = buffer;
+        this.data = buffer.addEntity(this);
+        this.size = size;
+        this.x = x;
+        this.y = y;
+        
+    }
+    set x(value: number) {
+        this.data.setInt16(0,value,true);
+    }
+    get x() {
+        return this.data.getInt16(0,true);
     }
 
-    initVao(): WebGLVertexArrayObject {
-        const vao = gl.createVertexArray() as WebGLVertexArrayObject;
-        gl.bindVertexArray(vao);
-        Object.values(this.program.attributes).forEach((a) => {
-            gl.enableVertexAttribArray(a.location);
-            gl.vertexAttribPointer(
-                a.location,
-                a.size,
-                a.type,
-                false,
-                0,
-                0
-            );
-
-        })
-        gl.bindVertexArray(null);
-        return vao;
-
+    set y(value: number) {
+        this.data.setInt16(2,value,true);
     }
-    draw() {
-        gl.useProgram(this.program.id);
+    get y() {
+        return this.data.getInt16(2,true);
+    }
+
+    set size(value: number) {
+        this.data.setUint8(4,value);
+    }
+    get size() {
+        return this.data.getUint8(4);
+    }
+
+    static createBuffer(numberOfRects : number) {
+        return new Buffer(numberOfRects, program.attributes);
+    }
     
-        const offset = 0;
-        const count = 1;
-        gl.drawArrays(gl.POINTS, offset, count);
-
+    static getProgram() {
+        return program;
     }
+    
 }
-
-
-const srcVertexShader = await fetch('shaders/example.vert.glsl')
-    .then(result => result.text());
-
-const srcFragmentShader = await fetch('shaders/example.frag.glsl')
-    .then(result => result.text());

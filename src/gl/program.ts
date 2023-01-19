@@ -1,12 +1,14 @@
-import { Block, ActiveInfoCollection } from "../helper/interfaces.js";
+import { Block, ActiveInfoCollection, VertexAttrib } from "../helper/interfaces.js";
 import { lookupActiveInfoTypeSize } from "../helper/lookup.js";
+import { Buffer } from "./buffer.js";
 import { gl } from "./gl.js";
+import { VertexAttributeArray } from "./vertexAttributes.js";
 
 export class Program {
   id: WebGLProgram;
   vert: WebGLShader;
   frag: WebGLShader;
-  attributes: ActiveInfoCollection;
+  attributes: VertexAttributeArray = new VertexAttributeArray([]);
   uniforms: ActiveInfoCollection;
   uniformBlocks: Block[];
 
@@ -20,8 +22,7 @@ export class Program {
 
     const err = gl.getProgramInfoLog(this.id);
     if (err) throw `linkingError: ${err}`;
-
-    this.attributes = this.getActiveInfos(gl.ACTIVE_ATTRIBUTES, gl.getActiveAttrib, gl.getAttribLocation);
+  
     this.uniforms = this.getActiveInfos(gl.ACTIVE_UNIFORMS, gl.getActiveUniform, gl.getUniformLocation);
     this.uniformBlocks = this.getUniformBlocks();
   }
@@ -34,6 +35,17 @@ export class Program {
     if (err) throw `compileError: ${type} - ${err}`;
     gl.attachShader(this.id, shader);
     return shader;
+  }
+
+
+  initAttributes(attribs : VertexAttrib[]) {
+    //lookup location and size from program
+    attribs.forEach(a => {
+      a.location = gl.getAttribLocation(this.id,a.name);
+      a.size = lookupActiveInfoTypeSize(gl.getActiveAttrib(this.id,a.location)?.type as number);
+    })
+    //this will calculate ByteSize, Offset and Stride
+    this.attributes = new VertexAttributeArray(attribs);
   }
 
   //used for ACTIVE_ATTRIBUTES and ACTIVE_UNIFORMS
@@ -61,8 +73,6 @@ export class Program {
       const name = gl.getActiveUniformBlockName(this.id, i) as string;
       const index = gl.getUniformBlockIndex(this.id, name);
       const uniformIndices = gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES) as Uint32Array;
-      // const uniformOffsets = gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_OFFSET);
-      // const uniformNames = gl.getActiveUniformBlockParameter(this.id, index, gl.UNIFORM_BLOCK)
       const uniforms = Object.values(this.uniforms).filter((_,i) => uniformIndices.includes(i));
       return {
         name: name,
@@ -76,5 +86,12 @@ export class Program {
       };
     }
     );
+  }
+
+  drawBuffer(buffer : Buffer) {
+    gl.useProgram(this.id);
+    buffer.draw();
+    gl.useProgram(null);
+
   }
 }
