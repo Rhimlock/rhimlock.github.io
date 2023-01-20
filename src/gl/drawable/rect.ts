@@ -31,6 +31,12 @@ export class Rect{
         this.y = y;
         
     }
+    set pos(pos: number[]) {
+        attribs.pos?.setValues?.(this.data,pos);
+    }
+    get pos() {
+        return attribs.pos?.getValues?.(this.data) as number[];
+    }
     set x(value: number) {
         this.data.setInt16(0,value,true);
     }
@@ -46,10 +52,14 @@ export class Rect{
     }
 
     set size(value: number) {
-        attribs.size?.set?.call(this.data,attribs.size.offset, value);
+        attribs.size?.setValue?.(this.data, value);
     }
-    get size() {
-        return attribs.size?.get?.call(this.data,attribs.size.offset);
+    get size() : number {
+        return attribs.size?.getValue?.(this.data) as number;
+    }
+
+    set color(color: number[]) {
+        attribs.color?.setValues?.(this.data, color);
     }
 
     static createBuffer(numberOfRects : number) {

@@ -24,6 +24,8 @@ export interface VertexAttrib {
   type: GLenum
   normalized?: boolean
   offset?: number
-  get?: Function
-  set?: Function
+  getValue? (dv: DataView) : number
+  setValue? (dv: DataView, value :number ) :  void
+  getValues? (dv: DataView) : number[]
+  setValues? (dv: DataView, value :number[] ) :  void
 }

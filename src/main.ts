@@ -9,6 +9,8 @@ const r2 = new Rect(rectBuffer, -300, 50, 16);
 const r3 = new Rect(rectBuffer, -300, 0, 16);
 const r4 = new Rect(rectBuffer, -300, -50, 16);
 const r5 = new Rect(rectBuffer, -300, -100, 16);
+r1.color = [255,255,0];
+r1.pos = [100,100];
 const tick = () => {
     gl.clear(gl.COLOR_BUFFER_BIT);
 

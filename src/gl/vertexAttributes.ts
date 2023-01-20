@@ -13,10 +13,17 @@ export class VertexAttributeArray {
         this.byteLength = 0;
         for (const [_, a] of Object.entries(this.attribs)){
             a.offset = this.byteLength;
-            this.byteLength = a.offset + this.getByteSize(a.type) * (a.size ?? 1);
+            const byteSize = this.getByteSize(a.type);
+            this.byteLength = a.offset +  byteSize * (a.size ?? 1);
             const functs = this.getFunction(a.type);
-            a.get = functs.get as Function;
-            a.set = functs.set as Function;
+            if (a.size == 1) {
+                a.getValue = function(dv : DataView) { return functs.get?.call(dv,a.offset as number,true) as number};
+                a.setValue = function(dv : DataView, value : number) { functs.set?.call(dv,a.offset as number,value,true)};
+            } else {
+                const arr = [...new Array(a.size)];
+                a.getValues = function(dv : DataView) { return arr.map((_,i) => functs.get?.call(dv,a.offset as number + i * byteSize ,true) as number)};
+                a.setValues = function(dv : DataView, values : number[]) {  arr.forEach((_,i) => functs.set?.call(dv,a.offset as number + i * byteSize ,values[i] as number,true))};
+            }
         }
     }
 
