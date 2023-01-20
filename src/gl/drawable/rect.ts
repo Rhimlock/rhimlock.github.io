@@ -1,20 +1,23 @@
+import { VertexAttrib } from "../../helper/interfaces.js";
 import { Buffer } from "../buffer.js";
 import { gl } from "../gl.js";
 import { Program } from "../program.js";
 import { shaders } from "../shaders.js";
 
-const program = new Program(shaders.rect?.vert as string, shaders.rect?.frag as string);
-
-program.initAttributes( [
-    {
-        name: 'pos',
+const program = new Program(shaders.rect?.vert as WebGLShader, shaders.rect?.frag as WebGLShader);
+const attribs = {
+    pos: {
         type: gl.SHORT,
     },
-    {
-        name: 'size',
-        type: gl.UNSIGNED_BYTE
+    size: {
+        type: gl.UNSIGNED_BYTE,
+    },
+    color: {
+        type: gl.UNSIGNED_BYTE,
     }
-]);
+} as {[key: string] : VertexAttrib};
+
+program.initAttributes(attribs);
 
 export class Rect{
     data: DataView
@@ -43,10 +46,10 @@ export class Rect{
     }
 
     set size(value: number) {
-        this.data.setUint8(4,value);
+        attribs.size?.set?.call(this.data,attribs.size.offset, value);
     }
     get size() {
-        return this.data.getUint8(4);
+        return attribs.size?.get?.call(this.data,attribs.size.offset);
     }
 
     static createBuffer(numberOfRects : number) {

@@ -22,7 +22,7 @@ export class Buffer {
         gl.bindVertexArray(vao);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.id);
         this.bufferData();
-        vaa.attribs.forEach((a, i) => {
+        Object.values(vaa.attribs).forEach((a, i) => {
             gl.enableVertexAttribArray(i);
             gl.vertexAttribPointer(
                 a.location as number,

@@ -6,17 +6,14 @@ import { VertexAttributeArray } from "./vertexAttributes.js";
 
 export class Program {
   id: WebGLProgram;
-  vert: WebGLShader;
-  frag: WebGLShader;
-  attributes: VertexAttributeArray = new VertexAttributeArray([]);
+  attributes: VertexAttributeArray = new VertexAttributeArray({});
   uniforms: ActiveInfoCollection;
   uniformBlocks: Block[];
 
-  constructor(srcVertexShader: string, srcFragmentShader: string) {
+  constructor(vertexShader: WebGLShader, fragmentShader: WebGLShader) {
     this.id = gl.createProgram() as WebGLProgram;
-    this.vert = this.compileShader(gl.VERTEX_SHADER, srcVertexShader);
-    this.frag = this.compileShader(gl.FRAGMENT_SHADER, srcFragmentShader);
-
+    gl.attachShader(this.id,vertexShader);
+    gl.attachShader(this.id,fragmentShader);
     gl.linkProgram(this.id);
     gl.useProgram(this.id);
 
@@ -27,23 +24,13 @@ export class Program {
     this.uniformBlocks = this.getUniformBlocks();
   }
 
-  compileShader(type: number, src: string) {
-    const shader = gl.createShader(type) as WebGLShader;
-    gl.shaderSource(shader, src);
-    gl.compileShader(shader);
-    const err = gl.getShaderInfoLog(shader);
-    if (err) throw `compileError: ${type} - ${err}`;
-    gl.attachShader(this.id, shader);
-    return shader;
-  }
-
-
-  initAttributes(attribs : VertexAttrib[]) {
+  initAttributes(attribs : {[key: string] : VertexAttrib }) {
     //lookup location and size from program
-    attribs.forEach(a => {
+    for (const [key, a] of Object.entries(attribs)){
+      a.name = key;
       a.location = gl.getAttribLocation(this.id,a.name);
       a.size = lookupActiveInfoTypeSize(gl.getActiveAttrib(this.id,a.location)?.type as number);
-    })
+    }
     //this will calculate ByteSize, Offset and Stride
     this.attributes = new VertexAttributeArray(attribs);
   }

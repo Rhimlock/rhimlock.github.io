@@ -18,11 +18,12 @@ export interface ActiveInfoCollection {
 }
 
 export interface VertexAttrib {
-  name: string
+  name?: string
   location?: number
   size?: number
   type: GLenum
   normalized?: boolean
-  stride?: number
   offset?: number
+  get?: Function
+  set?: Function
 }

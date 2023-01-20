@@ -5,4 +5,4 @@ if (!gl) {
 }
 dom.canvas.width = 300;
 dom.canvas.height = 150;
-gl.clearColor(0.0, 0.0, 0.0, 1.0);
+gl.clearColor(0.0, 0.5, 0.5, 1.0);

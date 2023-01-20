@@ -1,23 +1,23 @@
 import { VertexAttrib } from "../helper/interfaces.js"
 import { gl } from "./gl.js";
 export class VertexAttributeArray {
-    attribs: VertexAttrib[]
+    attribs: {[key: string] : VertexAttrib }
     byteLength = 0
 
-    constructor(attribs: VertexAttrib[]) {
+    constructor(attribs : {[key: string] : VertexAttrib }) {
         this.attribs = attribs;
         this.calcStrideAndOffset()
     }
 
     calcStrideAndOffset() {
         this.byteLength = 0;
-        for (let i = 0; i < this.attribs.length; ++i) {
-            const a = this.attribs[i] as VertexAttrib;
+        for (const [_, a] of Object.entries(this.attribs)){
             a.offset = this.byteLength;
             this.byteLength = a.offset + this.getByteSize(a.type) * (a.size ?? 1);
-
+            const functs = this.getFunction(a.type);
+            a.get = functs.get as Function;
+            a.set = functs.set as Function;
         }
-        this.attribs.forEach(a => a.stride = this.byteLengthPow2);
     }
 
     getByteSize(type: GLenum) {
