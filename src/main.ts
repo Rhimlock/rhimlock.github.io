@@ -1,5 +1,6 @@
 import { Rect } from "./gl/drawable/rect.js";
 import { gl } from "./gl/gl.js";
+import { Color } from "./helper/color.js";
 import { Timer } from "./helper/timer.js";
 
 const rectProgram = Rect.getProgram();
@@ -9,8 +10,12 @@ const r2 = new Rect(rectBuffer, -300, 50, 16);
 const r3 = new Rect(rectBuffer, -300, 0, 16);
 const r4 = new Rect(rectBuffer, -300, -50, 16);
 const r5 = new Rect(rectBuffer, -300, -100, 16);
-r1.color = [255,255,0];
+r1.color = new Color([255,255,0]);
 r1.pos = [100,100];
+r2.color = new Color([255,0,0]);
+r3.color = new Color([0, 255,0]);
+r4.color = new Color([0, 0, 255]);
+r5.color = new Color([255,0,255]);
 const tick = () => {
     gl.clear(gl.COLOR_BUFFER_BIT);
 

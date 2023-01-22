@@ -39,7 +39,7 @@ export class Buffer {
 
     draw() {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.id);
-        this.bufferData();
+        this.bufferSubData();
         gl.bindVertexArray(this.vao);
         gl.drawArrays(gl.POINTS,0,this.elements.length);
         gl.bindVertexArray(null);

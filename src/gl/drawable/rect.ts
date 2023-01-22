@@ -1,3 +1,4 @@
+import { Color } from "../../helper/color.js";
 import { VertexAttrib } from "../../helper/interfaces.js";
 import { Buffer } from "../buffer.js";
 import { gl } from "../gl.js";
@@ -22,9 +23,7 @@ program.initAttributes(attribs);
 export class Rect{
     data: DataView
     index = -1
-    buffer: Buffer
     constructor(buffer: Buffer, x = 0, y = 0, size = 0 ) {
-        this.buffer = buffer;
         this.data = buffer.addEntity(this);
         this.size = size;
         this.x = x;
@@ -54,12 +53,15 @@ export class Rect{
     set size(value: number) {
         attribs.size?.setValue?.(this.data, value);
     }
-    get size() : number {
+    get size() {
         return attribs.size?.getValue?.(this.data) as number;
     }
 
-    set color(color: number[]) {
-        attribs.color?.setValues?.(this.data, color);
+    set color(color: Color) {
+        attribs.color?.setValues?.(this.data, Array.from(color));
+    }
+    get color(){
+        return new Color(attribs.size?.getValues?.(this.data) as number[]);
     }
 
     static createBuffer(numberOfRects : number) {

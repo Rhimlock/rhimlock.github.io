@@ -15,7 +15,7 @@ export class VertexAttributeArray {
             a.offset = this.byteLength;
             const byteSize = this.getByteSize(a.type);
             this.byteLength = a.offset +  byteSize * (a.size ?? 1);
-            const functs = this.getFunction(a.type);
+            const functs = this.lookupGetterSetter(a.type);
             if (a.size == 1) {
                 a.getValue = function(dv : DataView) { return functs.get?.call(dv,a.offset as number,true) as number};
                 a.setValue = function(dv : DataView, value : number) { functs.set?.call(dv,a.offset as number,value,true)};
@@ -39,7 +39,7 @@ export class VertexAttributeArray {
         return 4;
     }
 
-    getFunction(type: GLenum) {
+    lookupGetterSetter(type: GLenum) {
         const dv = new DataView(new ArrayBuffer(0));
         switch (type) {
             case gl.BYTE:
