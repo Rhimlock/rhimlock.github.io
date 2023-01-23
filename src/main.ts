@@ -1,17 +1,18 @@
-import { Rect } from "./gl/drawable/rect.js";
+import { Light } from "./gl/drawable/light.js";
 import { gl } from "./gl/gl.js";
 import { Color } from "./helper/color.js";
 import { Timer } from "./helper/timer.js";
 
-const rectProgram = Rect.getProgram();
-const rectBuffer = Rect.createBuffer(5);
-const r1 = new Rect(rectBuffer, -300, 100, 16);
-const r2 = new Rect(rectBuffer, -300, 50, 16);
-const r3 = new Rect(rectBuffer, -300, 0, 16);
-const r4 = new Rect(rectBuffer, -300, -50, 16);
-const r5 = new Rect(rectBuffer, -300, -100, 16);
+const lights = Light.createBuffer(5);
+const r1 = new Light(lights, -300, 100, 16);
+const r2 = new Light(lights, -300, 50, 16);
+const r3 = new Light(lights, -300, 0, 16);
+const r4 = new Light(lights, -300, -50, 16);
+const r5 = new Light(lights, -300, -100, 16);
 r1.color = new Color([255,255,0]);
 r1.pos = [100,100];
+r2.pos = [80,80];
+r5.size = 255;
 r2.color = new Color([255,0,0]);
 r3.color = new Color([0, 255,0]);
 r4.color = new Color([0, 0, 255]);
@@ -19,11 +20,11 @@ r5.color = new Color([255,0,255]);
 const tick = () => {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-rectProgram.drawBuffer(rectBuffer);
-r1.x+=2;
-r2.x+=4;
-r3.x+=6;
-r4.x+=8;
+Light.draw(lights);
+r1.x+=1;
+r2.x+=3;
+r3.x+=5;
+r4.x+=7;
 r5.x+=10;
 
 }

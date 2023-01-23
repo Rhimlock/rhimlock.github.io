@@ -1,7 +1,7 @@
 import { gl } from "./gl.js";
 
 export const shaders = {
-    rect : {
+    light : {
         vert : WebGLShader,
         frag: WebGLShader
     },

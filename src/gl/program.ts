@@ -1,6 +1,5 @@
 import { Block, ActiveInfoCollection, VertexAttrib } from "../helper/interfaces.js";
 import { lookupActiveInfoTypeSize } from "../helper/lookup.js";
-import { Buffer } from "./buffer.js";
 import { gl } from "./gl.js";
 import { VertexAttributeArray } from "./vertexAttributes.js";
 
@@ -73,12 +72,5 @@ export class Program {
       };
     }
     );
-  }
-
-  drawBuffer(buffer : Buffer) {
-    gl.useProgram(this.id);
-    buffer.draw();
-    gl.useProgram(null);
-
   }
 }

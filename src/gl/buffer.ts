@@ -37,18 +37,16 @@ export class Buffer {
         return vao;
     }
 
-    draw() {
+    use() {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.id);
         this.bufferSubData();
         gl.bindVertexArray(this.vao);
-        gl.drawArrays(gl.POINTS,0,this.elements.length);
-        gl.bindVertexArray(null);
     }
 
 
     bufferData() {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.id);
-        gl.bufferData(gl.ARRAY_BUFFER, this.data, gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, this.data, gl.DYNAMIC_DRAW);
     }
 
     bufferSubData() {

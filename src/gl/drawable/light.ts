@@ -5,7 +5,7 @@ import { gl } from "../gl.js";
 import { Program } from "../program.js";
 import { shaders } from "../shaders.js";
 
-const program = new Program(shaders.rect?.vert as WebGLShader, shaders.rect?.frag as WebGLShader);
+const program = new Program(shaders.light?.vert as WebGLShader, shaders.light?.frag as WebGLShader);
 const attribs = {
     pos: {
         type: gl.SHORT,
@@ -20,7 +20,7 @@ const attribs = {
 
 program.initAttributes(attribs);
 
-export class Rect{
+export class Light{
     data: DataView
     index = -1
     constructor(buffer: Buffer, x = 0, y = 0, size = 0 ) {
@@ -70,6 +70,14 @@ export class Rect{
     
     static getProgram() {
         return program;
+    }
+    static draw(buffer: Buffer) {
+        gl.useProgram(program.id);
+        buffer.use();
+        gl.drawArrays(gl.POINTS,0, buffer.elements.length);
+        gl.bindVertexArray(null);
+        gl.useProgram(null);
+
     }
     
 }
