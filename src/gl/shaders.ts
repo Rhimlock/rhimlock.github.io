@@ -1,16 +1,15 @@
 import { gl } from "./gl.js";
 
+export class ShaderPair {
+    vert: WebGLShader = new WebGLShader();
+    frag: WebGLShader = new WebGLShader();
+}
 export const shaders = {
-    light : {
-        vert : WebGLShader,
-        frag: WebGLShader
-    },
-    example : {
-        vert : WebGLShader,
-        frag: WebGLShader
-    },
-
-} as { [key : string ] : Shader }
+    light : new ShaderPair(),
+    rect : new ShaderPair(),
+    example : new ShaderPair(),
+    framebuffer: new ShaderPair(),
+} as { [key : string ] : ShaderPair }
 
 for (const [key, value] of Object.entries(shaders)) {
     value.vert = compile(gl.VERTEX_SHADER,await fetch(`shaders/${key}.vert.glsl`)
@@ -19,16 +18,12 @@ for (const [key, value] of Object.entries(shaders)) {
     .then(result => result.text()));
 }
 
-export interface Shader {
-    vert: WebGLShader,
-    frag: WebGLShader
-}
 
 function compile (type: number, src: string) {
     const shader = gl.createShader(type) as WebGLShader;
     gl.shaderSource(shader, src);
     gl.compileShader(shader);
     const err = gl.getShaderInfoLog(shader);
-    if (err) throw `compileError: ${type} - ${err}`;
+    if (err) throw `compileError: ${type} - ${err} - ${src}`;
     return shader;
   }

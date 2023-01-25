@@ -1,6 +1,7 @@
 import { Block, ActiveInfoCollection, VertexAttrib } from "../helper/interfaces.js";
 import { lookupActiveInfoTypeSize } from "../helper/lookup.js";
 import { gl } from "./gl.js";
+import { ShaderPair } from "./shaders.js";
 import { VertexAttributeArray } from "./vertexAttributes.js";
 
 export class Program {
@@ -9,10 +10,10 @@ export class Program {
   uniforms: ActiveInfoCollection;
   uniformBlocks: Block[];
 
-  constructor(vertexShader: WebGLShader, fragmentShader: WebGLShader) {
+  constructor(shaders : ShaderPair) {
     this.id = gl.createProgram() as WebGLProgram;
-    gl.attachShader(this.id,vertexShader);
-    gl.attachShader(this.id,fragmentShader);
+    gl.attachShader(this.id,shaders.vert);
+    gl.attachShader(this.id,shaders.frag);
     gl.linkProgram(this.id);
     gl.useProgram(this.id);
 
@@ -28,10 +29,14 @@ export class Program {
     for (const [key, a] of Object.entries(attribs)){
       a.name = key;
       a.location = gl.getAttribLocation(this.id,a.name);
-      a.size = lookupActiveInfoTypeSize(gl.getActiveAttrib(this.id,a.location)?.type as number);
+      const attrib = gl.getActiveAttrib(this.id,a.location);
+      if (attrib) {
+        a.size = lookupActiveInfoTypeSize(attrib.type);
+      }
     }
     //this will calculate ByteSize, Offset and Stride
     this.attributes = new VertexAttributeArray(attribs);
+    return attribs;
   }
 
   //used for ACTIVE_ATTRIBUTES and ACTIVE_UNIFORMS
