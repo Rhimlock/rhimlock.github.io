@@ -3,15 +3,13 @@ import { gl } from "./gl.js";
 import { Pipeline } from "./pipeline.js";
 import { Texture } from "./texture.js";
 
-export class Framebuffer {
+export class FrameBuffer {
     id: WebGLFramebuffer
     texture: Texture
     constructor(width: number, height: number) {
         this.id = gl.createFramebuffer() as WebGLFramebuffer;
         if (!this.id) throw "gl.createFramebuffer() failed"
-        const image = new Image();
-        image.width = width;
-        image.height = height;
+        const image = new Image(width, height);
         this.texture = new Texture(image);
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.id);
         const attachmentPoint = gl.COLOR_ATTACHMENT0;
@@ -40,7 +38,9 @@ export class Framebuffer {
         pipeline.draw(vao);
         gl.useProgram(pipeline.program);
         gl.bindVertexArray(vao);
-        gl.uniform1i(gl.getUniformLocation(pipeline.program, "u_texture"), this.texture.no);
+        // pipeline.uniforms.u_texture.value = this.texture.no;
+        gl.uniform1i( gl.getUniformLocation(pipeline.program, "u_texture"),this.texture.no);
+
         gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
         gl.bindVertexArray(null);
         gl.useProgram(null);
@@ -59,8 +59,8 @@ const pipeline = new Pipeline('rect.vert', 'rect.frag', {
 });
 
 const vao = pipeline.createVertexBuffer(new Int8Array([
-    -1, 1, 0, 1,
-    -1, -1, 0, 0,
-    1, -1, 1, 0,
-    1, 1, 1, 1
+    -1, -1, 0, 1,
+    -1, 1, 0, 0,
+    1, 1, 1, 0,
+    1, -1, 1, 1
 ])).vao;

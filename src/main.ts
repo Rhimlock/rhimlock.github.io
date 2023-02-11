@@ -1,4 +1,4 @@
-import { Framebuffer } from "./gl/framebuffer.js";
+import { FrameBuffer } from "./gl/framebuffer.js";
 import { gl } from "./gl/gl.js";
 import { Pipeline } from "./gl/pipeline.js";
 import { Texture } from "./gl/texture.js";
@@ -35,9 +35,10 @@ gl.bindBuffer(gl.ARRAY_BUFFER, null);
 const ex2 = new Texture(dom.humans);
 
 gl.useProgram(p.program);
+// p.uniforms.u_texture.value = ex2.no;
 gl.uniform1i( gl.getUniformLocation(p.program, "u_texture"),ex2.no);
 
-const fb = new Framebuffer(128,128);
+const fb = new FrameBuffer(128,128);
 fb.activate();
 p.draw(v.vao);
 

@@ -1,4 +1,3 @@
-
 export const SHADER_SOURCES = await fetchIndex() as any;
 for (const [key, _value] of Object.entries(SHADER_SOURCES)) {
     SHADER_SOURCES[key] = await fetch(`shaders/${key}.glsl`)
@@ -6,9 +5,11 @@ for (const [key, _value] of Object.entries(SHADER_SOURCES)) {
 }
 
 async function fetchIndex() {
-    return fetch(`shaders/index.json`).then(result =>
-        result.json().then((arr: any[]) =>
-            arr.reduce((acc, curr) => (acc[curr] = '', acc), {})
+    const listName = "_shaderlist.txt";
+    return fetch(`shaders/${listName}`).then(result =>
+        result.text().then((text: string) =>
+            text.split("\n").filter(str => str.endsWith(".glsl"))
+                .reduce((acc: any, curr) => (acc[curr.replace(".glsl", "")] = '', acc), {})
         )
     );
 }
