@@ -1,19 +1,24 @@
 import { gl } from "../gl.js";
 import { VertexAttribute } from "./interfaces.js";
 
-export function lookupVertexAttributes(program: WebGLProgram, attribs: { [key: string]: VertexAttribute }) {
-    let offset = 0;
-    for (const [key, attrib] of Object.entries(attribs)) {
-        attrib.location = gl.getAttribLocation(program, key);
-        const info = gl.getActiveAttrib(program, attrib.location) as WebGLActiveInfo;
-        attrib.size = attrib.size ?? lookupSizeByType(info.type);
-        attrib.type = attrib.type ?? gl.FLOAT;
-        attrib.normalize = !!attrib.normalize;
-        attrib.offset = offset;
-        offset += lookupByteSize(attrib.type) * attrib.size;
-    }
-    const stride = offset;
-    Object.values(attribs).forEach(a => a.stride = stride);
+export function lookupVertexAttributes(program: WebGLProgram, attribs: { [key: string]: VertexAttribute }[]) {
+
+    attribs.forEach(attribObj => {
+        let offset = 0;
+        for (const [key, attrib] of Object.entries(attribObj)) {
+            attrib.location = gl.getAttribLocation(program, key);
+            const info = gl.getActiveAttrib(program, attrib.location) as WebGLActiveInfo;
+            attrib.size = attrib.size ?? lookupLengthByType(info.type);
+            attrib.type = attrib.type ?? gl.FLOAT;
+            attrib.normalize = !!attrib.normalize;
+            attrib.offset = offset;
+            offset += lookupByteSize(attrib.type) * attrib.size;
+        }
+
+        const stride = offset;
+        Object.values(attribObj).forEach(a => a.stride = stride);
+    })
+
     return attribs;
 }
 
@@ -26,9 +31,11 @@ export function lookupUniforms(program: WebGLProgram, blockIndex = -1) {
             const info = gl.getActiveUniform(program, index);
             const location = gl.getUniformLocation(program, info?.name as string);
             const uniform_function = lookupUniformSetter(info?.type as number);
+            const offset = gl.getActiveUniforms(program, [index], gl.UNIFORM_OFFSET)[0] as number;
             uniforms[info?.name as string] = {
                 value: undefined,
-                func: (value: number) => uniform_function.call(gl, location, value)
+                func: (value: number) => uniform_function.call(gl, location, value),
+                offset
             }
         }
     })
@@ -66,7 +73,7 @@ export function lookupByteSize(type: number) {
     }
 }
 
-export function lookupSizeByType(type: number) {
+export function lookupLengthByType(type: number) {
     switch (type) {
         case gl.FLOAT:
             return 1;

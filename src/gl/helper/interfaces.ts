@@ -1,17 +1,14 @@
-export interface VertexAttribute {
-    location?: number
-    type?: number
-    size?: number
-    normalize?: boolean
+
+export interface BufferItem {
+    type: number,
+    size?: number,
     offset?: number
-    stride?: number
 }
 
-export interface UniformBlock {
-    uniforms : Uniform[],
-    dataSize : number
-    bindingPoint : number
-
+export interface VertexAttribute extends BufferItem {
+    location?: number
+    normalize?: boolean
+    stride?: number
 }
 
 export interface Uniform {

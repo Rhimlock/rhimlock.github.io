@@ -1,7 +1,7 @@
-import { dom } from "../helper/htmlElements.js";
-import { gl } from "./gl.js";
-import { Pipeline } from "./pipeline.js";
-import { Texture } from "./texture.js";
+import { dom } from "../../helper/htmlElements.js";
+import { gl } from "../gl.js";
+import { Pipeline } from "../pipeline.js";
+import { Texture } from "../texture.js";
 
 export class FrameBuffer {
     id: WebGLFramebuffer
@@ -49,16 +49,16 @@ export class FrameBuffer {
 }
 
 
-const pipeline = new Pipeline('rect.vert', 'rect.frag', {
+const pipeline = new Pipeline('rect.vert', 'rect.frag', [{
     aPos: {
         type: gl.BYTE
     },
     aTex: {
         type: gl.BYTE
     }
-});
+}]);
 
-const vao = pipeline.createVertexBuffer(new Int8Array([
+const vao = pipeline.createVertexBuffers(new Int8Array([
     -1, -1, 0, 1,
     -1, 1, 0, 0,
     1, 1, 1, 0,

@@ -7,7 +7,7 @@
     "clean": "rm -rf ./js",
     "genShaderList": "ls shaders > shaders/_shaderlist.txt",
     "prebuild": "npm run clean && npm run genShaderList",
-    "prewatch": "clean && genShaderList",
+    "prewatch": "npm run prebuild",
     "build": "tsc -p tsconfig.json",
     "watch": "tsc -p tsconfig.json --watch"
   },
