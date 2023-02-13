@@ -11,13 +11,15 @@ export class Pipeline {
     fragmentShader: WebGLShader
     vertexAttributes: { [key: string]: VertexAttribute }[]
     uniforms: { [key: string]: any } = {};
+    mode : number
 
-    constructor(vertexShaderName: string, fragmentShaderName: string, vertexAttributes: { [key: string]: VertexAttribute }[]) {
+    constructor(vertexShaderName: string, fragmentShaderName: string, vertexAttributes: { [key: string]: VertexAttribute }[], mode = gl.TRIANGLE_FAN) {
         this.vertexShader = createAndCompileShader(gl.VERTEX_SHADER, SHADER_SOURCES[vertexShaderName] as string);
         this.fragmentShader = createAndCompileShader(gl.FRAGMENT_SHADER, SHADER_SOURCES[fragmentShaderName] as string);
         this.program = createAndLinkProgram(this.vertexShader, this.fragmentShader);
         this.vertexAttributes = lookupVertexAttributes(this.program, vertexAttributes);
         this.uniforms = lookupUniforms(this.program);
+        this.mode = mode;
     }
 
     createVertexBuffers(data: ArrayBufferView | number, usage: number = gl.STATIC_DRAW) {
@@ -43,10 +45,15 @@ export class Pipeline {
         return { id: vao as WebGLVertexArrayObject, buffers: buffers as WebGLBuffer[] };
     }
 
-    draw(vao: WebGLVertexArrayObject) {
+    draw(vao: WebGLVertexArrayObject, count : number, uniforms? : {[key:string] : number | number[]} ) {
         gl.useProgram(this.program);
+        if (uniforms) {
+            for (const[key , value] of Object.entries(uniforms)) {
+                this.uniforms[key] = value;
+            }
+        }
         gl.bindVertexArray(vao);
-        gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+        gl.drawArrays(this.mode, 0, count);
         gl.bindVertexArray(null);
         gl.useProgram(null);
     }

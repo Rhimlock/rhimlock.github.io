@@ -5,8 +5,8 @@ import { gl } from "./gl.js";
 import { Pipeline } from "./pipeline.js";
 
 export class Light extends BufferView {
-    [x: string]: any;
-
+    aPos: number[];
+    aSize: number;
 
     constructor(x: number, y: number, size: number) {
         const view = buffer.createView();
@@ -16,11 +16,7 @@ export class Light extends BufferView {
     }
     static draw() {
         buffer.sync();
-        gl.useProgram(pipeline.program);
-        gl.bindVertexArray(vao.id);
-        gl.drawArrays(gl.POINTS, 0, buffer.views.length);
-        gl.bindVertexArray(null);
-        gl.useProgram(null);
+        pipeline.draw(vao.id,buffer.views.length);
         
     }
 }
@@ -33,7 +29,8 @@ const pipeline = new Pipeline("light.vert", "light.frag",
         aSize: {
             type: gl.FLOAT
         }
-    }]
+    }],
+    gl.POINTS
 );
 
 const vao = pipeline.createVertexBuffers(5, gl.DYNAMIC_DRAW);

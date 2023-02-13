@@ -36,7 +36,6 @@ export class Buffer {
     }
 
     sync() {
-        this.views.forEach(v => console.log(v._data));
         gl.bindBuffer(this.target, this.id);
         gl.bufferData(this.target, this.data, this.usage);
         gl.bindBuffer(this.target, null);

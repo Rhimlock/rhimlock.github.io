@@ -33,17 +33,8 @@ export class FrameBuffer {
 
     draw() {
         this.disable();
-
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        pipeline.draw(vao);
-        gl.useProgram(pipeline.program);
-        gl.bindVertexArray(vao);
-        // pipeline.uniforms.u_texture.value = this.texture.no;
-        gl.uniform1i( gl.getUniformLocation(pipeline.program, "u_texture"),this.texture.no);
-
-        gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-        gl.bindVertexArray(null);
-        gl.useProgram(null);
+        pipeline.draw(vao.id, 4, {u_texture:this.texture.no});
+       
 
     }
 }
@@ -63,4 +54,4 @@ const vao = pipeline.createVertexBuffers(new Int8Array([
     -1, 1, 0, 0,
     1, 1, 1, 0,
     1, -1, 1, 1
-])).id;
+]));

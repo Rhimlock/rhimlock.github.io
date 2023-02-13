@@ -31,12 +31,11 @@ export function lookupUniforms(program: WebGLProgram, blockIndex = -1) {
             const info = gl.getActiveUniform(program, index);
             const location = gl.getUniformLocation(program, info?.name as string);
             const uniform_function = lookupUniformSetter(info?.type as number);
-            const offset = gl.getActiveUniforms(program, [index], gl.UNIFORM_OFFSET)[0] as number;
-            uniforms[info?.name as string] = {
-                value: undefined,
-                func: (value: number) => uniform_function.call(gl, location, value),
-                offset
-            }
+            Object.defineProperty(uniforms, info?.name as string, {
+                set(value) {
+                    uniform_function.call(gl, location, value)
+                },
+            });
         }
     })
 
@@ -49,10 +48,14 @@ function lookupUniformSetter(type: number) {
             return gl.uniform1i;
         case gl.FLOAT:
             return gl.uniform1f;
-        default:
         case gl.FLOAT_VEC2:
             gl.uniform2fv;
-            throw `lookupUniformSetter() failed for type {%type}`
+        case gl.FLOAT_VEC3:
+            gl.uniform3fv;
+            case gl.FLOAT_VEC4:
+                gl.uniform4fv;
+        default:
+            throw `lookupUniformSetter() failed for type ${type}`
     }
 }
 
@@ -84,8 +87,8 @@ export function lookupLengthByType(type: number) {
         case gl.FLOAT_VEC4:
             return 4;
         default:
-            throw 'unknown type in lookupSizeByteType';
+            throw 'unknown type in lookupLengthByType';
     }
 }
 
-export const nextPowerOf2 = (value : number) => Math.pow(2, Math.ceil(Math.log(value)/Math.log(2)));
+export const nextPowerOf2 = (value: number) => Math.pow(2, Math.ceil(Math.log(value) / Math.log(2)));
