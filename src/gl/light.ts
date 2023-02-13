@@ -1,25 +1,40 @@
-// import { FrameBuffer } from "./buffer/framebuffer.js";
-// import { gl } from "./gl.js";
-// import { Pipeline } from "./pipeline.js";
 
-// export class Light {
-//     frameBuffer: FrameBuffer
-//     constructor() {
-//         this.frameBuffer = new FrameBuffer(128, 128);
+import { Buffer } from "./buffer/buffer.js";
+import { BufferView } from "./buffer/bufferview.js";
+import { gl } from "./gl.js";
+import { Pipeline } from "./pipeline.js";
 
-//     }
-// }
+export class Light extends BufferView {
+    [x: string]: any;
 
-// const pipeline = new Pipeline("rect.vert", "rect.frag",
-//     {
-//         aPos: {
-//             type: gl.SHORT
-//         },
-//         aSize: {
-//             type: gl.UNSIGNED_BYTE
-//         },
-//         aColor: {
-//             type:gl.UNSIGNED_BYTE
-//         }
-//     }
-// );
+
+    constructor(x: number, y: number, size: number) {
+        const view = buffer.createView();
+        super(buffer.definition, view._data);
+        this.aPos = [x, y];
+        this.aSize = size;
+    }
+    static draw() {
+        buffer.sync();
+        gl.useProgram(pipeline.program);
+        gl.bindVertexArray(vao.id);
+        gl.drawArrays(gl.POINTS, 0, buffer.views.length);
+        gl.bindVertexArray(null);
+        gl.useProgram(null);
+        
+    }
+}
+
+const pipeline = new Pipeline("light.vert", "light.frag",
+    [{
+        aPos: {
+            type: gl.FLOAT
+        },
+        aSize: {
+            type: gl.FLOAT
+        }
+    }]
+);
+
+const vao = pipeline.createVertexBuffers(5, gl.DYNAMIC_DRAW);
+const buffer = vao.buffers[0] as Buffer;

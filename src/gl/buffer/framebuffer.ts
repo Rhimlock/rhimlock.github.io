@@ -63,4 +63,4 @@ const vao = pipeline.createVertexBuffers(new Int8Array([
     -1, 1, 0, 0,
     1, 1, 1, 0,
     1, -1, 1, 1
-])).vao;
+])).id;

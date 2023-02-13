@@ -26,12 +26,13 @@ export class Pipeline {
         const vao = gl.createVertexArray();
         if (vao) {
             gl.bindVertexArray(vao);
-            buffers.forEach(buffer => {
+            buffers.forEach((buffer) => {
 
                 gl.bindBuffer(gl.ARRAY_BUFFER, buffer.id);
 
                 Object.values(buffer.definition as { [key: string]: VertexAttribute } ).forEach(a => {
-                    gl.enableVertexAttribArray(a.location as number);
+                    
+                gl.enableVertexAttribArray(a.location as number);
                     gl.vertexAttribPointer(
                         a.location as number, a.size as number, a.type as number, !!a.normalize, a.stride ?? 0, a.offset ?? 0);
                 });
@@ -39,7 +40,7 @@ export class Pipeline {
             })
             gl.bindVertexArray(null);
         }
-        return { vao: vao as WebGLVertexArrayObject, buffers: buffers as WebGLBuffer };
+        return { id: vao as WebGLVertexArrayObject, buffers: buffers as WebGLBuffer[] };
     }
 
     draw(vao: WebGLVertexArrayObject) {

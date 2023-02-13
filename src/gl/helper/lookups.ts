@@ -15,7 +15,7 @@ export function lookupVertexAttributes(program: WebGLProgram, attribs: { [key: s
             offset += lookupByteSize(attrib.type) * attrib.size;
         }
 
-        const stride = offset;
+        const stride = nextPowerOf2(offset);
         Object.values(attribObj).forEach(a => a.stride = stride);
     })
 
@@ -87,3 +87,5 @@ export function lookupLengthByType(type: number) {
             throw 'unknown type in lookupSizeByteType';
     }
 }
+
+export const nextPowerOf2 = (value : number) => Math.pow(2, Math.ceil(Math.log(value)/Math.log(2)));

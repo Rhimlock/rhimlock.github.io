@@ -5,6 +5,10 @@ export interface BufferItem {
     offset?: number
 }
 
+export interface BufferItemDefinition {
+     [key: string]: BufferItem 
+}
+
 export interface VertexAttribute extends BufferItem {
     location?: number
     normalize?: boolean
