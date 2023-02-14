@@ -11,7 +11,7 @@ export class Pipeline {
     fragmentShader: WebGLShader
     vertexAttributes: { [key: string]: VertexAttribute }[]
     uniforms: { [key: string]: any } = {};
-    mode : number
+    mode: number
 
     constructor(vertexShaderName: string, fragmentShaderName: string, vertexAttributes: { [key: string]: VertexAttribute }[], mode = gl.TRIANGLE_FAN) {
         this.vertexShader = createAndCompileShader(gl.VERTEX_SHADER, SHADER_SOURCES[vertexShaderName] as string);
@@ -32,9 +32,9 @@ export class Pipeline {
 
                 gl.bindBuffer(gl.ARRAY_BUFFER, buffer.id);
 
-                Object.values(buffer.definition as { [key: string]: VertexAttribute } ).forEach(a => {
-                    
-                gl.enableVertexAttribArray(a.location as number);
+                Object.values(buffer.definition as { [key: string]: VertexAttribute }).forEach(a => {
+
+                    gl.enableVertexAttribArray(a.location as number);
                     gl.vertexAttribPointer(
                         a.location as number, a.size as number, a.type as number, !!a.normalize, a.stride ?? 0, a.offset ?? 0);
                 });
@@ -45,10 +45,10 @@ export class Pipeline {
         return { id: vao as WebGLVertexArrayObject, buffers: buffers as WebGLBuffer[] };
     }
 
-    draw(vao: WebGLVertexArrayObject, count : number, uniforms? : {[key:string] : number | number[]} ) {
+    draw(vao: WebGLVertexArrayObject, count: number, uniforms?: { [key: string]: number | number[] }) {
         gl.useProgram(this.program);
         if (uniforms) {
-            for (const[key , value] of Object.entries(uniforms)) {
+            for (const [key, value] of Object.entries(uniforms)) {
                 this.uniforms[key] = value;
             }
         }

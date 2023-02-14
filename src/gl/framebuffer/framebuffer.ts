@@ -6,7 +6,9 @@ import { Texture } from "../texture.js";
 export class FrameBuffer {
     id: WebGLFramebuffer
     texture: Texture
+    sizeInv : number[]
     constructor(width: number, height: number) {
+        this.sizeInv = [1/width, 1/height];
         this.id = gl.createFramebuffer() as WebGLFramebuffer;
         if (!this.id) throw "gl.createFramebuffer() failed"
         const image = new Image(width, height);

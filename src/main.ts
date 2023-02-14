@@ -1,28 +1,28 @@
 import { FrameBuffer } from "./gl/framebuffer/framebuffer.js";
-import { Light } from "./gl/framebuffer/lightmap.js";
+import { Lightmap } from "./gl/framebuffer/lightmap.js";
 import { Timer } from "./helper/timer.js";
 
-const lightmap = new FrameBuffer(128,128);
-const shadowmap = new FrameBuffer(128,128);
+const lightmap = new Lightmap(16, 16, 16);
+// const shadowmap = new FrameBuffer(128,128);
+// lightmap.createLight(0, 8, 8);
+// lightmap.createLight(2, 8, 8);
+// lightmap.createLight(4, 8, 8);
+// lightmap.createLight(8, 8, 8);
+// lightmap.createLight(-2, 8, 8);
+// lightmap.createLight(-4, 8, 8);
+// lightmap.createLight(-8, 8, 8);
+lightmap.createLight(0, 0, 8);
 const tick = () => {
-    lightmap.use();
-    Light.draw();
-    shadowmap.use();
-    Shadow.draw();
+
+    lightmap.render();
+    // shadowmap.use();
+    // Shadow.draw();
     FrameBuffer.disable();
+    lightmap.draw();
 }
 
 
 const timer = new Timer(tick, 1);
 timer.start();
 
-const l1 = new Light(1,1,16);
-const l2 = new Light(-100,0,32);
-console.log(l1,l2);
 
-
-const fb = new FrameBuffer(128,128);
-fb.use();
-
-Light.draw();
-fb.draw();

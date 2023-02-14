@@ -33,6 +33,7 @@ export function lookupUniforms(program: WebGLProgram, blockIndex = -1) {
             const uniform_function = lookupUniformSetter(info?.type as number);
             Object.defineProperty(uniforms, info?.name as string, {
                 set(value) {
+                    if (typeof value == "number") value = [value]
                     uniform_function.call(gl, location, value)
                 },
             });
@@ -45,15 +46,15 @@ export function lookupUniforms(program: WebGLProgram, blockIndex = -1) {
 function lookupUniformSetter(type: number) {
     switch (type) {
         case gl.SAMPLER_2D:
-            return gl.uniform1i;
+            return gl.uniform1iv;
         case gl.FLOAT:
-            return gl.uniform1f;
+            return gl.uniform1fv;
         case gl.FLOAT_VEC2:
-            gl.uniform2fv;
+            return gl.uniform2fv;
         case gl.FLOAT_VEC3:
-            gl.uniform3fv;
-            case gl.FLOAT_VEC4:
-                gl.uniform4fv;
+            return gl.uniform3fv;
+        case gl.FLOAT_VEC4:
+            return gl.uniform4fv;
         default:
             throw `lookupUniformSetter() failed for type ${type}`
     }
