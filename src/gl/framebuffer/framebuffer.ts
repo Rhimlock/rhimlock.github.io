@@ -17,24 +17,23 @@ export class FrameBuffer {
             gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D, this.texture.id, 0);
     }
 
-    activate() {
+    use() {
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.id);
         gl.viewport(0, 0, this.texture.width, this.texture.height);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
 
-    disable() {
+    static disable() {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.viewport(0, 0, dom.canvas.clientWidth, dom.canvas.clientHeight);
 
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         dom.canvas.width = dom.canvas.clientWidth;
         dom.canvas.height = dom.canvas.clientHeight;
     }
 
     draw() {
-        this.disable();
         pipeline.draw(vao.id, 4, {u_texture:this.texture.no});
-       
 
     }
 }

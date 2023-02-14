@@ -1,4 +1,4 @@
-import { Buffer } from "./buffer/buffer.js";
+import { Buffer } from "./arraybuffer/buffer.js";
 import { gl } from "./gl.js";
 import { VertexAttribute } from "./helper/interfaces.js";
 import { lookupUniforms, lookupVertexAttributes } from "./helper/lookups.js";

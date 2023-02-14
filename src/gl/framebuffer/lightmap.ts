@@ -1,9 +1,12 @@
 
-import { Buffer } from "./buffer/buffer.js";
-import { BufferView } from "./buffer/bufferview.js";
-import { gl } from "./gl.js";
-import { Pipeline } from "./pipeline.js";
+import { Buffer } from "../arraybuffer/buffer.js";
+import { BufferView } from "../arraybuffer/bufferview.js";
+import { gl } from "../gl.js";
+import { Pipeline } from "../pipeline.js";
 
+export class Lightmap extends Buffer {
+
+}
 export class Light extends BufferView {
     aPos: number[];
     aSize: number;
@@ -14,20 +17,22 @@ export class Light extends BufferView {
         this.aPos = [x, y];
         this.aSize = size;
     }
+
     static draw() {
         buffer.sync();
         pipeline.draw(vao.id,buffer.views.length);
-        
     }
 }
-
 const pipeline = new Pipeline("light.vert", "light.frag",
     [{
         aPos: {
-            type: gl.FLOAT
+            type: gl.SHORT
         },
         aSize: {
-            type: gl.FLOAT
+            type: gl.UNSIGNED_BYTE
+        },
+        aPalletColor: {
+            type: gl.UNSIGNED_BYTE
         }
     }],
     gl.POINTS
