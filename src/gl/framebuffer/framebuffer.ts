@@ -1,7 +1,8 @@
 import { dom } from "../../helper/htmlElements.js";
 import { gl } from "../gl.js";
-import { Pipeline } from "../pipeline.js";
+import { Program } from "../pipeline/program.js";
 import { Texture } from "../texture.js";
+import { VertexArray } from "../vertexarray.js";
 
 export class FrameBuffer {
     id: WebGLFramebuffer
@@ -35,24 +36,17 @@ export class FrameBuffer {
     }
 
     draw() {
-        pipeline.draw(vao.id, 4, {u_texture:this.texture.no});
+        program.draw(vao, 4, {u_texture:this.texture.no});
 
     }
 }
 
+const program = new Program('rect.vert', 'rect.frag');
 
-const pipeline = new Pipeline('rect.vert', 'rect.frag', [{
-    aPos: {
-        type: gl.BYTE
-    },
-    aTex: {
-        type: gl.BYTE
-    }
-}]);
-
-const vao = pipeline.createVertexBuffers(new Int8Array([
-    -1, -1, 0, 1,
-    -1, 1, 0, 0,
-    1, 1, 1, 0,
-    1, -1, 1, 1
-]));
+const vao = new VertexArray();
+const buffer = vao.createBuffer(program,4);
+buffer.addVertex({aPos : [-1, -1], aTex : [0,1]});
+buffer.addVertex({aPos : [-1, 1], aTex : [0,0]});
+buffer.addVertex({aPos : [1, 1], aTex : [1,0]});
+buffer.addVertex({aPos : [1, -1], aTex : [1,1]});
+buffer.sync();

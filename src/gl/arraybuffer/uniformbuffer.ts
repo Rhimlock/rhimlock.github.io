@@ -1,23 +1,24 @@
-import { BufferView } from "./bufferview.js";
+import { Vertex } from "./vertex.js";
 import { gl } from "../gl.js";
-import { lookupLengthByType } from "../helper/lookups.js";
+import { lookupLengthByType, lookupPointerType } from "../helper/lookups.js";
 import { Buffer } from "./buffer.js";
+import { Attribute, AttributeCollection } from "../helper/interfaces.js";
 
 export class UniformBuffer extends Buffer {
     bindingPoint: number
-    uniforms: BufferView
+    uniforms: Vertex
     constructor(program: WebGLProgram, blockName: string) {
 
         const index = gl.getUniformBlockIndex(program, blockName);
         const uniformIndices = gl.getActiveUniformBlockParameter(program, index, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
 
         super(
-            gl.getActiveUniformBlockParameter(program, index, gl.UNIFORM_BLOCK_DATA_SIZE),
             lookupBlockUniforms(program, uniformIndices),
+            1,
             gl.UNIFORM_BUFFER,
             gl.DYNAMIC_READ
         );
-        this.uniforms = super.createView();
+        this.uniforms = super.addVertex();
         this.bindingPoint = gl.getActiveUniformBlockParameter(program, index, gl.UNIFORM_BLOCK_BINDING);
     }
 
@@ -25,20 +26,23 @@ export class UniformBuffer extends Buffer {
         super.sync();
         gl.bindBufferBase(this.target, this.bindingPoint, this.id);
     }
-
 };
 
 function lookupBlockUniforms(program: WebGLProgram, indices: number[]) {
-    const uniforms = {} as { [key: string]: any };
+    const uniforms = {} as AttributeCollection;
     const offsets = gl.getActiveUniforms(program, indices, gl.UNIFORM_OFFSET);
-    return offsets.forEach((offset: number, n: number) => {
+    offsets.forEach((offset: number, n: number) => {
         const info = gl.getActiveUniform(program, indices[n] as number) as WebGLActiveInfo;
         uniforms[info.name] = {
-            type: info.type,
-            offset,
-            length: lookupLengthByType(info.type)
+                location: gl.getUniformLocation(program, info.name) as number,
+                size: lookupLengthByType(info.type) * info.size,
+                type: lookupPointerType(info.type),
+                normalized: false,
+                stride: 0,
+                offset
         }
     })
+    return uniforms;
 }
 
 

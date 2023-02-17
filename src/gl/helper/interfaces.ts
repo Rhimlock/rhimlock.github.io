@@ -1,18 +1,13 @@
-
-export interface BufferItem {
+export interface AttributeCollection {
+    [key:string] : Attribute
+}
+export interface Attribute {
+    location?: number,
+    size: number,
     type: number,
-    size?: number,
-    offset?: number
-}
-
-export interface BufferItemDefinition {
-     [key: string]: BufferItem 
-}
-
-export interface VertexAttribute extends BufferItem {
-    location?: number
-    normalize?: boolean
+    normalized?: boolean,
     stride?: number
+    offset?: number,
 }
 
 export interface Uniform {

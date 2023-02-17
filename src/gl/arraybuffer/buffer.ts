@@ -1,29 +1,26 @@
 import { gl } from "../gl.js";
-import { BufferItemDefinition } from "../helper/interfaces.js";
+import { AttributeCollection} from "../helper/interfaces.js";
 import { lookupByteSize, nextPowerOf2 } from "../helper/lookups.js";
-import { BufferView } from "./bufferview.js";
+import { Vertex } from "./vertex.js";
 
 export class Buffer {
-    id : WebGLBuffer
-    views : BufferView[] = []
-    definition: BufferItemDefinition
-    stride : number
-    data : ArrayBuffer
-    
+    id: WebGLBuffer
+    vertices: Vertex[] = []
+    definition: AttributeCollection
+    stride: number
+    data: ArrayBuffer
+
     target = gl.ARRAY_BUFFER
     usage = gl.STATIC_DRAW
 
-    constructor(definition: BufferItemDefinition, size : number | ArrayBufferView, target = gl.ARRAY_BUFFER, usage = gl.STATIC_DRAW ) {        
-        this.stride = calcByteSize(definition);
-        this.data = 
-            (typeof size === 'number') ?
-            new ArrayBuffer(this.stride * size) :
-            size.buffer
-        ;
-        this.definition = definition;        
-        this.target = target;
-        this.usage = usage        
-        this.id = this.createBuffer();
+    constructor(definition: AttributeCollection, maxNumberOfVertices: number, target = gl.ARRAY_BUFFER, usage = gl.STATIC_DRAW) {
+        this.definition = definition;
+        this.stride = this.calcByteSize();
+        this.data = new ArrayBuffer(this.stride * maxNumberOfVertices) ;
+            this.target = target;
+            this.usage = usage;
+            this.id = this.createBuffer();
+        
     }
 
     createBuffer() {
@@ -37,23 +34,23 @@ export class Buffer {
 
     sync() {
         gl.bindBuffer(this.target, this.id);
-        gl.bufferData(this.target, this.data, this.usage);
+        // gl.bufferData(this.target, this.data, this.usage);
+        gl.bufferSubData(this.target,0,new DataView(this.data),0,this.stride * this.vertices.length);
         gl.bindBuffer(this.target, null);
     }
-    
-    createView() {
-        const i = this.views.length * this.stride;
-        const view = new BufferView(this.definition, new DataView(this.data, i,this.stride));
-        this.views.push(view);
-        return view;
+
+    addVertex(attributes? : { [key : string] : number | number[]}) {
+        const byteOffset = this.vertices.length * this.stride;
+        const vertex = new Vertex(this.definition, new DataView(this.data, byteOffset, this.stride), attributes);
+        this.vertices.push(vertex);
+        return vertex;
     }
 
-}
-
-function calcByteSize(definition: BufferItemDefinition) {
-    let size = 0;
-    for(const item of Object.values(definition)) {
-        size += item.size as number * lookupByteSize(item.type);
+    calcByteSize() {
+        let size = 0;
+        for (const item of Object.values(this.definition)) {
+            size += item.size as number * lookupByteSize(item.type);
+        }
+        return nextPowerOf2(size);
     }
-    return nextPowerOf2(size);
 }

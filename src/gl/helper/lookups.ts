@@ -1,52 +1,24 @@
 import { gl } from "../gl.js";
-import { VertexAttribute } from "./interfaces.js";
 
-export function lookupVertexAttributes(program: WebGLProgram, attribs: { [key: string]: VertexAttribute }[]) {
-
-    attribs.forEach(attribObj => {
-        let offset = 0;
-        for (const [key, attrib] of Object.entries(attribObj)) {
-            attrib.location = gl.getAttribLocation(program, key);
-            const info = gl.getActiveAttrib(program, attrib.location) as WebGLActiveInfo;
-            attrib.size = attrib.size ?? lookupLengthByType(info.type);
-            attrib.type = attrib.type ?? gl.FLOAT;
-            attrib.normalize = !!attrib.normalize;
-            attrib.offset = offset;
-            offset += lookupByteSize(attrib.type) * attrib.size;
-        }
-
-        const stride = nextPowerOf2(offset);
-        Object.values(attribObj).forEach(a => a.stride = stride);
-    })
-
-    return attribs;
-}
-
-export function lookupUniforms(program: WebGLProgram, blockIndex = -1) {
-    const uniforms = {} as { [key: string]: any };
-    let indices = [...Array(gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS)).keys()] as number[];
-    let blockIndices = gl.getActiveUniforms(program, indices, gl.UNIFORM_BLOCK_INDEX) as number[];
-    indices.forEach(index => {
-        if (blockIndices[index] == blockIndex) {
-            const info = gl.getActiveUniform(program, index);
-            const location = gl.getUniformLocation(program, info?.name as string);
-            const uniform_function = lookupUniformSetter(info?.type as number);
-            Object.defineProperty(uniforms, info?.name as string, {
-                set(value) {
-                    if (typeof value == "number") value = [value]
-                    uniform_function.call(gl, location, value)
-                },
-            });
-        }
-    })
-
-    return uniforms;
-}
-
-function lookupUniformSetter(type: number) {
+export function lookupUniformSetter(type: number) {
     switch (type) {
         case gl.SAMPLER_2D:
+        case gl.INT:
             return gl.uniform1iv;
+        case gl.INT_VEC2:
+            return gl.uniform2iv;
+        case gl.INT_VEC3:
+            return gl.uniform3iv;
+        case gl.INT_VEC4:
+            return gl.uniform3iv;
+        case gl.UNSIGNED_INT:
+            return gl.uniform1iv;
+        case gl.UNSIGNED_INT_VEC2:
+            return gl.uniform2iv;
+        case gl.UNSIGNED_INT_VEC3:
+            return gl.uniform3iv;
+        case gl.UNSIGNED_INT_VEC4:
+            return gl.uniform3iv;
         case gl.FLOAT:
             return gl.uniform1fv;
         case gl.FLOAT_VEC2:
@@ -72,23 +44,85 @@ export function lookupByteSize(type: number) {
         case gl.UNSIGNED_INT:
         case gl.FLOAT:
             return 4;
+        case gl.INT_VEC2:
+        case gl.UNSIGNED_INT_VEC2:
+        case gl.FLOAT_VEC2:
+            return 8;
+        case gl.INT_VEC3:
+        case gl.UNSIGNED_INT_VEC3:
+        case gl.FLOAT_VEC3:
+            return 12;
+        case gl.INT_VEC4:
+        case gl.UNSIGNED_INT_VEC4:
+        case gl.FLOAT_VEC4:
+            return 16;
         default:
-            throw `could not getTypeSize() for Type ${type}`
+            throw `could not lookupByteSize() for Type ${type}`
     }
 }
 
 export function lookupLengthByType(type: number) {
     switch (type) {
+        case gl.INT:
+        case gl.UNSIGNED_INT:
         case gl.FLOAT:
             return 1;
+        case gl.INT_VEC2:
+        case gl.UNSIGNED_INT_VEC2:
         case gl.FLOAT_VEC2:
             return 2;
+        case gl.INT_VEC3:
+        case gl.UNSIGNED_INT_VEC3:
         case gl.FLOAT_VEC3:
             return 3;
+        case gl.INT_VEC4:
+        case gl.UNSIGNED_INT_VEC4:
         case gl.FLOAT_VEC4:
             return 4;
         default:
-            throw 'unknown type in lookupLengthByType';
+            throw `unknown type in lookupLengthByType ${type}`;
+    }
+}
+
+export function lookupPointerType(type: number) {
+    switch (type) {
+        case gl.INT:
+        case gl.INT_VEC2:
+        case gl.INT_VEC3:
+        case gl.INT_VEC4:
+            return gl.INT;
+        case gl.UNSIGNED_INT:
+        case gl.UNSIGNED_INT_VEC2:
+        case gl.UNSIGNED_INT_VEC3:
+        case gl.UNSIGNED_INT_VEC4:
+            return gl.UNSIGNED_INT;
+        case gl.FLOAT:
+        case gl.FLOAT_VEC2:
+        case gl.FLOAT_VEC3:
+        case gl.FLOAT_VEC4:
+            return gl.FLOAT;
+        default:
+            throw `unknown type in lookupPointerType ${type}`;
+    }
+}
+
+
+export function lookupTypedArrayByType(type: number) {
+    switch (type) {
+        case gl.UNSIGNED_BYTE:
+            return Uint8Array;
+        case gl.BYTE:
+            return Int8Array;
+        case gl.UNSIGNED_SHORT:
+            return Uint16Array;
+        case gl.SHORT:
+            return Int16Array;
+        case gl.UNSIGNED_INT:
+            return Uint32Array;
+        case gl.INT:
+            return Int32Array;
+        default:
+            return Float32Array;
     }
 }
 
