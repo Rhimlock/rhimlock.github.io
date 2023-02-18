@@ -2,7 +2,7 @@ import { dom } from "../../helper/htmlElements.js";
 import { gl } from "../gl.js";
 import { Program } from "../pipeline/program.js";
 import { Texture } from "../texture.js";
-import { VertexArray } from "../vertexarray.js";
+import { VertexArray } from "../pipeline/vertexarray.js";
 
 export class FrameBuffer {
     id: WebGLFramebuffer

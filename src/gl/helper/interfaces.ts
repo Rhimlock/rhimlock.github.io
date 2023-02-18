@@ -8,10 +8,5 @@ export interface Attribute {
     normalized?: boolean,
     stride?: number
     offset?: number,
-}
-
-export interface Uniform {
-    value: number | undefined,
-    func: Function,
-    offset: number | undefined
+    useIPointer?: boolean
 }

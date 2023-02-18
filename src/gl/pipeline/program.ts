@@ -2,7 +2,7 @@ import { UniformBuffer } from "../arraybuffer/uniformbuffer.js";
 import { gl } from "../gl.js";
 import { AttributeCollection } from "../helper/interfaces.js";
 import {lookupByteSize, lookupLengthByType, lookupPointerType, lookupUniformSetter } from "../helper/lookups.js";
-import { VertexArray } from "../vertexarray.js";
+import { VertexArray } from "./vertexarray.js";
 import { Shader } from "./shader.js";
 
 export class Program {
@@ -15,9 +15,11 @@ export class Program {
     mode = gl.TRIANGLE_FAN;
 
     constructor(vertexShaderName: string, fragmentShaderName?: string, mode = gl.TRIANGLE_FAN) {
+        fragmentShaderName = fragmentShaderName??vertexShaderName;
+
         this.id = gl.createProgram() as WebGLProgram;
         this.vertexShader = new Shader(`${vertexShaderName}.vert`, gl.VERTEX_SHADER);
-        this.fragmentShader = new Shader(`${fragmentShaderName??vertexShaderName}.frag`, gl.FRAGMENT_SHADER);
+        this.fragmentShader = new Shader(`${fragmentShaderName}.frag`, gl.FRAGMENT_SHADER);
         this.mode = mode;
         if (this.id) {
             gl.attachShader(this.id, this.vertexShader.id);
@@ -57,7 +59,8 @@ export class Program {
                 type: lookupPointerType(info.type),
                 normalized: false,
                 stride: 0,
-                offset
+                offset,
+                useIPointer: [gl.INT,gl.INT_VEC2,gl.INT_VEC3,gl.INT_VEC4,gl.UNSIGNED_INT,gl.UNSIGNED_INT_VEC2,gl.UNSIGNED_INT_VEC3,gl.UNSIGNED_INT_VEC4].includes(info.type)
             };
             offset +=  info.size * lookupByteSize(info.type);
         }
@@ -88,6 +91,4 @@ export class Program {
             }
         })
     }
-
-
 }

@@ -1,7 +1,7 @@
-import { Buffer } from "./arraybuffer/buffer.js";
-import { gl } from "./gl.js";
-import { Attribute } from "./helper/interfaces.js";
-import { Program } from "./pipeline/program.js";
+import { Buffer } from "../arraybuffer/buffer.js";
+import { gl } from "../gl.js";
+import { Attribute } from "../helper/interfaces.js";
+import { Program } from "./program.js";
 
 export class VertexArray {
     id: WebGLVertexArrayObject;
@@ -17,9 +17,14 @@ export class VertexArray {
         Object.values(buffer.definition as { [key: string]: Attribute }).forEach(a => {
 
             gl.enableVertexAttribArray(a.location as number);
+            if(a.useIPointer){
+                gl.vertexAttribIPointer(
+                    a.location as number, a.size as number, a.type as number, a.stride ?? 0, a.offset ?? 0);
+            } else {
             gl.vertexAttribPointer(
                 a.location as number, a.size as number, a.type as number, !!a.normalized, a.stride ?? 0, a.offset ?? 0);
-        });
+            }
+            });
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
         gl.bindVertexArray(null);

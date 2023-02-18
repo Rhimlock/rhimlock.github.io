@@ -106,7 +106,6 @@ export function lookupPointerType(type: number) {
     }
 }
 
-
 export function lookupTypedArrayByType(type: number) {
     switch (type) {
         case gl.UNSIGNED_BYTE:
