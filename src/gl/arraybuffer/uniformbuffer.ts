@@ -2,7 +2,7 @@ import { Vertex } from "./vertex.js";
 import { gl } from "../gl.js";
 import { lookupLengthByType, lookupPointerType } from "../helper/lookups.js";
 import { Buffer } from "./buffer.js";
-import { Attribute, AttributeCollection } from "../helper/interfaces.js";
+import { AttributeCollection } from "../helper/interfaces.js";
 
 export class UniformBuffer extends Buffer {
     bindingPoint: number

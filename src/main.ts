@@ -4,8 +4,8 @@ import { Timer } from "./helper/timer.js";
 
 const lightmap = new Lightmap(16, 16, 16);
 // const shadowmap = new FrameBuffer(128,128);
-lightmap.createLight(0, 0, 8);
-lightmap.createLight(-4, 0, 8);
+lightmap.createLight(0, 0, 16);
+lightmap.createLight(-6, 0, 8);
 lightmap.createLight(4, 4, 8);
 const tick = () => {
 

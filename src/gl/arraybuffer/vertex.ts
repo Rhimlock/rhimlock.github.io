@@ -1,4 +1,3 @@
-import { gl } from "../gl.js";
 import {Attribute, AttributeCollection } from "../helper/interfaces.js";
 import { lookupTypedArrayByType } from "../helper/lookups.js";
 
