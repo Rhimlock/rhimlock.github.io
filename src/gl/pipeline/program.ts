@@ -14,10 +14,10 @@ export class Program {
     uniformBlocks ={} as { [key: string]: UniformBuffer };
     mode = gl.TRIANGLE_FAN;
 
-    constructor(vertexShaderName: string, fragmentShaderName: string, mode = gl.TRIANGLE_FAN) {
+    constructor(vertexShaderName: string, fragmentShaderName?: string, mode = gl.TRIANGLE_FAN) {
         this.id = gl.createProgram() as WebGLProgram;
-        this.vertexShader = new Shader(vertexShaderName, gl.VERTEX_SHADER);
-        this.fragmentShader = new Shader(fragmentShaderName, gl.FRAGMENT_SHADER);
+        this.vertexShader = new Shader(`${vertexShaderName}.vert`, gl.VERTEX_SHADER);
+        this.fragmentShader = new Shader(`${fragmentShaderName??vertexShaderName}.frag`, gl.FRAGMENT_SHADER);
         this.mode = mode;
         if (this.id) {
             gl.attachShader(this.id, this.vertexShader.id);

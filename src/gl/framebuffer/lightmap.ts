@@ -37,4 +37,5 @@ interface Light extends Vertex {
     aPalletColor: number
 }
 
-const program = new Program("light.vert", "light.frag", gl.POINTS);
+const program = new Program("light");
+program.mode = gl.POINTS;

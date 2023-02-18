@@ -41,7 +41,7 @@ export class FrameBuffer {
     }
 }
 
-const program = new Program('rect.vert', 'rect.frag');
+const program = new Program('rect');
 
 const vao = new VertexArray();
 const buffer = vao.createBuffer(program,4);
