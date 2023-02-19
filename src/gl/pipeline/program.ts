@@ -35,7 +35,9 @@ export class Program {
         }
     }
 
-    draw(vao: VertexArray, count: number, uniforms?: { [key: string]: number | number[] }) {
+    draw(vao: VertexArray, uniforms?: { [key: string]: number | number[] }) {
+        const count = vao.buffers[0]?.vertices.length as number;
+        const instances =  vao.instanceDivisor * (vao.instancedBuffer?.vertices.length as number) ;
         gl.useProgram(this.id);
         if (uniforms) {
             for (const [key, value] of Object.entries(uniforms)) {
@@ -43,7 +45,12 @@ export class Program {
             }
         }
         gl.bindVertexArray(vao.id);
-        gl.drawArrays(this.mode, 0, count);
+        if (instances) {
+            gl.drawArraysInstanced(this.mode,0, count,instances);
+        } else {
+            gl.drawArrays(this.mode, 0, count);
+
+        }
         gl.bindVertexArray(null);
         gl.useProgram(null);
     }

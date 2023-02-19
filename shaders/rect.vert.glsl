@@ -1,6 +1,6 @@
 #version 300 es
 // vertex shader
-in lowp ivec2 aPos;
+in vec2 aPos;
 in vec2 aTex;
 out vec2 texCoord;
 void main() {

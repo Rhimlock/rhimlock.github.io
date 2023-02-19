@@ -18,7 +18,7 @@ export class Lightmap extends FrameBuffer {
     render() {
         this.buffer.sync();
         this.use();
-        program.draw(this.vao, this.buffer.vertices.length, { uViewSizeInv: this.sizeInv });
+        program.draw(this.vao,{ uViewSizeInv: this.sizeInv });
         FrameBuffer.disable();
     }
 

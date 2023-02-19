@@ -36,8 +36,7 @@ export class FrameBuffer {
     }
 
     draw() {
-        program.draw(vao, 4, {u_texture:this.texture.no});
-
+        program.draw(vao, {u_texture:this.texture.no});
     }
 }
 
