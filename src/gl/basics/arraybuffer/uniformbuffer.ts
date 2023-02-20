@@ -1,8 +1,8 @@
-import { Vertex } from "./vertex.js";
-import { gl } from "../gl.js";
-import { lookupLengthByType, lookupPointerType } from "../helper/lookups.js";
+import { AttributeCollection, Vertex } from "./vertex.js";
+import { gl } from "../../gl.js";
+import { lookupLengthByType, lookupPointerType } from "../lookups.js";
 import { Buffer } from "./buffer.js";
-import { AttributeCollection } from "../helper/interfaces.js";
+
 
 export class UniformBuffer extends Buffer {
     bindingPoint: number

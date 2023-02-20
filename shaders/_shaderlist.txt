@@ -3,3 +3,5 @@ light.vert.glsl
 rect.frag.glsl
 rect.vert.glsl
 _shaderlist.txt
+sprite.frag.glsl
+sprite.vert.glsl

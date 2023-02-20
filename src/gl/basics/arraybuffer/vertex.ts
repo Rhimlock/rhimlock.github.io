@@ -1,5 +1,4 @@
-import {Attribute, AttributeCollection } from "../helper/interfaces.js";
-import { lookupTypedArrayByType } from "../helper/lookups.js";
+import { lookupTypedArrayByType } from "../lookups.js";
 
 export class Vertex {
     _definition: AttributeCollection
@@ -29,7 +28,6 @@ export class Vertex {
         Object.entries(attributes).forEach(([key, value]) => {
             const desc = Object.getOwnPropertyDescriptor(self, key);
             if (desc && desc.set) {
-
                 desc?.set(value);
             } else {
                 throw `Property ${key} not available in Vertex ${self}`
@@ -53,4 +51,18 @@ function lookupGetterSetter(data: DataView, attrib: Attribute) {
         };
     }
     
+}
+
+export interface AttributeCollection {
+    [key:string] : Attribute
+}
+
+export interface Attribute {
+    location?: number,
+    size: number,
+    type: number,
+    normalized?: boolean,
+    stride?: number
+    offset?: number,
+    useIPointer?: boolean
 }

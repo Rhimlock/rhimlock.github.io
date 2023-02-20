@@ -1,8 +1,8 @@
 import { dom } from "../../helper/htmlElements.js";
 import { gl } from "../gl.js";
-import { Program } from "../pipeline/program.js";
-import { Texture } from "../texture.js";
-import { VertexArray } from "../pipeline/vertexarray.js";
+import { Program } from "./pipeline/program.js";
+import { Texture } from "./texture.js";
+import { VertexArray } from "./pipeline/vertexarray.js";
 
 export class FrameBuffer {
     id: WebGLFramebuffer
@@ -44,8 +44,8 @@ const program = new Program('rect');
 
 const vao = new VertexArray();
 const buffer = vao.createBuffer(program,4);
-buffer.addVertex({aPos : [-1, -1], aTex : [0,1]});
-buffer.addVertex({aPos : [-1, 1], aTex : [0,0]});
-buffer.addVertex({aPos : [1, 1], aTex : [1,0]});
-buffer.addVertex({aPos : [1, -1], aTex : [1,1]});
+buffer.addVertex({aPos : [-1, 1], aTex : [0,1]});
+buffer.addVertex({aPos : [-1, -1], aTex : [0,0]});
+buffer.addVertex({aPos : [1, -1], aTex : [1,0]});
+buffer.addVertex({aPos : [1, 1], aTex : [1,1]});
 buffer.sync();

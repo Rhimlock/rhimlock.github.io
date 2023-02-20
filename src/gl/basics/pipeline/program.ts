@@ -1,16 +1,16 @@
 import { UniformBuffer } from "../arraybuffer/uniformbuffer.js";
-import { gl } from "../gl.js";
-import { AttributeCollection } from "../helper/interfaces.js";
-import {lookupByteSize, lookupLengthByType, lookupPointerType, lookupUniformSetter } from "../helper/lookups.js";
+import { gl } from "../../gl.js";
 import { VertexArray } from "./vertexarray.js";
 import { Shader } from "./shader.js";
+import { AttributeCollection } from "../arraybuffer/vertex.js";
+import { lookupByteSize, lookupLengthByType, lookupPointerType, lookupUniformSetter } from "../lookups.js";
 
 export class Program {
     id: WebGLProgram
     vertexShader: Shader
     fragmentShader: Shader
     attributes ={} as AttributeCollection;
-    uniforms ={} as  { [key: string]: number | number[] };
+    uniforms ={} as  { [key: string]: number | Iterable<number> };
     uniformBlocks ={} as { [key: string]: UniformBuffer };
     mode = gl.TRIANGLE_FAN;
 
@@ -35,13 +35,19 @@ export class Program {
         }
     }
 
-    draw(vao: VertexArray, uniforms?: { [key: string]: number | number[] }) {
+    draw(vao: VertexArray, uniforms?: { [key: string]: number | Iterable<number> }) {
         const count = vao.buffers[0]?.vertices.length as number;
         const instances =  vao.instanceDivisor * (vao.instancedBuffer?.vertices.length as number) ;
         gl.useProgram(this.id);
         if (uniforms) {
             for (const [key, value] of Object.entries(uniforms)) {
-                this.uniforms[key] = value;
+                if (this.uniforms[key]) {
+                    this.uniforms[key] = value;
+                } else {
+                    throw `uniform ${key} not found in ${Object.keys(Object.getOwnPropertyDescriptors(this.uniforms))}`
+                }
+                
+                
             }
         }
         gl.bindVertexArray(vao.id);
@@ -85,7 +91,7 @@ export class Program {
                 const location = gl.getUniformLocation(this.id, info?.name as string);
                 const uniform_function = lookupUniformSetter(info?.type as number);
                 Object.defineProperty(this.uniforms, info?.name as string, {
-                    get() {return -1},
+                    get() {return 1},
                     set(value) {
                         if (typeof value == "number") value = [value]
                         uniform_function.call(gl, location, value)

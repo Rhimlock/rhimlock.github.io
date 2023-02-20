@@ -1,4 +1,4 @@
-import { gl } from "./gl.js";
+import { gl } from "../gl.js";
 let counter = 0;
 export class Texture {
     id: WebGLTexture

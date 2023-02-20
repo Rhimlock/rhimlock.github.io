@@ -1,10 +1,10 @@
 
-import { Buffer } from "../arraybuffer/buffer.js";
-import { Vertex } from "../arraybuffer/vertex.js";
-import { gl } from "../gl.js";
-import { Program } from "../pipeline/program.js";
-import { VertexArray } from "../pipeline/vertexarray.js";
-import { FrameBuffer } from "./framebuffer.js";
+import { Buffer } from "./basics/arraybuffer/buffer.js";
+import { Vertex } from "./basics/arraybuffer/vertex.js";
+import { gl } from "./gl.js";
+import { Program } from "./basics/pipeline/program.js";
+import { VertexArray } from "./basics/pipeline/vertexarray.js";
+import { FrameBuffer } from "./basics/framebuffer.js";
 
 export class Lightmap extends FrameBuffer {
     vao: VertexArray
@@ -19,7 +19,7 @@ export class Lightmap extends FrameBuffer {
         this.buffer.sync();
         this.use();
         program.draw(this.vao,{ uViewSizeInv: this.sizeInv });
-        FrameBuffer.disable();
+        // FrameBuffer.disable();
     }
 
     createLight(x: number, y: number, size: number) {

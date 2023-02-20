@@ -1,6 +1,6 @@
+import { gl } from "../../gl.js";
 import { Buffer } from "../arraybuffer/buffer.js";
-import { gl } from "../gl.js";
-import { Attribute } from "../helper/interfaces.js";
+import { Attribute } from "../arraybuffer/vertex.js";
 import { Program } from "./program.js";
 
 export class VertexArray {

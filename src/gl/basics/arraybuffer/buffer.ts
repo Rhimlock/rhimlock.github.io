@@ -1,7 +1,6 @@
-import { gl } from "../gl.js";
-import { AttributeCollection} from "../helper/interfaces.js";
-import { lookupByteSize, nextPowerOf2 } from "../helper/lookups.js";
-import { Vertex } from "./vertex.js";
+import { gl } from "../../gl.js";
+import { lookupByteSize, nextPowerOf2 } from "../lookups.js";
+import { AttributeCollection, Vertex } from "./vertex.js";
 
 export class Buffer {
     id: WebGLBuffer
@@ -39,7 +38,7 @@ export class Buffer {
         gl.bindBuffer(this.target, null);
     }
 
-    addVertex(attributes? : { [key : string] : number | number[]}) {
+    addVertex(attributes? : { [key : string] : number | number[]})  {
         const byteOffset = this.vertices.length * this.stride;
         const vertex = new Vertex(this.definition, new DataView(this.data, byteOffset, this.stride), attributes);
         this.vertices.push(vertex);
