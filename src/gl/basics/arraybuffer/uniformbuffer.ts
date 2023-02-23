@@ -3,11 +3,18 @@ import { gl } from "../../gl.js";
 import { lookupLengthByType, lookupPointerType } from "../lookups.js";
 import { Buffer } from "./buffer.js";
 
-
+const cache = {} as {[key:string] : UniformBuffer}
 export class UniformBuffer extends Buffer {
-    bindingPoint: number
-    uniforms: Vertex
-    constructor(program: WebGLProgram, blockName: string) {
+    bindingPoint: number = -1
+    uniforms: BlockUniforms = {} as Vertex
+    constructor(blockName: string, program?: WebGLProgram, ) {
+
+        if(cache[blockName]) {
+            return cache[blockName] as UniformBuffer;
+        }
+        if (!program) {
+            throw `no program for block ${ blockName } found`
+        }
 
         const index = gl.getUniformBlockIndex(program, blockName);
         const uniformIndices = gl.getActiveUniformBlockParameter(program, index, gl.UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES);
@@ -20,6 +27,7 @@ export class UniformBuffer extends Buffer {
         );
         this.uniforms = super.addVertex();
         this.bindingPoint = gl.getActiveUniformBlockParameter(program, index, gl.UNIFORM_BLOCK_BINDING);
+        cache[blockName] = this;
     }
 
     sync() {
@@ -45,5 +53,9 @@ function lookupBlockUniforms(program: WebGLProgram, indices: number[]) {
     return uniforms;
 }
 
+
+export interface BlockUniforms extends Vertex {
+    [key:string] : any
+}
 
 

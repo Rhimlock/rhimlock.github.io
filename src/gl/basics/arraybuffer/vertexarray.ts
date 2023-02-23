@@ -1,7 +1,7 @@
 import { gl } from "../../gl.js";
-import { Buffer } from "../arraybuffer/buffer.js";
-import { Attribute } from "../arraybuffer/vertex.js";
-import { Program } from "./program.js";
+import { Buffer } from "./buffer.js";
+import { Attribute } from "./vertex.js";
+import { Program } from "../pipeline/program.js";
 
 export class VertexArray {
     id: WebGLVertexArrayObject;

@@ -15,7 +15,7 @@ export class Buffer {
     constructor(definition: AttributeCollection, maxNumberOfVertices: number, target = gl.ARRAY_BUFFER, usage = gl.STATIC_DRAW) {
         this.definition = definition;
         this.stride = this.calcByteSize();
-        this.data = new ArrayBuffer(this.stride * maxNumberOfVertices) ;
+        this.data = new ArrayBuffer(Math.max(this.stride * maxNumberOfVertices, 16)) ;
             this.target = target;
             this.usage = usage;
             this.id = this.createBuffer();

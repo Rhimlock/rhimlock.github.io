@@ -1,9 +1,15 @@
 import { gl } from "../../gl.js";
 
+const cache = {} as {[key:string] : Shader}
 export class Shader {
     id : WebGLShader
     constructor(name : string, type : number) {
+
         this.id = gl.createShader(type) as WebGLShader;
+        if (cache[name]) {
+            gl.deleteShader(this.id);
+            return cache[name] as Shader;
+        }
         const src = SHADER_SOURCES[name];
         if (this.id) {
             gl.shaderSource(this.id, src);
@@ -13,6 +19,7 @@ export class Shader {
         } else {
             throw "gl.createShader() failed";
         }
+        cache[name] = this;
     }
 }
 

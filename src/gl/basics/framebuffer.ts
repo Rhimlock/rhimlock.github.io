@@ -1,15 +1,14 @@
-import { dom } from "../../helper/htmlElements.js";
 import { gl } from "../gl.js";
 import { Program } from "./pipeline/program.js";
 import { Texture } from "./texture.js";
-import { VertexArray } from "./pipeline/vertexarray.js";
+import { VertexArray } from "./arraybuffer/vertexarray.js";
 
 export class FrameBuffer {
     id: WebGLFramebuffer
     texture: Texture
-    sizeInv : number[]
+    sizeInv: number[]
     constructor(width: number, height: number) {
-        this.sizeInv = [1/width, 1/height];
+        this.sizeInv = [1 / width, 1 / height];
         this.id = gl.createFramebuffer() as WebGLFramebuffer;
         if (!this.id) throw "gl.createFramebuffer() failed"
         const image = new Image(width, height);
@@ -24,28 +23,33 @@ export class FrameBuffer {
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.id);
         gl.viewport(0, 0, this.texture.width, this.texture.height);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        if (program.uniformBlocks.settings) program.uniformBlocks.settings.uniforms.viewSizeInv = [1 / this.texture.width, 1 / this.texture.height];
     }
 
     static disable() {
+        const canvas = gl.canvas as HTMLCanvasElement;
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-        gl.viewport(0, 0, dom.canvas.clientWidth, dom.canvas.clientHeight);
+        gl.viewport(0, 0, canvas.clientWidth, canvas.clientHeight);
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        dom.canvas.width = dom.canvas.clientWidth;
-        dom.canvas.height = dom.canvas.clientHeight;
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        if (program.uniformBlocks.settings) program.uniformBlocks.settings.uniforms.viewSizeInv = [1 / canvas.width, 1 / canvas.height];
     }
 
     draw() {
-        program.draw(vao, {u_texture:this.texture.no});
+        program.draw(vao, { u_texture: this.texture.no });
     }
 }
 
 const program = new Program('rect');
 
 const vao = new VertexArray();
-const buffer = vao.createBuffer(program,4);
-buffer.addVertex({aPos : [-1, 1], aTex : [0,1]});
-buffer.addVertex({aPos : [-1, -1], aTex : [0,0]});
-buffer.addVertex({aPos : [1, -1], aTex : [1,0]});
-buffer.addVertex({aPos : [1, 1], aTex : [1,1]});
+const buffer = vao.createBuffer(program, 4);
+buffer.addVertex({ aPos: [-1, 1], aTex: [0, 1] });
+buffer.addVertex({ aPos: [-1, -1], aTex: [0, 0] });
+buffer.addVertex({ aPos: [1, -1], aTex: [1, 0] });
+buffer.addVertex({ aPos: [1, 1], aTex: [1, 1] });
 buffer.sync();

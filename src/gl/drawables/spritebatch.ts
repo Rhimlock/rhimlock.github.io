@@ -1,7 +1,7 @@
 import { Buffer } from "../basics/arraybuffer/buffer.js";
 import { Vertex } from "../basics/arraybuffer/vertex.js";
 import { Program } from "../basics/pipeline/program.js";
-import { VertexArray } from "../basics/pipeline/vertexarray.js";
+import { VertexArray } from "../basics/arraybuffer/vertexarray.js";
 import { Texture } from "../basics/texture.js"
 import { gl } from "../gl.js";
 
@@ -25,7 +25,7 @@ export class SpriteBatch{
 
     draw() {
         this.buffer.sync();
-        program.draw(this.vao, {u_texture : this.texture.no, uTexSizeInv : this.texture.sizeInv, uViewPortSizeInv : [1/128, 1/128]});
+        program.draw(this.vao, {u_texture : this.texture.no, uTexSizeInv : this.texture.sizeInv});
     }
 
 }

@@ -2,10 +2,16 @@
 import { FrameBuffer } from "./gl/basics/framebuffer.js";
 import { Texture } from "./gl/basics/texture.js";
 import { SpriteBatch } from "./gl/drawables/spritebatch.js";
+import { gl } from "./gl/gl.js";
 import { Lightmap } from "./gl/lightmap.js";
-import { dom } from "./helper/htmlElements.js";
+import { images } from "./helper/images.js";
 import { Timer } from "./helper/timer.js";
-const batch = new SpriteBatch(20,new Texture(dom.orks));
+
+const cnv = gl.canvas as HTMLCanvasElement;
+cnv.id = "canvas";
+document.body.appendChild(cnv);
+
+const batch = new SpriteBatch(20,new Texture(images.orks));
 batch.createSprite([-64,-32],[0,0],16);
 const lightmap = new Lightmap(128, 128, 16);
 lightmap.createLight(-6, 0, 32);

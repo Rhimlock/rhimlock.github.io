@@ -3,7 +3,7 @@ import { Buffer } from "./basics/arraybuffer/buffer.js";
 import { Vertex } from "./basics/arraybuffer/vertex.js";
 import { gl } from "./gl.js";
 import { Program } from "./basics/pipeline/program.js";
-import { VertexArray } from "./basics/pipeline/vertexarray.js";
+import { VertexArray } from "./basics/arraybuffer/vertexarray.js";
 import { FrameBuffer } from "./basics/framebuffer.js";
 
 export class Lightmap extends FrameBuffer {
