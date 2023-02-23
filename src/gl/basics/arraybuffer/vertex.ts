@@ -1,19 +1,14 @@
 import { lookupTypedArrayByType } from "../lookups.js";
 
 export class Vertex {
-    _definition: AttributeCollection
-    _data : DataView
     
-    constructor(definition: AttributeCollection, data: DataView, attributes? : { [key : string] : number | number[]}) {
-        this._data = data;
-        this._definition = definition;
-        this.initAttributes(data);
-        if (attributes) this.setValues(attributes);
+    constructor(definition: AttributeCollection, data: DataView, values? : { [key : string] : number | number[]}) {
+        this.addAttributes(definition, data);
+        if(values) this.setValues(values);
     }
 
-    initAttributes(data: DataView) {
-        this._data = data;
-        for (const [key, item] of Object.entries(this._definition)) {
+    addAttributes(definition: AttributeCollection, data: DataView) {
+        for (const [key, item] of Object.entries(definition)) {
             const functions = lookupGetterSetter(data, item);
             Object.defineProperty(this, key, {
                 get: functions.getter,

@@ -33,14 +33,19 @@ export class Buffer {
 
     sync() {
         gl.bindBuffer(this.target, this.id);
-        // gl.bufferData(this.target, this.data, this.usage);
         gl.bufferSubData(this.target,0,new DataView(this.data),0,this.stride * this.vertices.length);
         gl.bindBuffer(this.target, null);
     }
 
-    addVertex(attributes? : { [key : string] : number | number[]})  {
+    addVertex(attributes : { [key : string] : number | number[]}, vertex?: Vertex)  {
         const byteOffset = this.vertices.length * this.stride;
-        const vertex = new Vertex(this.definition, new DataView(this.data, byteOffset, this.stride), attributes);
+        const dv = new DataView(this.data, byteOffset, this.stride);
+        if (vertex) {
+            vertex.addAttributes(this.definition,dv);
+            vertex.setValues(attributes);
+        } else {
+            vertex = new Vertex(this.definition, dv, attributes);
+        }
         this.vertices.push(vertex);
         return vertex;
     }
@@ -50,6 +55,7 @@ export class Buffer {
         for (const item of Object.values(this.definition)) {
             size += item.size as number * lookupByteSize(item.type);
         }
-        return nextPowerOf2(size);
+        console.log(nextPowerOf2(size));
+        return size;
     }
 }

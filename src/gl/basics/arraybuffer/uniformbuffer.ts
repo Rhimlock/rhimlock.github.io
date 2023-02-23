@@ -25,7 +25,7 @@ export class UniformBuffer extends Buffer {
             gl.UNIFORM_BUFFER,
             gl.DYNAMIC_READ
         );
-        this.uniforms = super.addVertex();
+        this.uniforms = super.addVertex({});
         this.bindingPoint = gl.getActiveUniformBlockParameter(program, index, gl.UNIFORM_BLOCK_BINDING);
         cache[blockName] = this;
     }

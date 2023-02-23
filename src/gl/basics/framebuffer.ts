@@ -46,10 +46,9 @@ export class FrameBuffer {
 
 const program = new Program('rect');
 
-const vao = new VertexArray();
-const buffer = vao.createBuffer(program, 4);
-buffer.addVertex({ aPos: [-1, 1], aTex: [0, 1] });
-buffer.addVertex({ aPos: [-1, -1], aTex: [0, 0] });
-buffer.addVertex({ aPos: [1, -1], aTex: [1, 0] });
-buffer.addVertex({ aPos: [1, 1], aTex: [1, 1] });
-buffer.sync();
+const vao = new VertexArray(program.attributes,4);
+vao.addVertex({ aPos: [-1, 1], aTex: [0, 1] });
+vao.addVertex({ aPos: [-1, -1], aTex: [0, 0] });
+vao.addVertex({ aPos: [1, -1], aTex: [1, 0] });
+vao.addVertex({ aPos: [1, 1], aTex: [1, 1] });
+vao.sync();
