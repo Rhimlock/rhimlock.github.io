@@ -48,4 +48,6 @@ const tick = () => {
 const timer = new Timer(tick, 1);
 timer.start();
 
-
+const tilesize = 16;
+const tilemap = images.tiles;
+console.log(tilesize,tilemap.dataset);

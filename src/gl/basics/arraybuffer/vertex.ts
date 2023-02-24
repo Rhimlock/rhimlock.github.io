@@ -20,14 +20,14 @@ export class Vertex {
 
     setValues(attributes : { [key : string] : number | number[]}) {
         const self = this;
-        Object.entries(attributes).forEach(([key, value]) => {
+        for (const [key, value] of Object.entries(attributes)) {
             const desc = Object.getOwnPropertyDescriptor(self, key);
             if (desc && desc.set) {
                 desc?.set(value);
             } else {
                 throw `Property ${key} not available in Vertex ${self}`
             }
-        })
+        }
     }
 }
 

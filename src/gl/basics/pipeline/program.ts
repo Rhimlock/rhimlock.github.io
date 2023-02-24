@@ -60,7 +60,9 @@ export class Program {
 
             }
         }
-        Object.values(this.uniformBlocks).forEach(block => block.sync());
+        for(const block of Object.values(this.uniformBlocks)) {
+            block.sync();
+        }
         gl.bindVertexArray(vao.id);
         if (instances) {
             gl.drawArraysInstanced(this.mode, 0, count, instances);
@@ -88,14 +90,16 @@ export class Program {
             };
             offset += info.size * lookupByteSize(info.type);
         }
-        Object.values(this.attributes).forEach(a => a.stride = offset);
+        for (const a of Object.values(this.attributes)) {
+            a.stride = offset;
+        }
     }
 
     initUniforms() {
         const indices = [...Array(gl.getProgramParameter(this.id, gl.ACTIVE_UNIFORMS)).keys()] as number[];
         const blockIndices = gl.getActiveUniforms(this.id, indices, gl.UNIFORM_BLOCK_INDEX) as number[];
 
-        indices.forEach(index => {
+        for (const index of indices) {
             const blockIndex = blockIndices[index] as number;
             if (blockIndex == -1) {
                 const info = gl.getActiveUniform(this.id, index);
@@ -113,6 +117,6 @@ export class Program {
                 if (!this.uniformBlocks[blockName])
                     this.uniformBlocks[blockName] = new UniformBuffer(blockName, this.id);
             }
-        })
+        }
     }
 }

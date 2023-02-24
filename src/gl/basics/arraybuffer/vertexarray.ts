@@ -15,7 +15,7 @@ export class VertexArray {
         if (!bufferOptions) {
             this.createBuffer(attributes, maxNumberOfVertices);
         } else {
-            bufferOptions.forEach(opt => {
+            for (const opt of bufferOptions) {
                 if (opt.attributeTypes) {
                     const def = Object.entries(opt.attributeTypes).map(([key, type]) => {
                         const attrib = attributes[key];
@@ -28,15 +28,14 @@ export class VertexArray {
                     }).reduce((result, entry) => Object.assign(result, entry), {});
                     this.createBuffer(def, opt.maxNumberOfVertices ?? maxNumberOfVertices, opt.usage, opt.instanceDivisor);
                 }
-            });
+            }
         }
     }
 
     initPointerAndDivisor(buffer: Buffer, instanceDivisor = 0) {
         gl.bindVertexArray(this.id);
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer.id);
-
-        Object.values(buffer.definition as { [key: string]: Attribute }).forEach(a => {
+        for (const a of Object.values(buffer.definition as { [key: string]: Attribute })) {
 
             gl.enableVertexAttribArray(a.location as number);
             if (a.useIPointer) {
@@ -52,7 +51,7 @@ export class VertexArray {
                 this.instancedBuffer = buffer;
                 this.instanceDivisor = instanceDivisor
             }
-        });
+        }
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
         gl.bindVertexArray(null);
@@ -67,16 +66,16 @@ export class VertexArray {
 
     addVertex(attributes: { [key: string]: number | number[] }) {
         let vertex = {};
-        this.buffers.forEach(b =>
-            {
+        for (const b of this.buffers) {
             vertex = b.addVertex(attributes);
-            }
-        );
+        }
         return vertex;
     }
 
     sync() {
-        this.buffers.forEach(b => b.sync());
+        for (const b of this.buffers) {
+            b.sync();
+        }
     }
 
 }
