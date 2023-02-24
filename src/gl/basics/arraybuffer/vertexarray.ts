@@ -15,19 +15,21 @@ export class VertexArray {
         if (!bufferOptions) {
             this.createBuffer(attributes, maxNumberOfVertices);
         } else {
+            let def = {};
             for (const opt of bufferOptions) {
-                if (opt.attributeTypes) {
-                    const def = Object.entries(opt.attributeTypes).map(([key, type]) => {
-                        const attrib = attributes[key];
-                        if (attrib) {
-                            attrib.type = type;
-                            return attrib;
-                        } else {
-                            throw `attribute ${key} not found`
-                        }
-                    }).reduce((result, entry) => Object.assign(result, entry), {});
-                    this.createBuffer(def, opt.maxNumberOfVertices ?? maxNumberOfVertices, opt.usage, opt.instanceDivisor);
+                for (const key in opt.attributeTypes) {
+                    const type = opt.attributeTypes[key] as number;
+                    const attrib = attributes[key];
+                    if (attrib) {
+                        attrib.type = type;
+                        def = Object.assign(def, attrib);
+                    } else {
+                        throw `attribute ${key} not found`
+                    }
                 }
+
+                this.createBuffer(def, opt.maxNumberOfVertices ?? maxNumberOfVertices, opt.usage, opt.instanceDivisor);
+
             }
         }
     }

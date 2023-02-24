@@ -8,8 +8,9 @@ export class Vertex {
     }
 
     addAttributes(definition: AttributeCollection, data: DataView) {
-        for (const [key, item] of Object.entries(definition)) {
-            const functions = lookupGetterSetter(data, item);
+        for (const key in definition) {
+            
+            const functions = lookupGetterSetter(data, definition[key] as Attribute);
             Object.defineProperty(this, key, {
                 get: functions.getter,
 
@@ -20,10 +21,11 @@ export class Vertex {
 
     setValues(attributes : { [key : string] : number | number[]}) {
         const self = this;
-        for (const [key, value] of Object.entries(attributes)) {
+        for (const key in attributes) {
+            const attrib = attributes[key];
             const desc = Object.getOwnPropertyDescriptor(self, key);
             if (desc && desc.set) {
-                desc?.set(value);
+                desc?.set(attrib);
             } else {
                 throw `Property ${key} not available in Vertex ${self}`
             }

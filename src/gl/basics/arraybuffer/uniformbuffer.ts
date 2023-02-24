@@ -39,7 +39,8 @@ export class UniformBuffer extends Buffer {
 function lookupBlockUniforms(program: WebGLProgram, indices: number[]) {
     const uniforms = {} as AttributeCollection;
     const offsets = gl.getActiveUniforms(program, indices, gl.UNIFORM_OFFSET) as number[];
-    for (const [i,offset] of offsets.entries()) {
+    for (let i = 0; i < offsets.length; ++i) {
+        const offset = offsets[i];
         const info = gl.getActiveUniform(program, indices[i] as number) as WebGLActiveInfo;
         uniforms[info.name] = {
                 location: gl.getUniformLocation(program, info.name) as number,

@@ -50,9 +50,9 @@ export class Program {
         const instances = vao.instanceDivisor * (vao.instancedBuffer?.vertices.length as number);
         gl.useProgram(this.id);
         if (uniforms) {
-            for (const [key, value] of Object.entries(uniforms)) {
+            for (const key in uniforms) {
                 if (this.uniforms[key]) {
-                    this.uniforms[key] = value;
+                    this.uniforms[key] = uniforms[key] as  number | Iterable<number>;
                 } else {
                     throw `uniform ${key} not found in ${Object.keys(Object.getOwnPropertyDescriptors(this.uniforms))}`
                 }
