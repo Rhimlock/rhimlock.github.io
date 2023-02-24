@@ -6,6 +6,7 @@ import { AttributeCollection } from "../arraybuffer/vertex.js";
 import { lookupByteSize, lookupLengthByType, lookupPointerType, lookupUniformSetter } from "../lookups.js";
 
 const cache = {} as { [key: string]: Program }
+
 export class Program {
     id: WebGLProgram
     attributes = {} as AttributeCollection;
