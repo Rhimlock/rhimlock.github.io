@@ -8,8 +8,8 @@ class View {
 
     convertPos(clientX: number, clientY : number) : Point {
         return new Point(
-            (clientX + window.pageXOffset - this.tileSize * 0.5 * this.zoom ) / (this.zoom * this.tileSize),
-            (clientY + window.pageYOffset - this.tileSize * 0.5 * this.zoom) / (this.zoom * this.tileSize)
+            (clientX + window.scrollX - this.tileSize * 0.5 * this.zoom ) / (this.zoom * this.tileSize),
+            (clientY + window.scrollY - this.tileSize * 0.5 * this.zoom) / (this.zoom * this.tileSize)
         );
     }
     updatePos() {

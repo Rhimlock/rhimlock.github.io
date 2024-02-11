@@ -5,10 +5,9 @@ import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { VAO } from "../vao.js";
 import { VBO } from "../vbo.js";
-import { Drawable } from "./drawable.js";
 import { Sprite } from "./sprite.js";
 
-export class SpriteBatch implements Drawable {
+export class SpriteBatch {
   private buffers: VBO[];
   private vboPos: VBO;
   private vboTex: VBO;

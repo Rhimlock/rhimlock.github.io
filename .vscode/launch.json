@@ -1,6 +1,13 @@
   {
     "version": "0.2.0",
     "configurations": [
+      {
+        "name": "Launch Chrome",
+        "request": "launch",
+        "type": "chrome",
+        "url": "http://localhost:8080",
+        "webRoot": "${workspaceFolder}"
+      },
 
       {
         "type": "firefox",
@@ -21,7 +28,7 @@
         "url": "http://localhost:5500/",
         "sourceMaps": true,
         "webRoot": "${workspaceRoot}",
-        "runtimeExecutable": "/snap/bin/chromium",
+        "runtimeExecutable": "/usr/bin/chromium",
         "runtimeArgs": [
           "--remote-debugging-port=9222",
           "--user-data-dir=~/Projects/Secret/.chromium-cache/"

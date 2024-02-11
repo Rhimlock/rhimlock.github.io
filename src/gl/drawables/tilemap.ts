@@ -6,9 +6,8 @@ import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { VAO } from "../vao.js";
 import { VBO } from "../vbo.js";
-import { Drawable } from "./drawable.js";
 
-export class TileMap implements Drawable {
+export class TileMap {
     private buffer: VBO;
     private vao: VAO;
     private tex: Texture;
@@ -25,7 +24,7 @@ export class TileMap implements Drawable {
         gl.uniform1ui(this.program.uniforms.uMapSize, size.x);
     }
 
-    draw(progress: number): void {
+    draw(): void {
         this.buffer.update();
         gl.useProgram(this.program.id);
         gl.bindVertexArray(this.vao.id);

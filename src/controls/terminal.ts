@@ -25,6 +25,7 @@ class Terminal {
     isVisible() : boolean {
         return (dom.terminal.className === "terminal_visible");
     }
+
     log(...data: any[]) {
         let txt = '';
         data.forEach(element => {
@@ -36,6 +37,7 @@ class Terminal {
         dom.log.appendChild(p);
         this.showLastLine();
     }
+    
     showLastLine() {
         dom.log.scrollTop = dom.log.scrollHeight;
     }
