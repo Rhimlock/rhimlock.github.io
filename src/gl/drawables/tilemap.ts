@@ -5,7 +5,7 @@ import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { VAO } from "../vao.js";
-import { VBO } from "../vbo.js";
+import { VBO } from "../buffer/vbo.js";
 
 export class TileMap {
     private buffer: VBO;
@@ -39,11 +39,10 @@ export class TileMap {
     }
 }
 
+//needed for glsl-literal plugin
+const glsl = (x: any) => x as string;
 
-
-
-
-const vertexShader = `#version 300 es  
+const vertexShader = glsl`#version 300 es  
 precision mediump float;
   in float type;
   uniform vec2 uTexInv;
@@ -67,15 +66,15 @@ void main() {
 }
 `;
 
-const fragmentShader = `#version 300 es    
+const fragmentShader = glsl`#version 300 es    
 precision mediump float;
-uniform sampler2D uTex;
-in vec2 vTex;
-in float tileSizeInv;
-out vec4 outColor;
+    uniform sampler2D uTex;
+    in vec2 vTex;
+    in float tileSizeInv;
+    out vec4 outColor;
 
 void main() {    
-    outColor = vec4(gl_PointCoord,0.0,1.0);
+    //outColor = vec4(gl_PointCoord,0.0,1.0);
     outColor = texture(uTex, vTex + gl_PointCoord * tileSizeInv);
 }
 `;

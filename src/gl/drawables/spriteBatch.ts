@@ -4,7 +4,7 @@ import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { VAO } from "../vao.js";
-import { VBO } from "../vbo.js";
+import { VBO } from "../buffer/vbo.js";
 import { Sprite } from "./sprite.js";
 
 export class SpriteBatch {
@@ -36,7 +36,7 @@ export class SpriteBatch {
     gl.uniform1f(this.program.uniforms.uTileSize, view.tileSize);
   }
 
-  createSprite(p: Point = new Point(0,0)): Sprite {
+  createSprite(p: Point = new Point(0, 0)): Sprite {
     if (this.sprites.length === this.maxSprites) {
       throw 'batchError: could not create new Sprite';
     }
@@ -57,7 +57,7 @@ export class SpriteBatch {
     }
   }
 
-  draw(progress : number): void {
+  draw(progress: number): void {
     this.buffers.forEach(b => b.updateSub(this.sprites.length));
     gl.useProgram(this.program.id);
     gl.bindVertexArray(this.vao.id);
@@ -73,11 +73,10 @@ export class SpriteBatch {
   }
 }
 
+//needed for glsl-literal plugin
+const glsl = (x: any) => x as string;
 
-
-
-
-const vertexShader = `#version 300 es  
+const vertexShader = glsl`#version 300 es  
 precision mediump float;
   in vec2 aVert;
   in vec3 aTex;
@@ -100,12 +99,12 @@ void main() {
 }
 `;
 
-const fragmentShader = `#version 300 es    
+const fragmentShader = glsl`#version 300 es    
 precision mediump float;
-uniform sampler2D uTex;
-in vec4 vColor;
-in vec3 vTex;
-out vec4 outColor;
+  uniform sampler2D uTex;
+  in vec4 vColor;
+  in vec3 vTex;
+  out vec4 outColor;
 
 void main() {    
   vec2 t = (vTex.xy + gl_PointCoord) * vTex.z ;

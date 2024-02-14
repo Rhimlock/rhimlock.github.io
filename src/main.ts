@@ -43,7 +43,7 @@ const tick = (elapsedTime: number) => {
     player.update(elapsedTime * 0.001);
     dummies.forEach(d => d.update(elapsedTime * 0.001));
     batch.draw(elapsedTime);
-    tilemap.draw(elapsedTime);
+    tilemap.draw();
 }
 
 const timer = new Timer(tick, 0);

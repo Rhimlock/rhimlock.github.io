@@ -1,5 +1,5 @@
-import { TypedArray } from "../helper/typedArray.js";
-import { gl } from "./gl.js";
+import { TypedArray } from "../../helper/typedArray.js";
+import { gl } from "../gl.js";
 
 export class VBO {
     public id: WebGLBuffer | null;
@@ -37,7 +37,6 @@ export class VBO {
         (this.data as TypedArray)[index * this.verticesPerElement + offset] = v;
     }
 }
-
 function lookupType(data: ArrayBufferView): number {
     switch (data.constructor.name) {
         case "Int8Array": return gl.BYTE; break;
@@ -50,3 +49,4 @@ function lookupType(data: ArrayBufferView): number {
         default: return -1;
     }
 };
+

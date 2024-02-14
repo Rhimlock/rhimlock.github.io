@@ -1,7 +1,7 @@
 import { Color } from "../../helper/color.js";
 import { Point } from "../../helper/point.js";
 import { view } from "../../helper/view.js";
-import { VBO } from "../vbo.js";
+import { VBO } from "../buffer/vbo.js";
 
 export class Sprite extends Point {
     public static ELEMENTS_PER_POSITION = 2;
@@ -42,10 +42,13 @@ export class Sprite extends Point {
     set size(v: number) { this.vboTex.setVertex(v * view.tileSize, this.i, 2); }
     
     set color(v: Color) {
-        this.vboColor?.setVertex(v.r, this.i, 0);
-        this.vboColor?.setVertex(v.g, this.i, 1);
-        this.vboColor?.setVertex(v.b, this.i, 2);
-        this.vboColor?.setVertex(v.a, this.i, 3);
+        const vbo = this.vboColor;
+        if (vbo) {
+            vbo.setVertex(v.r, this.i, 0);
+            vbo.setVertex(v.g, this.i, 1);
+            vbo.setVertex(v.b, this.i, 2);
+            vbo.setVertex(v.a, this.i, 3);
+        }
 
     }
 
