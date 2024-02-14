@@ -21,7 +21,7 @@ export class Animation {
         const frame = this.frames[i];
         if (frame && frame != this.currentFrame) {
             this.currentFrame = frame;
-            sprite.tx = frame.x;
+            sprite.tex.x = frame.x;
         }
     }
 }

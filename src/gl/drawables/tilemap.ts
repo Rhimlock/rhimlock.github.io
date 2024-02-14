@@ -74,7 +74,6 @@ precision mediump float;
     out vec4 outColor;
 
 void main() {    
-    //outColor = vec4(gl_PointCoord,0.0,1.0);
     outColor = texture(uTex, vTex + gl_PointCoord * tileSizeInv);
 }
 `;

@@ -15,7 +15,7 @@
         {
             "label": "StartServer",
             "type": "process",
-            "command": "tsc & ${input:startServer} "
+            "command": "rm -r js && tsc & ${input:startServer} "
         },
         {
             "label": "StopServer",

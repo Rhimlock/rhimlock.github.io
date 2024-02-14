@@ -13,7 +13,7 @@ export class Point {
     set y(v: number) { this._y = v; }
 
     get length() { return (Math.sqrt(this.x * this.x + this.y * this.y)); }
-    get normalized() { return this.length > 0 ? this.getResized(1 / this.length) : this; }
+    get normalized() : Point { return this.length > 0 ? this.getResized(1 / this.length) : this; }
     get inverted() { return new Point(-this.x, -this.y); }
     get rotatedLeft() { return new Point(this.y, - this.x); }
     get rotatedRight() { return new Point(- this.y, this.x); }

@@ -6,6 +6,7 @@ import { Texture } from "../texture.js";
 import { VAO } from "../vao.js";
 import { VBO } from "../buffer/vbo.js";
 import { Sprite } from "./sprite.js";
+import { Vec2, Vec3, Vec4 } from "../buffer/vec.js";
 
 export class SpriteBatch {
   private buffers: VBO[];
@@ -40,11 +41,14 @@ export class SpriteBatch {
     if (this.sprites.length === this.maxSprites) {
       throw 'batchError: could not create new Sprite';
     }
-    const spr = new Sprite(this.vboPos, this.vboTex, this.vboColor, this.sprites.length);
-    spr.x = p.x;
-    spr.y = p.y;
-    spr.size = 2;
-    spr.ty = 0;
+    const n = this.sprites.length;
+    const spr = new Sprite(new Vec2(this.vboPos.getSubArray(n,Sprite.ELEMENTS_PER_POSITION)),
+    new Vec3(this.vboTex.getSubArray(n,Sprite.ELEMENTS_PER_TEXTURE)),
+    this.vboColor ? new Vec4(this.vboColor.getSubArray(n,Sprite.ELEMENTS_PER_COLOR)) : null);
+    spr.pos.x = p.x;
+    spr.pos.y = p.y;
+    spr.tex.z = 2;
+    spr.tex.y = 0;
     this.sprites.push(spr);
     return spr;
   }
@@ -52,12 +56,13 @@ export class SpriteBatch {
   deleteSprite(i: number) {
     const spr = this.sprites.pop();
     if (spr) {
-      spr.changeIndex(i);
+      //spr.changeIndex(i);
       this.sprites[i] = spr;
     }
   }
 
   draw(progress: number): void {
+    console.log(this.vboPos, this.vboTex);
     this.buffers.forEach(b => b.updateSub(this.sprites.length));
     gl.useProgram(this.program.id);
     gl.bindVertexArray(this.vao.id);

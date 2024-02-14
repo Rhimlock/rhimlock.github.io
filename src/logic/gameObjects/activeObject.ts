@@ -42,13 +42,13 @@ export class ActiveObject extends BaseObject {
         }
         if (Math.abs(this.direction.y) > Math.abs(this.direction.x)) {
             switch(Math.sign(this.direction.y)) {
-                case -1 :  this.sprite.ty = 0; break;
-                case 1 : this.sprite.ty = 2; break;
+                case -1 :  this.sprite.tex.y = 0; break;
+                case 1 : this.sprite.tex.y = 2; break;
             } 
         } else {
             switch(Math.sign(this.direction.x)) {
-                case -1 :  this.sprite.ty = 3; break;
-                case 1 : this.sprite.ty = 1; break;
+                case -1 :  this.sprite.tex.y = 3; break;
+                case 1 : this.sprite.tex.y = 1; break;
             } 
         }
         this.squad?.update();

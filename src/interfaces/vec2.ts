@@ -17,7 +17,7 @@ export class Vec2 {
     }
 
     get length() { return (Math.sqrt(this.x * this.x + this.y * this.y)); }
-    get normalized() { return this.length === 0 ? this : this.resized(1 / this.length); }
+    get normalized() : Vec2 { return this.length === 0 ? this : this.resized(1 / this.length); }
     get inverted() { return new Vec2([-this.x, -this.y]); }
     get rotatedLeft() { return new Vec2([this.y, - this.x]); }
     get rotatedRight() { return new Vec2([- this.y, this.x]); }

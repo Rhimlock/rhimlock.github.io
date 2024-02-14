@@ -36,6 +36,12 @@ export class VBO {
         this.changed = true;
         (this.data as TypedArray)[index * this.verticesPerElement + offset] = v;
     }
+
+    getSubArray(n:number, length: number) {
+        const begin = n * this.verticesPerElement;
+        const end = begin + length;
+        return (this.data as TypedArray).subarray(begin,end);
+    }
 }
 function lookupType(data: ArrayBufferView): number {
     switch (data.constructor.name) {
