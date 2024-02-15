@@ -3,7 +3,7 @@ import { gl } from "../gl.js";
 
 export class VBO {
     public id: WebGLBuffer | null;
-    public data: ArrayBufferView;
+    public data: TypedArray;
     public type: number;
     public changed = false;
     private verticesPerElement : number;
@@ -37,10 +37,17 @@ export class VBO {
         (this.data as TypedArray)[index * this.verticesPerElement + offset] = v;
     }
 
-    getSubArray(element:number, length: number  = 1) {
+    getElement(element:number) {
         const begin = element * this.verticesPerElement;
-        const end = begin + length * this.verticesPerElement;
+        const end = begin + this.verticesPerElement;
         return (this.data as TypedArray).subarray(begin,end);
+    }
+
+    overwrite(old: number, element : number) {
+        for (let i = 0; i < this.verticesPerElement; i++) {
+            this.data[i+element] = this.data[i+old] as number;
+        }
+
     }
 }
 
@@ -52,7 +59,10 @@ function getArray(type:number, size : number) {
         case gl.SHORT: return(new Int16Array(size));
         case gl.UNSIGNED_INT: return(new Uint32Array(size));
         case gl.INT: return(new Int32Array(size));
-        case gl.FLOAT: return(new Float32Array(size));
+        case gl.FLOAT: 
+        case gl.FLOAT_VEC2:
+        case gl.FLOAT_VEC3:
+        case gl.FLOAT_VEC4:return(new Float32Array(size));
         default: throw ("Unknown type for VBO: " + type);
     }
 }

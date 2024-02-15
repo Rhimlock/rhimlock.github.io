@@ -6,15 +6,15 @@ class Vector {
         this.data = data;
     }    
 
-    replaceData(data : TypedArray | Array<number>, keepOldValues = true) {
-        const oldData = this.data;
-        this.data = data;
-        if (keepOldValues) {
-            for(let i = 0; i < this.data.length; i++) {
-                this.data[i] = oldData[i] ?? 0;
-            }
-        }
-    }
+    // replaceData(data : TypedArray | Array<number>, keepOldValues = true) {
+    //     const oldData = this.data;
+    //     this.data = data;
+    //     if (keepOldValues) {
+    //         for(let i = 0; i < this.data.length; i++) {
+    //             this.data[i] = oldData[i] ?? 0;
+    //         }
+    //     }
+    // }
 
     get length() { return Math.sqrt(
         (this.data as Array<number>).reduce((a : number,v : number) => a + v*v,0)

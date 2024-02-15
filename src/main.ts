@@ -14,7 +14,7 @@ import { TileMap } from "./gl/drawables/tilemap.js";
 
 
 const tilemap = new TileMap(1024,1024,dom.tiles);
-const batch = new SpriteBatch(20, dom.humans, true);
+const batch = new SpriteBatch(20, dom.humans);
 const player = new ActiveObject(batch.createSprite());
 const dummies : ActiveObject[] = [];
 
@@ -54,7 +54,7 @@ const timer = new Timer(tick, 0);
 timer.start();
 
 const createDummy = () => {
-    const dummy = new ActiveObject(batch.createSprite(mousePos));
+    const dummy = new ActiveObject(batch.createSprite(mousePos.x, mousePos.y));
     player.squad?.addMember(dummy);
     dummies.push(dummy);
     return dummy;
