@@ -14,7 +14,7 @@ import { TileMap } from "./gl/drawables/tilemap.js";
 
 
 const tilemap = new TileMap(1024,1024,dom.tiles);
-const batch = new SpriteBatch(20, dom.humans);
+const batch = new SpriteBatch(5, dom.humans);
 const player = new ActiveObject(batch.createSprite());
 const dummies : ActiveObject[] = [];
 
@@ -47,7 +47,7 @@ const tick = (elapsedTime: number) => {
     player.update(elapsedTime * 0.001);
     dummies.forEach(d => d.update(elapsedTime * 0.001));
     batch.draw(elapsedTime);
-    tilemap.draw();
+    //tilemap.draw();
 }
 
 const timer = new Timer(tick, 0);
@@ -60,7 +60,7 @@ const createDummy = () => {
     return dummy;
 }
 
-createDummy();
+//createDummy();
 input.bindCall(timer.toggle,input.keys.pause,timer);
 
 window.onblur = () => timer.toggle.bind(timer);

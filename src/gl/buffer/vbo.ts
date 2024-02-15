@@ -1,3 +1,4 @@
+import { Vec2, Vec3, Vec4 } from "../../components/vectors.js";
 import { TypedArray } from "../../helper/typedArray.js";
 import { gl } from "../gl.js";
 
@@ -10,9 +11,9 @@ export class VBO {
     
     constructor(type : number, elements : number, verticesPerElement : number) {
         this.id = gl.createBuffer();
-        this.type = type;
+        this.type = ([gl.FLOAT_VEC2, gl.FLOAT_VEC3, gl.FLOAT_VEC4] as number[]).includes(type) ? gl.FLOAT : type;
         this.verticesPerElement = verticesPerElement;
-        this.data = getArray(type, elements * verticesPerElement);
+        this.data = getArray(this.type, elements * verticesPerElement);
         this.update();
     }
 
@@ -40,7 +41,13 @@ export class VBO {
     getElement(element:number) {
         const begin = element * this.verticesPerElement;
         const end = begin + this.verticesPerElement;
-        return (this.data as TypedArray).subarray(begin,end);
+        const a = (this.data as TypedArray).subarray(begin,end);
+        switch (this.verticesPerElement) {
+            case 2: return new Vec2(a);
+            case 3: return new Vec3(a);
+            case 4: return new Vec4(a);
+            default: throw "Unknown number of vertices per element"
+        }
     }
 
     overwrite(old: number, element : number) {
@@ -59,10 +66,7 @@ function getArray(type:number, size : number) {
         case gl.SHORT: return(new Int16Array(size));
         case gl.UNSIGNED_INT: return(new Uint32Array(size));
         case gl.INT: return(new Int32Array(size));
-        case gl.FLOAT: 
-        case gl.FLOAT_VEC2:
-        case gl.FLOAT_VEC3:
-        case gl.FLOAT_VEC4:return(new Float32Array(size));
+        case gl.FLOAT:return(new Float32Array(size));
         default: throw ("Unknown type for VBO: " + type);
     }
 }

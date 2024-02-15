@@ -39,8 +39,6 @@ const vertexShader = glsl`#version 300 es
 precision mediump float;
   in vec2 pos;
   in vec3 tex;
-  in vec4 aColor;
-  out vec4 vColor;
   out vec3 vTex;
   uniform vec2 uTexInv;
   uniform vec2 uView;
@@ -54,14 +52,12 @@ void main() {
   gl_Position = vec4(v, v.y, 1.0);
   gl_PointSize = tex.z;
   vTex = vec3(tex.xy * tex.z * uTexInv * uTileSize, tex.z  * uTexInv.x );
-  vColor = aColor / 256.0;
 }
 `;
 
 const fragmentShader = glsl`#version 300 es    
 precision mediump float;
   uniform sampler2D uTex;
-  in vec4 vColor;
   in vec3 vTex;
   out vec4 outColor;
 
@@ -70,6 +66,5 @@ void main() {
   outColor = texture(uTex,t);
 
   if (outColor.a <= 0.1) discard;
-  outColor.rgb += vColor.rgb * vColor.a;
 }
 `;
