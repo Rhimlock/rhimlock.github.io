@@ -15,7 +15,7 @@
         {
             "label": "StartServer",
             "type": "process",
-            "command": "rm -r js && tsc & ${input:startServer} "
+            "command": "npm run build && ${input:startServer} "
         },
         {
             "label": "StopServer",

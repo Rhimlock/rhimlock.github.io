@@ -1,4 +1,4 @@
-import { Vec2, Vec3, Vec4 } from "../buffer/vec.js";
+import { Vec2, Vec3, Vec4 } from "../../components/vectors.js";
 
 export class Sprite {
     public static ELEMENTS_PER_POSITION = 2;

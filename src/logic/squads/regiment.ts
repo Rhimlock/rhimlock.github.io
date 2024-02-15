@@ -68,8 +68,6 @@ export class Regiment implements Squad {
         }
         const m = this.members[n];
         if (m) {
-
-            console.log(n, m.toString());
             return m;
         }
         return new Point(-1, -1);

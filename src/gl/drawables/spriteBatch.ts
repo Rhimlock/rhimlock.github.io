@@ -6,7 +6,7 @@ import { Texture } from "../texture.js";
 import { VAO } from "../vao.js";
 import { VBO } from "../buffer/vbo.js";
 import { Sprite } from "./sprite.js";
-import { Vec2, Vec3, Vec4 } from "../buffer/vec.js";
+import { Vec2, Vec3, Vec4 } from "../../components/vectors.js";
 
 export class SpriteBatch {
   private buffers: VBO[];
@@ -21,11 +21,11 @@ export class SpriteBatch {
 
   constructor(maxSprites: number, img: HTMLImageElement, useColors: boolean = false) {
 
-    this.vboPos = new VBO(new Float32Array(maxSprites * Sprite.ELEMENTS_PER_POSITION), Sprite.ELEMENTS_PER_POSITION);
-    this.vboTex = new VBO(new Int8Array(maxSprites * Sprite.ELEMENTS_PER_TEXTURE), Sprite.ELEMENTS_PER_TEXTURE);
+    this.vboPos = new VBO(gl.FLOAT,maxSprites,Sprite.ELEMENTS_PER_POSITION);
+    this.vboTex = new VBO(gl.BYTE,maxSprites,Sprite.ELEMENTS_PER_TEXTURE);
     this.buffers = [this.vboPos, this.vboTex];
     if (useColors) {
-      this.vboColor = new VBO(new Uint8Array(maxSprites * Sprite.ELEMENTS_PER_COLOR), Sprite.ELEMENTS_PER_COLOR);
+      this.vboColor = new VBO(gl.UNSIGNED_BYTE, maxSprites, Sprite.ELEMENTS_PER_COLOR);
       this.buffers.push(this.vboColor);
     }
     this.maxSprites = maxSprites;
@@ -37,17 +37,18 @@ export class SpriteBatch {
     gl.uniform1f(this.program.uniforms.uTileSize, view.tileSize);
   }
 
-  createSprite(p: Point = new Point(0, 0)): Sprite {
-    if (this.sprites.length === this.maxSprites) {
+  createSprite(p: Point = new Point(1, 1)): Sprite {
+    p = new Point(1,1);
+    if (this.sprites.length >= this.maxSprites) {
       throw 'batchError: could not create new Sprite';
     }
-    const n = this.sprites.length;
-    const spr = new Sprite(new Vec2(this.vboPos.getSubArray(n,Sprite.ELEMENTS_PER_POSITION)),
-    new Vec3(this.vboTex.getSubArray(n,Sprite.ELEMENTS_PER_TEXTURE)),
-    this.vboColor ? new Vec4(this.vboColor.getSubArray(n,Sprite.ELEMENTS_PER_COLOR)) : null);
+    const i = this.sprites.length;
+    const spr = new Sprite(new Vec2(this.vboPos.getSubArray(i)),
+    new Vec3(this.vboTex.getSubArray(i)),
+    this.vboColor ? new Vec4(this.vboColor.getSubArray(i)) : null);
     spr.pos.x = p.x;
     spr.pos.y = p.y;
-    spr.tex.z = 2;
+    spr.tex.z = 16;
     spr.tex.y = 0;
     this.sprites.push(spr);
     return spr;
@@ -62,7 +63,6 @@ export class SpriteBatch {
   }
 
   draw(progress: number): void {
-    console.log(this.vboPos, this.vboTex);
     this.buffers.forEach(b => b.updateSub(this.sprites.length));
     gl.useProgram(this.program.id);
     gl.bindVertexArray(this.vao.id);
@@ -94,12 +94,12 @@ precision mediump float;
   uniform float uTileSize;
 
 void main() {
-  vec2 v = round(aVert.xy - uView.xy * uTileSize )* uResInv ;
+  vec2 v = round(aVert.xy *8.0 - uView.xy * uTileSize )* uResInv ;
   v.y *= -1.0;
   v += vec2(-1.0,1.0);
   gl_Position = vec4(v, v.y, 1.0);
-  gl_PointSize = aTex.z ;
-  vTex = vec3(aTex.xy * aTex.z * uTexInv, aTex.z  * uTexInv.x);
+  gl_PointSize = aTex.z;
+  vTex = vec3(aTex.xy * aTex.z * uTexInv * uTileSize, aTex.z  * uTexInv.x );
   vColor = aColor / 256.0;
 }
 `;

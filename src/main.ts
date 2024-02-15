@@ -11,21 +11,24 @@ import { mousePos } from "./controls/mouse.js";
 import { Regiment } from "./logic/squads/regiment.js";
 import { Point } from "./helper/point.js";
 import { TileMap } from "./gl/drawables/tilemap.js";
-import { Vec2 } from "./interfaces/vec2.js";
 
-const arr = new Uint8Array(1024*1024);
 
-for (let i = 0; i < arr.length; i++) {
-    arr[i] = Math.round(Math.random() * 8);
-}
-const tilemap = new TileMap(arr, new Vec2([1024,1024]),dom.tiles);
-const batch = new SpriteBatch(2, dom.humans, true);
+const tilemap = new TileMap(1024,1024,dom.tiles);
+const batch = new SpriteBatch(20, dom.humans, true);
 const player = new ActiveObject(batch.createSprite());
 const dummies : ActiveObject[] = [];
+
+
+for (let y = 0; y <1024; y++) {
+for (let x = 0; x < 1024; x++) {
+    tilemap.setTile(x,y,Math.round(Math.random() * 8));
+}
+}
+
 player.x = 8;
+
 player.y = 8;
-//player.sprite.color = new Color(255,0,0,255);
-player.size = 10;
+player.size = 8;
 player.squad = new Regiment(player);
 info.player = player;
 const tick = (elapsedTime: number) => {
@@ -65,4 +68,4 @@ input.bindCall((() => {player.destination = mousePos;}), input.keys.middleClick,
 
 input.bindCall(createDummy, input.keys.click, null);
 
-input.bindCall(batch.deleteSprite, input.keys.escape, batch);
+//input.bindCall(batch.deleteSprite, input.keys.escape, batch);

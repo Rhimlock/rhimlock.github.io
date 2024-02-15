@@ -1,6 +1,5 @@
 import { TypedArray } from "../../helper/typedArray.js";
 import { view } from "../../helper/view.js";
-import { Vec2 } from "../../interfaces/vec2.js";
 import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
@@ -13,17 +12,19 @@ export class TileMap {
     private tex: Texture;
     private program = new Program(vertexShader, fragmentShader);
 
-    constructor(array: TypedArray, size: Vec2, img: HTMLImageElement) {
-        this.buffer = new VBO(array, 1);
+    constructor(width: number, height: number, img: HTMLImageElement) {
+        this.buffer = new VBO(gl.UNSIGNED_BYTE, width * height, 1);
         this.tex = new Texture(img);
 
         this.vao = new VAO([this.buffer], this.program.attributes);
         gl.uniform1i(this.program.uniforms.uTex, this.tex.no);
         gl.uniform2fv(this.program.uniforms.uTexInv, this.tex.sizeInv);
         gl.uniform1f(this.program.uniforms.uTileSize, view.tileSize);
-        gl.uniform1ui(this.program.uniforms.uMapSize, size.x);
+        gl.uniform1ui(this.program.uniforms.uMapSize, width);
     }
 
+    getTile(x: number, y: number) { return this.buffer.getVertex(x * y, 0); }
+    setTile(x: number, y: number, value: number) { return this.buffer.setVertex(value, x * y, 0); }
     draw(): void {
         this.buffer.update();
         gl.useProgram(this.program.id);

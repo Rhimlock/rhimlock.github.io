@@ -8,11 +8,11 @@ export class VBO {
     public changed = false;
     private verticesPerElement : number;
     
-    constructor(data: ArrayBufferView, verticesPerElement : number) {
+    constructor(type : number, elements : number, verticesPerElement : number) {
         this.id = gl.createBuffer();
-        this.data = data;
-        this.type = lookupType(data);
+        this.type = type;
         this.verticesPerElement = verticesPerElement;
+        this.data = getArray(type, elements * verticesPerElement);
         this.update();
     }
 
@@ -37,22 +37,22 @@ export class VBO {
         (this.data as TypedArray)[index * this.verticesPerElement + offset] = v;
     }
 
-    getSubArray(n:number, length: number) {
-        const begin = n * this.verticesPerElement;
-        const end = begin + length;
+    getSubArray(element:number, length: number  = 1) {
+        const begin = element * this.verticesPerElement;
+        const end = begin + length * this.verticesPerElement;
         return (this.data as TypedArray).subarray(begin,end);
     }
 }
-function lookupType(data: ArrayBufferView): number {
-    switch (data.constructor.name) {
-        case "Int8Array": return gl.BYTE; break;
-        case "Uint8Array": return gl.UNSIGNED_BYTE; break;
-        case "Int16Array": return gl.SHORT; break;
-        case "Uint16Array": return gl.UNSIGNED_SHORT; break;
-        case "Int32Array": return gl.INT; break;
-        case "Uint32Array": return gl.UNSIGNED_INT; break;
-        case "Float32Array": return gl.FLOAT; break;
-        default: return -1;
-    }
-};
 
+function getArray(type:number, size : number) {
+    switch(type) {
+        case gl.UNSIGNED_BYTE: return(new Uint8Array(size));
+        case gl.BYTE: return(new Int8Array(size));
+        case gl.UNSIGNED_SHORT: return(new Uint16Array(size));
+        case gl.SHORT: return(new Int16Array(size));
+        case gl.UNSIGNED_INT: return(new Uint32Array(size));
+        case gl.INT: return(new Int32Array(size));
+        case gl.FLOAT: return(new Float32Array(size));
+        default: throw ("Unknown type for VBO: " + type);
+    }
+}
