@@ -1,6 +1,6 @@
 import { TypedArray } from "../helper/typedArray.js";
 
-class Vector {
+export class Vector {
   data: TypedArray | Array<number>;
   constructor(data: TypedArray | Array<number>) {
     this.data = data;
@@ -19,6 +19,9 @@ class Vector {
     for (let i = 0; i < this.data.length; i++) {
       this.data[i] = values[i] ?? (this.data[i] as number);
     }
+  }
+  getValue(i:number) {
+    return this.data[i];
   }
 
   get length() {

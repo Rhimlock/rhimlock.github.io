@@ -1,3 +1,4 @@
+import { Vector } from "../../components/vectors.js";
 import { view } from "../../helper/view.js";
 import { VBO } from "../buffer/vbo.js";
 import { gl } from "../gl.js";
@@ -9,6 +10,11 @@ export interface BufferInfo {
   type: number;
   normalized?: boolean;
 }
+
+export interface Element {
+  [key: string]: Vector;
+}
+
 export class Batch {
   private buffers: VBO[] = [];
   private vao: VAO;
@@ -33,7 +39,7 @@ export class Batch {
     this.vao = new VAO(this.buffers, this.program.attributes);
   }
 
-  createElement(): any {
+  createElement(): Element {
     if (this.elements.length >= this.limit)
       throw "can't create Element, Batch reached limit";
     const element: any = {};
@@ -41,22 +47,22 @@ export class Batch {
     return this.getElement(n - 1);
   }
 
-  removeElement(element: number = this.elements.length - 1) {
+  removeElement(i: number = this.elements.length - 1) {
     const last = this.elements.pop();
-    if (element == this.elements.length) return;
+    if (i == this.elements.length) return;
 
-    this.buffers.forEach((vbo, i) => {
-      vbo.overwrite(element, this.elements.length);
-      last[i] = this.elements[element][i];
+    this.buffers.forEach((vbo, n) => {
+      vbo.overwrite(i, this.elements.length);
+      last[i] = this.elements[i][n];
     });
-    this.elements[element] = last;
+    this.elements[i] = last;
   }
 
   getElement(i: number) {
-    const element = {} as any;
+    const element: Element = {};
     this.buffers.forEach((buffer, n) => {
       const a = this.program.attributes[n] as Attribute;
-      element[a.info.name ?? ""] = buffer.getElement(i);
+      element[a.info.name ?? ""] = buffer.getVector(i);
     });
     return element;
   }

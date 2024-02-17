@@ -1,8 +1,13 @@
+import { Vector } from "../../components/vectors.js";
 import { view } from "../../helper/view.js";
 import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { Batch } from "./batch.js";
+
+export interface Tile {
+  type: Vector
+}
 
 export class TileMap extends Batch {
   private tex: Texture;
@@ -23,10 +28,12 @@ export class TileMap extends Batch {
   }
 
   getTile(x: number, y: number) {
-    return this.getElement(x + y * this.width)[0];
+    const tile = this.getElement(x + y * this.width) as any as Tile;
+    return tile.type?.getValue(0);
   }
   setTile(x: number, y: number, value: number) {
-    return (this.getElement(x + y * this.width).type[0] = value);
+    const tile = this.getElement(x + y * this.width);
+    tile.type?.setValues([value]);
   }
 }
 

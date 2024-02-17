@@ -28,7 +28,7 @@ export class SpriteBatch extends Batch {
   }
 
   createSprite(x = 1, y = 1): Sprite {
-    const spr: Sprite = this.createElement();
+    const spr: Sprite = this.createElement() as any as Sprite;
 
     spr.pos.x = x;
     spr.pos.y = y;

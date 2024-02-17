@@ -1,4 +1,4 @@
-import { Vec2, Vec3, Vec4 } from "../../components/vectors.js";
+import { Vec2, Vec3, Vec4, Vector } from "../../components/vectors.js";
 import { TypedArray } from "../../helper/typedArray.js";
 import { gl } from "../gl.js";
 
@@ -8,12 +8,12 @@ export class VBO {
   public type: number;
   public normalized: boolean;
   public changed = false;
-  private verticesPerElement: number;
+  private verticesPerVector: number;
 
   constructor(
     type: number,
-    elements: number,
-    verticesPerElement: number,
+    vectors: number,
+    verticesPerVector: number,
     normalized = false,
   ) {
     this.id = gl.createBuffer();
@@ -22,8 +22,8 @@ export class VBO {
     ).includes(type)
       ? gl.FLOAT
       : type;
-    this.verticesPerElement = verticesPerElement;
-    this.data = getArray(this.type, elements * verticesPerElement);
+    this.verticesPerVector = verticesPerVector;
+    this.data = getArray(this.type, vectors * verticesPerVector);
     this.normalized = normalized;
     this.update();
   }
@@ -42,20 +42,20 @@ export class VBO {
   }
 
   getVertex(n: number, offset: number) {
-    return (this.data as TypedArray)[n * this.verticesPerElement + offset];
+    return (this.data as TypedArray)[n * this.verticesPerVector + offset];
   }
   setVertex(v: number, index: number, offset: number) {
     this.changed = true;
-    (this.data as TypedArray)[index * this.verticesPerElement + offset] = v;
+    (this.data as TypedArray)[index * this.verticesPerVector + offset] = v;
   }
 
-  getElement(element: number) {
-    const begin = element * this.verticesPerElement;
-    const end = begin + this.verticesPerElement;
+  getVector(element: number) : Vector{
+    const begin = element * this.verticesPerVector;
+    const end = begin + this.verticesPerVector;
     const a = (this.data as TypedArray).subarray(begin, end);
-    switch (this.verticesPerElement) {
+    switch (this.verticesPerVector) {
       case 1:
-        return a;
+        return new Vector(a);
       case 2:
         return new Vec2(a);
       case 3:
@@ -68,7 +68,7 @@ export class VBO {
   }
 
   overwrite(old: number, element: number) {
-    for (let i = 0; i < this.verticesPerElement; i++) {
+    for (let i = 0; i < this.verticesPerVector; i++) {
       this.data[i + element] = this.data[i + old] as number;
     }
   }
