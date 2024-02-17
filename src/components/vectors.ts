@@ -15,6 +15,11 @@ class Vector {
     //         }
     //     }
     // }
+    setValues(values: number[]) {
+        for (let i = 0; i < this.data.length; i++) {
+            this.data[i] = values[i] ?? this.data[i] as number;
+        }
+    }
 
     get length() { return Math.sqrt(
         (this.data as Array<number>).reduce((a : number,v : number) => a + v*v,0)

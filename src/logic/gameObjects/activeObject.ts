@@ -1,4 +1,4 @@
-import { Sprite } from "../../gl/drawables/sprite.js";
+import { Sprite } from "../../gl/drawables/spriteBatch.js";
 import { Animation, Frame } from "../../helper/animation.js";
 import { Point } from "../../helper/point.js";
 import { Squad } from "../squads/squad.js";

@@ -1,4 +1,4 @@
-import { Sprite } from "../../gl/drawables/sprite.js";
+import { Sprite } from "../../gl/drawables/spriteBatch.js";
 import { Point } from "../../helper/point.js";
 
 export class BaseObject extends Point {

@@ -1,9 +1,15 @@
+import { Vec2, Vec3, Vec4 } from "../../components/vectors.js";
 import { view } from "../../helper/view.js";
 import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
-import { Sprite } from "./sprite.js";
 import { Batch } from "./batch.js";
+
+export interface Sprite {
+  pos : Vec2,
+  tex : Vec3,
+  color : Vec4
+}
 
 export class SpriteBatch extends Batch {
 
@@ -26,6 +32,7 @@ export class SpriteBatch extends Batch {
     spr.pos.y = y;
     spr.tex.z = 16;
     spr.tex.y = 0;
+    spr.color.setValues([1,.5,1,1]);
     return spr;
   }
 
@@ -39,6 +46,8 @@ const vertexShader = glsl`#version 300 es
 precision mediump float;
   in vec2 pos;
   in vec3 tex;
+  in vec4 color;
+  out vec4 vColor;
   out vec3 vTex;
   uniform vec2 uTexInv;
   uniform vec2 uView;
@@ -52,6 +61,7 @@ void main() {
   gl_Position = vec4(v, v.y, 1.0);
   gl_PointSize = tex.z;
   vTex = vec3(tex.xy * tex.z * uTexInv * uTileSize, tex.z  * uTexInv.x );
+  vColor = color;
 }
 `;
 
@@ -59,6 +69,7 @@ const fragmentShader = glsl`#version 300 es
 precision mediump float;
   uniform sampler2D uTex;
   in vec3 vTex;
+  in vec4 vColor;
   out vec4 outColor;
 
 void main() {    
@@ -66,5 +77,6 @@ void main() {
   outColor = texture(uTex,t);
 
   if (outColor.a <= 0.1) discard;
+  outColor = outColor * vColor;
 }
 `;

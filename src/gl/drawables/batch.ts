@@ -34,7 +34,7 @@ export class Batch {
         return element;
     }
 
-    removeElement(element: number) {
+    removeElement(element: number = this.elements.length - 1) {
         const last = this.elements.pop();
         if (element == this.elements.length) return;
 

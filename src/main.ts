@@ -47,7 +47,7 @@ const tick = (elapsedTime: number) => {
     player.update(elapsedTime * 0.001);
     dummies.forEach(d => d.update(elapsedTime * 0.001));
     batch.draw(elapsedTime);
-    //tilemap.draw();
+    tilemap.draw();
 }
 
 const timer = new Timer(tick, 0);
@@ -60,7 +60,7 @@ const createDummy = () => {
     return dummy;
 }
 
-//createDummy();
+createDummy();
 input.bindCall(timer.toggle,input.keys.pause,timer);
 
 window.onblur = () => timer.toggle.bind(timer);
@@ -68,4 +68,4 @@ input.bindCall((() => {player.destination = mousePos;}), input.keys.middleClick,
 
 input.bindCall(createDummy, input.keys.click, null);
 
-//input.bindCall(batch.deleteSprite, input.keys.escape, batch);
+input.bindCall(batch.removeElement, input.keys.escape, batch);
