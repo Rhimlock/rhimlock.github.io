@@ -1,43 +1,33 @@
-import { TypedArray } from "../../helper/typedArray.js";
 import { view } from "../../helper/view.js";
 import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
-import { VAO } from "../vao.js";
-import { VBO } from "../buffer/vbo.js";
+import { Batch } from "./batch.js";
 
-export class TileMap {
-    private buffer: VBO;
-    private vao: VAO;
-    private tex: Texture;
-    private program = new Program(vertexShader, fragmentShader);
+export class TileMap extends Batch {
+  private tex: Texture;
+  private width: number;
 
-    constructor(width: number, height: number, img: HTMLImageElement) {
-        this.buffer = new VBO(gl.UNSIGNED_BYTE, width * height, 1);
-        this.tex = new Texture(img);
+  constructor(width: number, height: number, img: HTMLImageElement) {
+    super(width * height, new Program(vertexShader, fragmentShader), [
+      { type: gl.UNSIGNED_BYTE, normalized: false },
+    ]);
+    this.width = width;
+    for (let i = 0; i < width * height; i++) this.createElement();
+    this.tex = new Texture(img);
 
-        this.vao = new VAO([this.buffer], this.program.attributes);
-        gl.uniform1i(this.program.uniforms.uTex, this.tex.no);
-        gl.uniform2fv(this.program.uniforms.uTexInv, this.tex.sizeInv);
-        gl.uniform1f(this.program.uniforms.uTileSize, view.tileSize);
-        gl.uniform1ui(this.program.uniforms.uMapSize, width);
-    }
+    gl.uniform1i(this.program.uniforms.uTex, this.tex.no);
+    gl.uniform2fv(this.program.uniforms.uTexInv, this.tex.sizeInv);
+    gl.uniform1f(this.program.uniforms.uTileSize, view.tileSize);
+    gl.uniform1ui(this.program.uniforms.uMapSize, this.width);
+  }
 
-    getTile(x: number, y: number) { return this.buffer.getVertex(x * y, 0); }
-    setTile(x: number, y: number, value: number) { return this.buffer.setVertex(value, x * y, 0); }
-    draw(): void {
-        this.buffer.update();
-        gl.useProgram(this.program.id);
-        gl.bindVertexArray(this.vao.id);
-        gl.uniform2f(this.program.uniforms.uView, view.x, view.y);
-        gl.uniform2f(
-            this.program.uniforms.uResInv,
-            2 / gl.drawingBufferWidth,
-            2 / gl.drawingBufferHeight
-        );
-        gl.drawArrays(gl.POINTS, 0, (this.buffer.data as TypedArray).length);
-        gl.bindVertexArray(null);
-    }
+  getTile(x: number, y: number) {
+    return this.getElement(x + y * this.width)[0];
+  }
+  setTile(x: number, y: number, value: number) {
+    return (this.getElement(x + y * this.width).type[0] = value);
+  }
 }
 
 //needed for glsl-literal plugin

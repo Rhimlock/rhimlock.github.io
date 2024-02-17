@@ -2,13 +2,13 @@ import { dom } from "../helper/htmlElements.js";
 import { terminal } from "../controls/terminal.js";
 import { view } from "../helper/view.js";
 export var gl = dom.canvas.getContext("webgl2", {
-    antialias: false,
-    depth: true,
-    alpha: false,
-    preserveDrawingBuffer: false
+  antialias: false,
+  depth: true,
+  alpha: false,
+  preserveDrawingBuffer: false,
 }) as WebGL2RenderingContext;
 if (!gl) {
-    throw new Error("webgl2 context could not be initialized");
+  throw new Error("webgl2 context could not be initialized");
 }
 initGL();
 updateSize();
@@ -18,14 +18,14 @@ window.onresize = updateSize;
 window.onscroll = view.updatePos.bind(view);
 
 function initGL() {
-    gl.clearColor(0.2, 0.2, 0.2, 1.0);
-    gl.enable(gl.DEPTH_TEST);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.clearColor(0.2, 0.2, 0.2, 1.0);
+  gl.enable(gl.DEPTH_TEST);
+  gl.clear(gl.COLOR_BUFFER_BIT);
 }
 
 function updateSize() {
-    gl.canvas.width = dom.canvas.clientWidth / view.zoom;
-    gl.canvas.height = dom.canvas.clientHeight / view.zoom;
-    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    terminal.showLastLine();
-};
+  gl.canvas.width = dom.canvas.clientWidth / view.zoom;
+  gl.canvas.height = dom.canvas.clientHeight / view.zoom;
+  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+  terminal.showLastLine();
+}

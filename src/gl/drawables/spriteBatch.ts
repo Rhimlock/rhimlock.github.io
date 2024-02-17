@@ -6,18 +6,20 @@ import { Texture } from "../texture.js";
 import { Batch } from "./batch.js";
 
 export interface Sprite {
-  pos : Vec2,
-  tex : Vec3,
-  color : Vec4
+  pos: Vec2;
+  tex: Vec3;
+  color: Vec4;
 }
 
 export class SpriteBatch extends Batch {
-
   private tex: Texture;
 
   constructor(maxSprites: number, img: HTMLImageElement) {
-
-    super(maxSprites,new Program(vertexShader, fragmentShader));
+    super(maxSprites, new Program(vertexShader, fragmentShader), [
+      { type: gl.FLOAT, normalized: false },
+      { type: gl.SHORT, normalized: false },
+      { type: gl.UNSIGNED_BYTE, normalized: true },
+    ]);
     this.tex = new Texture(img);
 
     gl.uniform1i(this.program.uniforms.uTex, this.tex.no);
@@ -26,17 +28,15 @@ export class SpriteBatch extends Batch {
   }
 
   createSprite(x = 1, y = 1): Sprite {
-    const spr : Sprite = this.createElement();
+    const spr: Sprite = this.createElement();
 
     spr.pos.x = x;
     spr.pos.y = y;
     spr.tex.z = 16;
     spr.tex.y = 0;
-    spr.color.setValues([1,.5,1,1]);
+    spr.color.setValues([255, 255, 255, 255]);
     return spr;
   }
-
-
 }
 
 //needed for glsl-literal plugin

@@ -1,33 +1,29 @@
 <html>
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <title>test</title>
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-</head>
+  </head>
 
-<body>
-
-    <img id="orks" src="images/orks.png" style="display:none" />
-    <img id="humans" src="images/humans.png" style="display:none" />
-    <img id="tiles" src="images/tiles.png" style="display:none" />
+  <body>
+    <img id="orks" src="images/orks.png" style="display: none" />
+    <img id="humans" src="images/humans.png" style="display: none" />
+    <img id="tiles" src="images/tiles.png" style="display: none" />
     <script type="module" src="js/main.js"></script>
 
     <div id="world">
-        <canvas id="canvas"></canvas>
+      <canvas id="canvas"></canvas>
     </div>
-    <div id="terminal">       
-        <div id="log"></div>
-        
-        <input id="commandLine" type="text" />
-        
+    <div id="terminal">
+      <div id="log"></div>
+
+      <input id="commandLine" type="text" />
     </div>
     <div id="info">
-        WorldTime: <span id="worldTime">0</span><br />
-        WorldPos: <span id="worldPos"></span><br />
-        MousePos: <span id="mousePos"></span><br />
-        PlayerPos: <span id="playerPos"></span>
+      WorldTime: <span id="worldTime">0</span><br />
+      WorldPos: <span id="worldPos"></span><br />
+      MousePos: <span id="mousePos"></span><br />
+      PlayerPos: <span id="playerPos"></span>
     </div>
-</body>
-
+  </body>
 </html>

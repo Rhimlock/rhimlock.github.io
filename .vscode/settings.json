@@ -1,12 +1,11 @@
 {
-    "files.exclude": {
-        "**/*.js": { "when": "$(basename).ts" },
-        "**/**.js": { "when": "$(basename).tsx" },
-        "js/": true,
-        "~": true
-
-    },
-    "liveServer.settings.ChromeDebuggingAttachment": true,
-    "liveServer.settings.host": "localhost",
-    "liveServer.settings.NoBrowser": true
+  "files.exclude": {
+    "**/*.js": { "when": "$(basename).ts" },
+    "**/**.js": { "when": "$(basename).tsx" },
+    "js/": true,
+    "~": true
+  },
+  "liveServer.settings.ChromeDebuggingAttachment": true,
+  "liveServer.settings.host": "localhost",
+  "liveServer.settings.NoBrowser": true
 }

@@ -1,14 +1,15 @@
 import { gl } from "../gl.js";
 
 export class Shader {
-  id: WebGLShader | null
-  type: number
-  constructor(type: number, src: string = '') {
+  id: WebGLShader | null;
+  type: number;
+  constructor(type: number, src: string = "") {
     this.type = type;
     this.id = gl.createShader(type);
     if (this.id !== null) {
-      if (src === '') {
-        src = (type === gl.VERTEX_SHADER) ? simpleVertexShader : simpleFragmentShader;
+      if (src === "") {
+        src =
+          type === gl.VERTEX_SHADER ? simpleVertexShader : simpleFragmentShader;
       }
       gl.shaderSource(this.id, src);
       gl.compileShader(this.id);
@@ -16,7 +17,6 @@ export class Shader {
       if (err) throw `compileError: ${type} - ${err}`;
     }
   }
-
 }
 
 const simpleVertexShader = `#version 300 es  

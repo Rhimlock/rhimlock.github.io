@@ -3,7 +3,6 @@ import { Attribute, fetchAttributes } from "./attribute.js";
 import { Shader } from "./shader.js";
 import { fetchUniforms, Uniforms } from "./uniforms.js";
 
-
 export class Program {
   id: WebGLProgram | null;
   vert: Shader;
