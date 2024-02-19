@@ -20,7 +20,7 @@ export class Vector {
       this.data[i] = values[i] ?? (this.data[i] as number);
     }
   }
-  getValue(i:number) {
+  getValue(i: number) {
     return this.data[i];
   }
 

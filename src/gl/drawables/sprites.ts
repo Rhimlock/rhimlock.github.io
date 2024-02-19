@@ -11,7 +11,7 @@ export interface Sprite {
   color: Vec4;
 }
 
-export class SpriteBatch extends Batch {
+export class Sprites extends Batch {
   private tex: Texture;
 
   constructor(maxSprites: number, img: HTMLImageElement) {

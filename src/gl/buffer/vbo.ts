@@ -8,12 +8,12 @@ export class VBO {
   public type: number;
   public normalized: boolean;
   public changed = false;
-  private verticesPerVector: number;
+  private vertexLength: number;
 
   constructor(
     type: number,
-    vectors: number,
-    verticesPerVector: number,
+    vertexCount: number,
+    vertexLength: number,
     normalized = false,
   ) {
     this.id = gl.createBuffer();
@@ -22,8 +22,8 @@ export class VBO {
     ).includes(type)
       ? gl.FLOAT
       : type;
-    this.verticesPerVector = verticesPerVector;
-    this.data = getArray(this.type, vectors * verticesPerVector);
+    this.vertexLength = vertexLength;
+    this.data = getArray(this.type, vertexCount * vertexLength);
     this.normalized = normalized;
     this.update();
   }
@@ -41,19 +41,19 @@ export class VBO {
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
   }
 
-  getVertex(n: number, offset: number) {
-    return (this.data as TypedArray)[n * this.verticesPerVector + offset];
+  getValue(n: number, offset: number) {
+    return (this.data as TypedArray)[n * this.vertexLength + offset];
   }
-  setVertex(v: number, index: number, offset: number) {
+  setValue(v: number, index: number, offset: number) {
     this.changed = true;
-    (this.data as TypedArray)[index * this.verticesPerVector + offset] = v;
+    (this.data as TypedArray)[index * this.vertexLength + offset] = v;
   }
 
-  getVector(element: number) : Vector{
-    const begin = element * this.verticesPerVector;
-    const end = begin + this.verticesPerVector;
+  getVector(i: number): Vector {
+    const begin = i * this.vertexLength;
+    const end = begin + this.vertexLength;
     const a = (this.data as TypedArray).subarray(begin, end);
-    switch (this.verticesPerVector) {
+    switch (this.vertexLength) {
       case 1:
         return new Vector(a);
       case 2:
@@ -67,8 +67,16 @@ export class VBO {
     }
   }
 
+  setVector(i: number, values: Vector) {
+    const vec = this.getVector(i);
+    vec.setValues(values.data as number[]);
+    values.data.forEach((value, n) => {
+      this.data[(i + n) * values.length] = value;
+    });
+  }
+
   overwrite(old: number, element: number) {
-    for (let i = 0; i < this.verticesPerVector; i++) {
+    for (let i = 0; i < this.vertexLength; i++) {
       this.data[i + element] = this.data[i + old] as number;
     }
   }

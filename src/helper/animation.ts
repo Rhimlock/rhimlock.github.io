@@ -1,4 +1,4 @@
-import { Sprite } from "../gl/drawables/spriteBatch.js";
+import { Sprite } from "../gl/drawables/sprites.js";
 
 export class Animation {
   frames: Frame[] = [];

@@ -20,6 +20,7 @@ export class Batch {
   private vao: VAO;
   protected program: Program;
   private elements: any[] = [];
+  protected mode: number = gl.POINTS;
   private limit: number;
 
   constructor(elements: number, program: Program, info: BufferInfo[] = []) {
@@ -35,7 +36,6 @@ export class Batch {
         ),
       );
     });
-
     this.vao = new VAO(this.buffers, this.program.attributes);
   }
 
@@ -83,7 +83,7 @@ export class Batch {
     gl.useProgram(this.program.id);
     gl.bindVertexArray(this.vao.id);
     this.updateUniforms(progress);
-    gl.drawArrays(gl.POINTS, 0, this.elements.length);
+    gl.drawArrays(this.mode, 0, this.elements.length);
     gl.bindVertexArray(null);
   }
 }

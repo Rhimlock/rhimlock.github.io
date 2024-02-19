@@ -6,7 +6,7 @@ import { Texture } from "../texture.js";
 import { Batch } from "./batch.js";
 
 export interface Tile {
-  type: Vector
+  type: Vector;
 }
 
 export class TileMap extends Batch {
