@@ -1,4 +1,3 @@
-import { gl } from "./gl/gl.js";
 import { input } from "./controls/input.js";
 import { Timer } from "./helper/timer.js";
 import { info } from "./controls/info.js";
@@ -13,11 +12,14 @@ import { Layer } from "./gl/drawables/Layer.js";
 import { Vec2 } from "./components/vectors.js";
 
 const tilemap = new TileMap(128, 128, dom.tiles);
-const batch = new Sprites(5, dom.humans);
+const batch = new Sprites(5000, dom.humans);
 const player = new ActiveObject(batch.createSprite());
 const dummies: ActiveObject[] = [];
 const layer = new Layer(
-  new Vec2([dom.canvas.width, dom.canvas.height]),
+  new Vec2([dom.canvas.width, dom.canvas.height]),0.9
+);
+const layer2 = new Layer(
+  new Vec2([dom.canvas.width, dom.canvas.height]),-1
 );
 for (let y = 0; y < 128; y++) {
   for (let x = 0; x < 128; x++) {
@@ -42,15 +44,17 @@ const tick = (elapsedTime: number) => {
   if (dir.length !== 0) {
     player.destination = player.getSum(dir);
   }
-  layer.use();
-  gl.clear(gl.COLOR_BUFFER_BIT);
+
   player.update(elapsedTime * 0.001);
+  dummies.forEach((d) => d.update(elapsedTime * 0.001));
+  layer.use();
 
   tilemap.draw();
-  dummies.forEach((d) => d.update(elapsedTime * 0.001));
+  layer2.use();
   batch.draw(elapsedTime);
-  layer.disable();
+  layer2.disable();
   layer.draw();
+  layer2.draw();
 };
 
 const timer = new Timer(tick, 0);

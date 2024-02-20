@@ -10,10 +10,11 @@ interface Vertex {
 }
 export class Layer extends Batch {
   fbo: Framebuffer;
-  constructor(size: Vec2) {
+  constructor(size: Vec2, depth = 0) {
+
     super(4, new Program(vertexShader, fragmentShader));
     this.mode = gl.TRIANGLE_FAN;
-    this.fbo = new Framebuffer(size);
+    this.fbo = new Framebuffer(size,true);
     [
       [-1, 1, 0, 1],
       [-1, -1, 0, 0],
@@ -26,6 +27,7 @@ export class Layer extends Batch {
       vertex.tex.setValues([v.z, v.w]);
     });
     gl.uniform1i(this.program.uniforms.uTex, this.fbo.tex.no);
+    gl.uniform1f(this.program.uniforms.uLayer, depth);
   }
 
   use() {
@@ -45,10 +47,10 @@ precision mediump float;
   in vec2 pos;
   in vec2 tex;
   out vec2 vTexPos;
-
+  uniform float uLayer;
 void main() {
   vTexPos = tex;
-  gl_Position = vec4(pos, 0.0, 1.0);
+  gl_Position = vec4(pos, uLayer, 1.0);
 }
 `;
 
