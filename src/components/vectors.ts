@@ -1,20 +1,13 @@
+import { VBO } from "../gl/buffer/vbo.js";
 import { TypedArray } from "../helper/typedArray.js";
 
 export class Vector {
   data: TypedArray | Array<number>;
+  buffer: VBO | undefined;
   constructor(data: TypedArray | Array<number>) {
     this.data = data;
   }
 
-  // replaceData(data : TypedArray | Array<number>, keepOldValues = true) {
-  //     const oldData = this.data;
-  //     this.data = data;
-  //     if (keepOldValues) {
-  //         for(let i = 0; i < this.data.length; i++) {
-  //             this.data[i] = oldData[i] ?? 0;
-  //         }
-  //     }
-  // }
   setValues(values: number[]) {
     for (let i = 0; i < this.data.length; i++) {
       this.data[i] = values[i] ?? (this.data[i] as number);
@@ -72,21 +65,9 @@ export class Vec2 extends Vector {
   }
 }
 
-export class Vec3 extends Vector {
-  get x() {
-    return this.data[0] as number;
-  }
-  get y() {
-    return this.data[1] as number;
-  }
+export class Vec3 extends Vec2 {
   get z() {
     return this.data[2] as number;
-  }
-  set x(value: number) {
-    this.data[0] = value;
-  }
-  set y(value: number) {
-    this.data[1] = value;
   }
   set z(value: number) {
     this.data[2] = value;

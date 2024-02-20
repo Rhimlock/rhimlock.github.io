@@ -60,7 +60,5 @@ in vec2 vTexPos;
 
 void main() {    
   outColor = texture(uTex,vTexPos);
-   // outColor.ba = vec2(1.0,1.0);
-  //if (outColor.a <= 0.1) discard;
 }
 `;

@@ -23,15 +23,15 @@ export class Batch {
   protected mode: number = gl.POINTS;
   private limit: number;
 
-  constructor(elements: number, program: Program, info: BufferInfo[] = []) {
-    this.limit = elements;
+  constructor(count: number, program: Program, info: BufferInfo[] = []) {
+    this.limit = count;
     this.program = program;
     program.attributes.forEach((a, i) => {
       this.buffers.push(
         new VBO(
           info[i]?.type ?? a.info.type,
-          elements,
           a.size,
+          count,
           info[i]?.normalized,
         ),
       );
