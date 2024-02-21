@@ -29,7 +29,7 @@ export class TileMap extends Batch {
 
   getTile(x: number, y: number) {
     const tile = this.getElement(x + y * this.width) as any as Tile;
-    return tile.type?.getValue(0);
+    return tile.type?.data[0];
   }
   setTile(x: number, y: number, value: number) {
     const tile = this.getElement(x + y * this.width);

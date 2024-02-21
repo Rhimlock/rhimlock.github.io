@@ -2,24 +2,21 @@ import { VBO } from "../gl/buffer/vbo.js";
 import { TypedArray } from "../helper/typedArray.js";
 
 export class Vector {
-  data: TypedArray | Array<number>;
+  data: TypedArray | number[];
   buffer: VBO | undefined;
-  constructor(data: TypedArray | Array<number>) {
+  constructor(data: TypedArray | number[]) {
     this.data = data;
   }
 
-  setValues(values: number[]) {
+  setValues(values: TypedArray | number[]) {
     for (let i = 0; i < this.data.length; i++) {
       this.data[i] = values[i] ?? (this.data[i] as number);
     }
   }
-  getValue(i: number) {
-    return this.data[i];
-  }
 
   get length() {
     return Math.sqrt(
-      (this.data as Array<number>).reduce(
+      (this.data as number[]).reduce(
         (a: number, v: number) => a + v * v,
         0,
       ),

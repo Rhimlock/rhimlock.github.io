@@ -1,10 +1,10 @@
+import { Vec2 } from "../components/vectors.js";
 import { dom } from "../helper/htmlElements.js";
-import { Point } from "../helper/point.js";
 import { view } from "../helper/view.js";
 import { input } from "./input.js";
 import { terminal } from "./terminal.js";
 
-export const mousePos = new Point(0, 0);
+export const mousePos = new Vec2([0, 0]);
 
 window.onmousedown = (ev: MouseEvent) => {
   input.set("mouse" + ev.button, true);

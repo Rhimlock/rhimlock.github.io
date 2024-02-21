@@ -41,7 +41,7 @@ function setDepth(use = true) {
   }
 }
 
-export function updateViewport(size: Vec2 = new Vec2([gl.drawingBufferWidth, gl.drawingBufferHeight]), depth = true, color: Vec4 = new Vec4([0.1,0.1,0.1,1])) {
+export function updateViewport(size: Vec2 = new Vec2([gl.drawingBufferWidth, gl.drawingBufferHeight]), depth = true, color: Vec4 = new Vec4([0.1,0.1,1,1])) {
   gl.clearColor(color.r, color.g, color.b, color.a);
   setDepth(depth);
   gl.viewport(0, 0, size.x, size.y);

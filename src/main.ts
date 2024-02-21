@@ -73,7 +73,7 @@ input.bindCall(timer.toggle, input.keys.pause, timer);
 window.onblur = () => timer.toggle.bind(timer);
 input.bindCall(
   () => {
-    player.destination = mousePos;
+    player.destination = new Point(mousePos.x, mousePos.y);
   },
   input.keys.middleClick,
   null,

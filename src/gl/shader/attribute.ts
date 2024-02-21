@@ -25,29 +25,23 @@ export function fetchAttributes(id: WebGLProgram) {
 }
 
 function lookupSize(type: number): number {
-  let size = -1;
   switch (type) {
     case gl.FLOAT:
     case gl.UNSIGNED_INT:
     case gl.INT:
     case gl.SAMPLER_2D:
-      size = 1;
-      break;
+      return 1;
     case gl.FLOAT_VEC2:
-      size = 2;
-      break;
+      return 2;
     case gl.FLOAT_VEC3:
-      size = 3;
+      return 3;
       break;
     case gl.FLOAT_VEC4:
-      size = 4;
-      break;
+      return 4;
+    default:
+      throw {
+        name: "ShaderError",
+        message: "unable to lookup length of type: " + type,
+      };
   }
-  if (size < 0) {
-    throw {
-      name: "ShaderError",
-      message: "unable to lookup length of type: " + type,
-    };
-  }
-  return size;
 }

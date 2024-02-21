@@ -75,8 +75,7 @@ precision mediump float;
 void main() {    
   vec2 t = (vTex.xy + gl_PointCoord) * vTex.z ;
   outColor = texture(uTex,t);
-
-  if (outColor.a <= 0.1) discard;
   outColor = outColor * vColor;
+  if (outColor.a <= 0.1) discard;
 }
 `;
