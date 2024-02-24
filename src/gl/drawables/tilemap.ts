@@ -1,4 +1,4 @@
-import { Vector } from "../../components/vectors.js";
+import { Vec2 } from "../../components/vectors.js";
 import { view } from "../../helper/view.js";
 import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
@@ -6,19 +6,19 @@ import { Texture } from "../texture.js";
 import { Batch } from "./batch.js";
 
 export interface Tile {
-  type: Vector;
+  texPos: Vec2;
 }
 
 export class TileMap extends Batch {
   private tex: Texture;
   private width: number;
 
-  constructor(width: number, height: number, img: HTMLImageElement) {
-    super(width * height, new Program(vertexShader, fragmentShader), [
+  constructor(size: Vec2, img: HTMLImageElement) {
+    super(size.x * size.y, new Program(vertexShader, fragmentShader), [
       { type: gl.UNSIGNED_BYTE, normalized: false },
     ]);
-    this.width = width;
-    for (let i = 0; i < width * height; i++) this.createElement();
+    this.width = size.x;
+    for (let i = 0; i < size.x * size.y; i++) this.createElement();
     this.tex = new Texture(img);
 
     gl.uniform1i(this.program.uniforms.uTex, this.tex.no);
@@ -27,13 +27,13 @@ export class TileMap extends Batch {
     gl.uniform1ui(this.program.uniforms.uMapSize, this.width);
   }
 
-  getTile(x: number, y: number) {
-    const tile = this.getElement(x + y * this.width) as any as Tile;
-    return tile.type?.data[0];
+  getTile(pos: Vec2) {
+    const tile = this.getElement(pos.x + pos.y * this.width) as any as Tile;
+    return tile;
   }
-  setTile(x: number, y: number, value: number) {
-    const tile = this.getElement(x + y * this.width);
-    tile.type?.setValues([value]);
+  setTile(pos:Vec2, tex: Vec2) {
+    const tile = this.getTile(pos);
+    tile.texPos?.setValues(tex.getValues());
   }
 }
 
@@ -42,7 +42,7 @@ const glsl = (x: any) => x as string;
 
 const vertexShader = glsl`#version 300 es  
 precision mediump float;
-  in float type;
+  in vec2 texPos;
   uniform vec2 uTexInv;
   uniform vec2 uView;
   uniform vec2 uResInv;
@@ -59,7 +59,7 @@ void main() {
     v += vec2(-1.0,1.0);
     gl_Position = vec4(v, 0.99999, 1.0);
     gl_PointSize = uTileSize ;
-    vTex.x = type * uTileSize * uTexInv.x;
+    vTex = texPos * uTileSize * uTexInv.x;
     tileSizeInv = uTexInv.x * uTileSize;
 }
 `;

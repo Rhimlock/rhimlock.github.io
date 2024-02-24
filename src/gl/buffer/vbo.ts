@@ -58,11 +58,11 @@ export class VBO {
     }
   }
 
-  setVector(i: number, values: Vector) {
+  setVector(i: number, ve: Vector) {
     const vec = this.getVector(i);
-    vec.setValues(values.data as number[]);
-    values.data.forEach((value, n) => {
-      this.data[(i + n) * values.length] = value;
+    vec.setValues(ve.getValues() as number[]);
+    ve.getValues().forEach((value, n) => {
+      this.data[(i + n) * ve.length] = value;
     });
   }
 

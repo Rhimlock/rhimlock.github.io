@@ -2,8 +2,8 @@ import { VBO } from "../gl/buffer/vbo.js";
 import { TypedArray } from "../helper/typedArray.js";
 
 export class Vector {
-  data: TypedArray | number[];
-  buffer: VBO | undefined;
+  protected data: TypedArray | number[];
+  protected buffer: VBO | undefined;
   constructor(data: TypedArray | number[]) {
     this.data = data;
   }
@@ -12,6 +12,9 @@ export class Vector {
     for (let i = 0; i < this.data.length; i++) {
       this.data[i] = values[i] ?? (this.data[i] as number);
     }
+  }
+  getValues() {
+    return this.data;
   }
 
   get length() {
@@ -38,6 +41,15 @@ export class Vector {
       this.data[i] += v.data[i] ?? 0;
     }
   }
+
+  equals(v:Vector) {
+    for (let i = 0; i<this.data.length; i++) {
+      if (this.data[i] !== v.data[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
 export class Vec2 extends Vector {
@@ -59,6 +71,9 @@ export class Vec2 extends Vector {
   }
   get rotatedRight() {
     return new Vec2([-this.y, this.x]);
+  }
+  static sum(v1:Vec2, v2:Vec2) {
+    return new Vec2([v1.x+v2.x,v1.y+v2.y]);
   }
 }
 

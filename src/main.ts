@@ -10,8 +10,12 @@ import { Point } from "./helper/point.js";
 import { TileMap } from "./gl/drawables/tilemap.js";
 import { Layer } from "./gl/drawables/Layer.js";
 import { Vec2 } from "./components/vectors.js";
+import { WfcHandler } from "./components/WaveFunctionCollapse/WfcHandler.js";
+import { WfcField } from "./components/WaveFunctionCollapse/WfcField.js";
 
-const tilemap = new TileMap(128, 128, dom.tiles);
+const mapSize = new Vec2([20,20]);
+const wfc = new WfcHandler(dom.tiles,8,mapSize);
+const tilemap = new TileMap(mapSize, dom.tiles);
 const batch = new Sprites(5000, dom.humans);
 const player = new ActiveObject(batch.createSprite());
 const dummies: ActiveObject[] = [];
@@ -21,12 +25,12 @@ const layer = new Layer(
 const layer2 = new Layer(
   new Vec2([dom.canvas.width, dom.canvas.height]),-1
 );
-for (let y = 0; y < 128; y++) {
-  for (let x = 0; x < 128; x++) {
-    tilemap.setTile(x, y, Math.round(Math.random() * 8));
-  }
-}
 
+// wfc.grid.fields.forEach(f => {
+//   wfc.wave();
+//   //tilemap.setTile((f as WfcField).pos,(f as WfcField).tiles[0]?.texPos || new Vec2([0,0]) as Vec2)
+// });
+wfc.wave(new Vec2(mapSize.resized(0.4).getValues()));
 player.x = 8;
 
 player.y = 8;
@@ -44,11 +48,10 @@ const tick = (elapsedTime: number) => {
   if (dir.length !== 0) {
     player.destination = player.getSum(dir);
   }
-
+  doWaveFunctionCollapseStep();
   player.update(elapsedTime * 0.001);
   dummies.forEach((d) => d.update(elapsedTime * 0.001));
   layer.use();
-
   tilemap.draw();
   layer2.use();
   batch.draw(elapsedTime);
@@ -67,13 +70,21 @@ const createDummy = () => {
   return dummy;
 };
 
+const doWaveFunctionCollapseStep = () => {
+  wfc.wave();
+  wfc.grid.fields.forEach(f => {
+    tilemap.setTile((f as WfcField).pos,(f as WfcField).tiles[0]?.texPos || new Vec2([0,0]) as Vec2)
+  });
+}
+
 createDummy();
 input.bindCall(timer.toggle, input.keys.pause, timer);
 
 window.onblur = () => timer.toggle.bind(timer);
 input.bindCall(
   () => {
-    player.destination = new Point(mousePos.x, mousePos.y);
+    
+ 
   },
   input.keys.middleClick,
   null,
