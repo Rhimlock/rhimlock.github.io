@@ -36,7 +36,7 @@ export class Batch {
         ),
       );
     });
-    this.vao = new VAO(this.buffers, this.program.attributes);
+    this.vao = new VAO(this.buffers);
   }
 
   createElement(): Element {

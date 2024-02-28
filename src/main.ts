@@ -13,7 +13,7 @@ import { Vec2 } from "./components/vectors.js";
 import { WfcHandler } from "./components/WaveFunctionCollapse/WfcHandler.js";
 import { WfcField } from "./components/WaveFunctionCollapse/WfcField.js";
 
-const mapSize = new Vec2([20,20]);
+const mapSize = new Vec2([60,40]);
 const wfc = new WfcHandler(dom.tiles,8,mapSize);
 const tilemap = new TileMap(mapSize, dom.tiles);
 const batch = new Sprites(5000, dom.humans);

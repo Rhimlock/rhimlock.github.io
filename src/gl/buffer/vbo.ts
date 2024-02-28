@@ -6,7 +6,7 @@ export class VBO {
   public id: WebGLBuffer | null;
   public type: number;
   public normalized: boolean;
-  private attribSize: number;
+  public attribSize: number;
   private data: TypedArray;
   constructor(
     type: number,
