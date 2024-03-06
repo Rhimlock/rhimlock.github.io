@@ -1,9 +1,7 @@
-import { VBO } from "../gl/buffer/vbo.js";
 import { TypedArray } from "../helper/typedArray.js";
 
 export class Vector {
   protected data: TypedArray | number[];
-  protected buffer: VBO | undefined;
   constructor(data: TypedArray | number[]) {
     this.data = data;
   }

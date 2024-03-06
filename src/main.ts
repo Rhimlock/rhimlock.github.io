@@ -13,23 +13,20 @@ import { Vec2 } from "./components/vectors.js";
 import { WfcHandler } from "./components/WaveFunctionCollapse/WfcHandler.js";
 import { WfcField } from "./components/WaveFunctionCollapse/WfcField.js";
 
-const mapSize = new Vec2([60,40]);
-const wfc = new WfcHandler(dom.tiles,8,mapSize);
+const mapSize = new Vec2([80, 60]);
+
+const wfc = new WfcHandler(dom.tiles, 8, mapSize);
 const tilemap = new TileMap(mapSize, dom.tiles);
 const batch = new Sprites(5000, dom.humans);
 const player = new ActiveObject(batch.createSprite());
 const dummies: ActiveObject[] = [];
 const layer = new Layer(
-  new Vec2([dom.canvas.width, dom.canvas.height]),0.9
+  new Vec2([dom.canvas.width, dom.canvas.height]), 0.9
 );
 const layer2 = new Layer(
-  new Vec2([dom.canvas.width, dom.canvas.height]),-1
+  new Vec2([dom.canvas.width, dom.canvas.height]), -1
 );
 
-// wfc.grid.fields.forEach(f => {
-//   wfc.wave();
-//   //tilemap.setTile((f as WfcField).pos,(f as WfcField).tiles[0]?.texPos || new Vec2([0,0]) as Vec2)
-// });
 wfc.wave(new Vec2(mapSize.resized(0.4).getValues()));
 player.x = 8;
 
@@ -72,8 +69,8 @@ const createDummy = () => {
 
 const doWaveFunctionCollapseStep = () => {
   wfc.wave();
-  wfc.grid.fields.forEach(f => {
-    tilemap.setTile((f as WfcField).pos,(f as WfcField).tiles[0]?.texPos || new Vec2([0,0]) as Vec2)
+  wfc.grid.cells.forEach(f => {
+    tilemap.setTile((f as WfcField), (f as WfcField).tiles[0] || new Vec2([0, 0]) as Vec2)
   });
 }
 
@@ -83,8 +80,8 @@ input.bindCall(timer.toggle, input.keys.pause, timer);
 window.onblur = () => timer.toggle.bind(timer);
 input.bindCall(
   () => {
-    
- 
+
+
   },
   input.keys.middleClick,
   null,

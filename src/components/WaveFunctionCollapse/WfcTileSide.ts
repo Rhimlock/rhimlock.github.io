@@ -1,18 +1,24 @@
-import { Vec4 } from "../vectors.js";
+import { Vec4, Vector} from "../vectors.js";
 
-export class WfcTileSide {
-    connectors: number[] = [];
+const colors: Vec4[] = [];
+
+function addColor(color: Vec4) {
+    let i = colors.findIndex(c => c.equals(color));
+    if (i < 0) i = colors.push(color) - 1;
+    return i;
+}
+
+function addColors(arr: Vec4[]){
+    return arr.map(color =>  addColor(color))
+};
+
+export class WfcTileSide extends Vector {
     type: number = 0;
     constructor(colors: Vec4[]) {
-        this.connectors = colors.map(c => c.r);
-
+        super(addColors(colors));
     }
 
-
-    connects(side: WfcTileSide): boolean {
-        for (let i = 0; i < this.connectors.length; i++) {
-            if (this.connectors[i] != side.connectors[i]) return false;
-        }
-        return true;
+    equals(side: WfcTileSide): boolean {
+        return this.data.every((c,i) => c === side.data[i]);
     }
 }

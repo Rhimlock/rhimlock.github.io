@@ -1,23 +1,26 @@
 import { Vec2 } from "./vectors.js";
-
-export const DIR = {
-    array: [
-        new Vec2([0,-1]),
-        new Vec2([1,0]),
-        new Vec2([0,1]),
-        new Vec2([-1,0])
-    ],
+export const enum DIR {
+    up = 0,
+    right = 1,
+    down = 2,
+    left = 3
+}
+export const VDIR = {
     get up() {
-        return this.array[0];
+        return new Vec2([0,-1])
     },
     get right() {
-        return this.array[1];
+        return new Vec2([1,0]);
     },
     get down() {
-        return this.array[2];
+        return new Vec2([0,1]);
     },
     get left() {
-        return this.array[3];
+        return new Vec2([-1,0]);
+    },
+
+    get all() {
+        return [this.up, this.right, this.down, this.left];
     }
 
 }
