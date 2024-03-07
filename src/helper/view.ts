@@ -1,8 +1,10 @@
+import { Vec2 } from "../components/vectors.js";
 import { Point } from "./point.js";
 
-class View {
-  x = 0;
-  y = 0;
+class View extends Vec2{
+  constructor() {
+    super(new Float32Array(2));
+  }
   zoom = 3;
   tileSize = 8;
 

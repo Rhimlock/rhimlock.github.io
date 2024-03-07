@@ -68,14 +68,9 @@ export class Batch {
   }
 
   updateUniforms(progress: number) {
-    const unis = this.program.uniforms;
-    gl.uniform2f(unis.uView, view.x, view.y);
-    gl.uniform2f(
-      unis.uResInv,
-      2 / gl.drawingBufferWidth,
-      2 / gl.drawingBufferHeight,
-    );
-    gl.uniform1f(unis.uProgress, progress);
+    this.program.setUniform("uResInv", [2 / gl.drawingBufferWidth, 2/gl.drawingBufferHeight]);
+    this.program.setUniform("uView", [view.x, view.y]);
+    this.program.setUniform("uProgress", progress);
   }
 
   draw(progress: number = 0): void {

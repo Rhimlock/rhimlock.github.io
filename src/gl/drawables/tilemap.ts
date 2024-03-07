@@ -21,14 +21,14 @@ export class TileMap extends Batch {
     for (let i = 0; i < size.x * size.y; i++) this.createElement();
     this.tex = new Texture(img);
 
-    gl.uniform1i(this.program.uniforms.uTex, this.tex.no);
-    gl.uniform2fv(this.program.uniforms.uTexInv, this.tex.sizeInv);
-    gl.uniform1f(this.program.uniforms.uTileSize, view.tileSize);
-    gl.uniform1ui(this.program.uniforms.uMapSize, this.width);
+    this.program.setUniform("uTex", this.tex.no);
+    this.program.setUniform("uTexInv", this.tex.sizeInv);
+    this.program.setUniform("uTileSize", view.tileSize);
+    this.program.setUniform("uMapSize", this.width);
   }
   draw() {
-    this.program.ubos.setting2?.updateUniform("green",new Float32Array([Math.random()]));
-    this.program.ubos.setting?.updateUniform("red",new Float32Array([Math.random()]));
+    this.program.setUniform("green",new Float32Array([Math.random()]));
+    this.program.setUniform("red",new Float32Array([Math.random()]));
     super.draw(0);
 
   }

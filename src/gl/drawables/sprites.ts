@@ -22,9 +22,9 @@ export class Sprites extends Batch {
     ]);
     this.tex = new Texture(img);
 
-    gl.uniform1i(this.program.uniforms.uTex, this.tex.no);
-    gl.uniform2fv(this.program.uniforms.uTexInv, this.tex.sizeInv);
-    gl.uniform1f(this.program.uniforms.uTileSize, view.tileSize);
+    this.program.setUniform("uTex", this.tex.no);
+    this.program.setUniform("uTexInv", this.tex.sizeInv);
+    this.program.setUniform("uTileSize", view.tileSize);
   }
 
   createSprite(x = 1, y = 1): Sprite {

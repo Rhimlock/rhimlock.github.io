@@ -26,8 +26,8 @@ export class Layer extends Batch {
       vertex.pos.setValues([v.x, v.y]);
       vertex.tex.setValues([v.z, v.w]);
     });
-    gl.uniform1i(this.program.uniforms.uTex, this.fbo.tex.no);
-    gl.uniform1f(this.program.uniforms.uLayer, depth);
+    this.program.setUniform("uTex", this.fbo.tex.no);
+    this.program.setUniform("uLayer", depth);
   }
 
   use() {
