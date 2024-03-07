@@ -1,5 +1,4 @@
 import { Vec2 } from "../components/vectors.js";
-import { Point } from "./point.js";
 
 class View extends Vec2{
   constructor() {
@@ -8,12 +7,12 @@ class View extends Vec2{
   zoom = 3;
   tileSize = 8;
 
-  convertPos(clientX: number, clientY: number): Point {
-    return new Point(
+  convertPos(clientX: number, clientY: number): Vec2 {
+    return new Vec2([
       (clientX + window.scrollX - this.tileSize * 0.5 * this.zoom) /
         (this.zoom * this.tileSize),
       (clientY + window.scrollY - this.tileSize * 0.5 * this.zoom) /
-        (this.zoom * this.tileSize),
+        (this.zoom * this.tileSize)]
     );
   }
   updatePos() {

@@ -23,16 +23,6 @@ export class Vector {
       ),
     );
   }
-  get normalized(): Vector {
-    const l = this.length;
-    return l === 0 ? this : this.resized(1 / l);
-  }
-  get inverted() {
-    return new Vector(this.data.map((v: number) => -v));
-  }
-  resized(factor: number) {
-    return new Vector(this.data.map((v: number) => v * factor));
-  }
 
   add(v: Vector) {
     for (let i = 0; i < this.data.length; i++) {
@@ -70,9 +60,20 @@ export class Vec2 extends Vector {
   get rotatedRight() {
     return new Vec2([-this.y, this.x]);
   }
+  get inverted() {
+    return new Vec2(this.data.map((v: number) => -v));
+  }
   static sum(v1:Vec2, v2:Vec2) {
     return new Vec2([v1.x+v2.x,v1.y+v2.y]);
   }
+  get normalized(): Vec2 {
+    const l = this.length;
+    return l === 0 ? this : this.resized(1 / l);
+  }
+  resized(factor: number) {
+    return new Vec2(this.data.map((v: number) => v * factor));
+  }
+
 }
 
 export class Vec3 extends Vec2 {

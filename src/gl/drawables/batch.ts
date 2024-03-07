@@ -1,4 +1,5 @@
 import { Vector } from "../../components/vectors.js";
+import { Collection } from "../../helper/Collection.js";
 import { view } from "../../helper/view.js";
 import { VBO } from "../buffer/vbo.js";
 import { gl } from "../gl.js";
@@ -9,10 +10,6 @@ import { VAO } from "../vao.js";
 export interface BufferInfo {
   type: number;
   normalized?: boolean;
-}
-
-export interface Element {
-  [key: string]: Vector;
 }
 
 export class Batch {
@@ -39,7 +36,7 @@ export class Batch {
     this.vao = new VAO(this.buffers);
   }
 
-  createElement(): Element {
+  createElement(): Collection<Vector> {
     if (this.elements.length >= this.limit)
       throw "can't create Element, Batch reached limit";
     const element: any = {};
@@ -59,7 +56,7 @@ export class Batch {
   }
 
   getElement(i: number) {
-    const element: Element = {};
+    const element: Collection<Vector> = {};
     this.buffers.forEach((buffer, n) => {
       const a = this.program.attributes[n] as Attribute;
       element[a.info.name ?? ""] = buffer.getVector(i);

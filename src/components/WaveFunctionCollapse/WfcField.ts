@@ -1,21 +1,27 @@
 import { Grid } from "../grid.js";
 import { Vec2 } from "../vectors.js";
 import { WfcTile } from "./WfcTile.js";
-
+let allTiles: WfcTile[] = [];
 export class WfcField extends Vec2 {
     tiles: WfcTile[] = [];
     grid: Grid
     constructor(pos: Vec2, tiles: WfcTile[], grid: Grid) {
-        super([pos.x,pos.y]);
+        super([pos.x, pos.y]);
         this.tiles = [...tiles];
+        allTiles = tiles;
         this.grid = grid;
     }
 
     pickRandom() {
 
         this.clean();
-        this.tiles = [this.tiles[Math.ceil(this.tiles.length * Math.random()-1)] as WfcTile];
-        this.neighbors.forEach((n:WfcField) => n?.clean());
+        if (this.tiles.length < 1) {
+            this.tiles = [...allTiles];
+            this.neighbors.forEach((n: WfcField) => n.tiles = [...allTiles]);
+        } else {
+            this.tiles = [this.tiles[Math.ceil(this.tiles.length * Math.random() - 1)] as WfcTile];
+        }
+        this.neighbors.forEach((n: WfcField) => n?.clean());
     }
 
     clean() {
@@ -24,7 +30,7 @@ export class WfcField extends Vec2 {
             if (neighbor) {
 
                 this.tiles = this.tiles.filter(tile => {
-                    const hits = tile.findNeighbors(neighbor.tiles,i);
+                    const hits = tile.findNeighbors(neighbor.tiles, i);
                     return hits.length > 0;
                 })
             }
@@ -34,7 +40,7 @@ export class WfcField extends Vec2 {
     get neighbors() {
         return this.grid.getNeighbors(this) as WfcField[];
     }
-   
+
 
     get tile() {
         switch (this.tiles.length) {
