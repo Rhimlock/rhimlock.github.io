@@ -26,7 +26,6 @@ export class WfcHandler {
 
             }
         }
-        //this.tiles.forEach((t,i) => t.sides.forEach(s => console.log(i,s)));
         this.grid = new Grid(mapSize);
         for (let i = 0; i < (mapSize.x * mapSize.y); i++) this.todo.push( new WfcField(new Vec2([i % mapSize.x, Math.floor(i / mapSize.x)]), this.tiles, this.grid));
         this.grid.cells = [...this.todo];

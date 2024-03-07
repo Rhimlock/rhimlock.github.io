@@ -26,6 +26,12 @@ export class TileMap extends Batch {
     gl.uniform1f(this.program.uniforms.uTileSize, view.tileSize);
     gl.uniform1ui(this.program.uniforms.uMapSize, this.width);
   }
+  draw() {
+    this.program.ubos.setting2?.updateUniform("green",new Float32Array([Math.random()]));
+    this.program.ubos.setting?.updateUniform("red",new Float32Array([Math.random()]));
+    super.draw(0);
+
+  }
 
   getTile(pos: Vec2) {
     const tile = this.getElement(pos.x + pos.y * this.width) as any as Tile;
@@ -66,6 +72,12 @@ void main() {
 
 const fragmentShader = glsl`#version 300 es    
 precision mediump float;
+    uniform setting {
+      float red;
+    };
+    uniform setting2 {
+      float green;
+    };
     uniform sampler2D uTex;
     in vec2 vTex;
     in float tileSizeInv;
@@ -73,5 +85,7 @@ precision mediump float;
 
 void main() {    
     outColor = texture(uTex, vTex + gl_PointCoord * tileSizeInv);
+    outColor.r *= red;
+    outColor.g *= green;
 }
 `;

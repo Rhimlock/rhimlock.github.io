@@ -1,7 +1,9 @@
+import { UboContainer } from "../buffer/ubo.js";
 import { gl } from "../gl.js";
 import { Attribute, fetchAttributes } from "./attribute.js";
 import { Shader } from "./shader.js";
-import { fetchUniforms, Uniforms } from "./uniforms.js";
+import { fetchUniformBlocks, fetchUniforms, Uniforms } from "./uniforms.js";
+let currentProgram: WebGLProgram | null;
 
 export class Program {
   id: WebGLProgram | null;
@@ -9,6 +11,7 @@ export class Program {
   frag: Shader;
   attributes = [] as Attribute[];
   uniforms = {} as Uniforms;
+  ubos: UboContainer = {};
   constructor(srcVertexShader: string, srcFragmentShader: string) {
     this.id = gl.createProgram();
     this.vert = new Shader(gl.VERTEX_SHADER, srcVertexShader);
@@ -17,11 +20,18 @@ export class Program {
       gl.attachShader(this.id, this.vert.id);
       gl.attachShader(this.id, this.frag.id);
       gl.linkProgram(this.id);
-      gl.useProgram(this.id);
+      this.use();
       var err = gl.getProgramInfoLog(this.id);
       if (err) throw `linkingError: ${err}`;
       this.attributes = fetchAttributes(this.id);
       this.uniforms = fetchUniforms(this.id);
+      this.ubos = fetchUniformBlocks(this.id);
+    }
+  }
+  use() {
+    if (currentProgram != this.id) {
+      gl.useProgram(this.id);
+      currentProgram = this.id;
     }
   }
 }

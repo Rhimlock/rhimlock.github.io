@@ -16,7 +16,6 @@ export class WfcField extends Vec2 {
         this.clean();
         this.tiles = [this.tiles[Math.ceil(this.tiles.length * Math.random()-1)] as WfcTile];
         this.neighbors.forEach((n:WfcField) => n?.clean());
-        console.log(this.neighbors);
     }
 
     clean() {
