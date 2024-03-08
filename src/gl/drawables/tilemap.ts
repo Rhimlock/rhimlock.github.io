@@ -1,4 +1,4 @@
-import { Vec2 } from "../../components/vectors.js";
+import { Vec } from "../../components/vec.js";
 import { view } from "../../helper/view.js";
 import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
@@ -6,14 +6,14 @@ import { Texture } from "../texture.js";
 import { Batch } from "./batch.js";
 
 export interface Tile {
-  texPos: Vec2;
+  texPos: Vec;
 }
 
 export class TileMap extends Batch {
   private tex: Texture;
   private width: number;
 
-  constructor(size: Vec2, img: HTMLImageElement) {
+  constructor(size: Vec, img: HTMLImageElement) {
     super(size.x * size.y, new Program(vertexShader, fragmentShader), [
       { type: gl.UNSIGNED_BYTE, normalized: false },
     ]);
@@ -33,13 +33,13 @@ export class TileMap extends Batch {
 
   }
 
-  getTile(pos: Vec2) {
+  getTile(pos: Vec) {
     const tile = this.getElement(pos.x + pos.y * this.width) as any as Tile;
     return tile;
   }
-  setTile(pos:Vec2, tex: Vec2) {
+  setTile(pos:Vec, tex: Vec){
     const tile = this.getTile(pos);
-    tile.texPos?.setValues(tex.getValues());
+    tile.texPos?.assign(tex.data);
   }
 }
 

@@ -1,10 +1,10 @@
 import { VDIR } from "./directions.js";
-import { Vec2 } from "./vectors.js";
+import { Vec } from "./vec.js";
 
 export class Grid {
-    size: Vec2;
+    size: Vec;
     cells: any[] = [];
-    constructor(size: Vec2, values: any[] | undefined = undefined) {
+    constructor(size: Vec, values: any[] | undefined = undefined) {
         this.size = size;
         if (values) {
             this.cells = values;
@@ -13,20 +13,20 @@ export class Grid {
         }
     }
 
-    getCell(pos: Vec2) {
+    getCell(pos: Vec) {
         return this.isFieldInGrid(pos) ? this.cells[pos.x + pos.y * this.size.x] : undefined;
     }
 
-    getNeighbors(pos: Vec2) {
+    getNeighbors(pos: Vec) {
         return [
-            this.getCell(Vec2.sum(pos, VDIR.up)),
-            this.getCell(Vec2.sum(pos, VDIR.right)),
-            this.getCell(Vec2.sum(pos, VDIR.down)),
-            this.getCell(Vec2.sum(pos, VDIR.left))
+            this.getCell(Vec.sum(pos, VDIR.up)),
+            this.getCell(Vec.sum(pos, VDIR.right)),
+            this.getCell(Vec.sum(pos, VDIR.down)),
+            this.getCell(Vec.sum(pos, VDIR.left))
         ]
     }
 
-    isFieldInGrid(pos: Vec2): boolean {
+    isFieldInGrid(pos: Vec): boolean {
         return pos.x >= 0 && pos.x < this.size.x && pos.y >= 0 && pos.y < this.size.y;
     }
 }

@@ -1,19 +1,18 @@
 import { Grid } from "../grid.js";
-import { Vec2 } from "../vectors.js";
+import { Vec } from "../vec.js";
 import { WfcTile } from "./WfcTile.js";
 let allTiles: WfcTile[] = [];
-export class WfcField extends Vec2 {
+export class WfcField extends Vec {
     tiles: WfcTile[] = [];
     grid: Grid
-    constructor(pos: Vec2, tiles: WfcTile[], grid: Grid) {
-        super([pos.x, pos.y]);
+    constructor(pos: Vec, tiles: WfcTile[], grid: Grid) {
+        super(pos.data);
         this.tiles = [...tiles];
         allTiles = tiles;
         this.grid = grid;
     }
 
     pickRandom() {
-
         this.clean();
         if (this.tiles.length < 1) {
             this.tiles = [...allTiles];

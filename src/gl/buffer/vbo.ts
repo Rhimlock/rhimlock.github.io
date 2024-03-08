@@ -1,4 +1,4 @@
-import { Vec2, Vec3, Vec4, Vector } from "../../components/vectors.js";
+import { Vec } from "../../components/vec.js";
 import { TypedArray, createTypedArrayByGlType } from "../../helper/typedArray.js";
 import { gl } from "../gl.js";
 import { Buffer } from "./buffer.js";
@@ -31,31 +31,20 @@ export class VBO extends Buffer{
     super.update(this.data);
   }
 
-  getVector(i: number): Vector {
+  getVector(i: number): Vec {
     const begin = i * this.attribSize;
     const end = begin + this.attribSize;
     const a = (this.data as TypedArray).subarray(begin, end);
-    switch (this.attribSize) {
-      case 1:
-        return new Vector(a);
-      case 2:
-        return new Vec2(a);
-      case 3:
-        return new Vec3(a);
-      case 4:
-        return new Vec4(a);
-      default:
-        throw "Unknown number of vertices per element";
-    }
+    return(new Vec(a));
   }
 
-  setVector(i: number, ve: Vector) {
-    const vec = this.getVector(i);
-    vec.setValues(ve.getValues() as number[]);
-    ve.getValues().forEach((value, n) => {
-      this.data[(i + n) * ve.length] = value;
-    });
-  }
+  // setVector(i: number, v: Vec) {
+  //   const vec = this.getVector(i);
+  //   vec.assign(v);
+  //   ve.getValues().forEach((value, n) => {
+  //     this.data[(i + n) * ve.length] = value;
+  //   });
+  // }
 
   overwrite(old: number, element: number) {
     for (let i = 0; i < this.attribSize; i++) {

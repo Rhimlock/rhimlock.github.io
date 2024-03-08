@@ -1,4 +1,4 @@
-import { Vec2 } from "../components/vectors.js";
+import { Vec } from "../components/vec.js";
 import { gl } from "./gl.js";
 let counter = 0;
 export class Texture {
@@ -8,7 +8,7 @@ export class Texture {
 
   constructor(
     img: HTMLImageElement | null,
-    size: Vec2 | undefined = undefined,
+    size: Vec | undefined = undefined,
   ) {
     this.id = gl.createTexture();
     gl.activeTexture(gl.TEXTURE0 + this.no);
@@ -34,7 +34,7 @@ export class Texture {
         gl.UNSIGNED_BYTE,
         null,
       );
-    const s = size as Vec2;
+    const s = size as Vec;
     this.sizeInv = new Float32Array([1 / s.x, 1 / s.y]);
   }
 }

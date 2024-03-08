@@ -1,7 +1,7 @@
 import { dom } from "../helper/htmlElements.js";
 import { terminal } from "../controls/terminal.js";
 import { view } from "../helper/view.js";
-import { Vec2, Vec4 } from "../components/vectors.js";
+import { Vec } from "../components/vec.js";
 export const gl = dom.canvas.getContext("webgl2", {
   antialias: false,
   depth: true,
@@ -41,7 +41,7 @@ function setDepth(use = true) {
   }
 }
 
-export function updateViewport(size: Vec2 = new Vec2([gl.drawingBufferWidth, gl.drawingBufferHeight]), depth = true, color: Vec4 = new Vec4([0.1,0.1,1,1])) {
+export function updateViewport(size: Vec = Vec.newI(gl.drawingBufferWidth, gl.drawingBufferHeight), depth = true, color: Vec = Vec.newF(0.1,0.1,1,1)) {
   gl.clearColor(color.r, color.g, color.b, color.a);
   setDepth(depth);
   gl.viewport(0, 0, size.x, size.y);

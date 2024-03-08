@@ -1,6 +1,6 @@
-import { Vec2 } from "./vectors.js";
+import { Vec } from "./vec.js";
 
-export class Rect extends Vec2 {
+export class Rect extends Vec {
     get w() {
         return this.data[2] as number;
     }

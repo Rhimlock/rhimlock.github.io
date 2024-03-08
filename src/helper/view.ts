@@ -1,18 +1,18 @@
-import { Vec2 } from "../components/vectors.js";
+import { Vec } from "../components/vec.js";
 
-class View extends Vec2{
+class View extends Vec{
   constructor() {
     super(new Float32Array(2));
   }
   zoom = 3;
   tileSize = 8;
 
-  convertPos(clientX: number, clientY: number): Vec2 {
-    return new Vec2([
+  convertPos(clientX: number, clientY: number): Vec {
+    return Vec.newF(
       (clientX + window.scrollX - this.tileSize * 0.5 * this.zoom) /
         (this.zoom * this.tileSize),
       (clientY + window.scrollY - this.tileSize * 0.5 * this.zoom) /
-        (this.zoom * this.tileSize)]
+        (this.zoom * this.tileSize)
     );
   }
   updatePos() {

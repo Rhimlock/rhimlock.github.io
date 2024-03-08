@@ -1,4 +1,4 @@
-import { Vector } from "../../components/vectors.js";
+import { Vec } from "../../components/vec.js";
 import { Collection } from "../../helper/Collection.js";
 import { view } from "../../helper/view.js";
 import { VBO } from "../buffer/vbo.js";
@@ -36,7 +36,7 @@ export class Batch {
     this.vao = new VAO(this.buffers);
   }
 
-  createElement(): Collection<Vector> {
+  createElement(): Collection<Vec> {
     if (this.elements.length >= this.limit)
       throw "can't create Element, Batch reached limit";
     const element: any = {};
@@ -56,7 +56,7 @@ export class Batch {
   }
 
   getElement(i: number) {
-    const element: Collection<Vector> = {};
+    const element: Collection<Vec> = {};
     this.buffers.forEach((buffer, n) => {
       const a = this.program.attributes[n] as Attribute;
       element[a.info.name ?? ""] = buffer.getVector(i);

@@ -1,4 +1,4 @@
-import { Vec2, Vec4 } from "../../components/vectors.js";
+import { Vec } from "../../components/vec.js";
 import { gl, updateViewport } from "../gl.js";
 import { Texture } from "../texture.js";
 
@@ -6,9 +6,9 @@ export class Framebuffer {
   id: WebGLFramebuffer;
   depthBuffer: WebGLRenderbuffer | undefined;
   tex: Texture;
-  size: Vec2;
+  size: Vec;
 
-  constructor(size: Vec2, depth = false) {
+  constructor(size: Vec, depth = false) {
     this.id = gl.createFramebuffer() as WebGLFramebuffer;
     this.size = size;
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.id);
@@ -43,7 +43,7 @@ export class Framebuffer {
 
   use() {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.id);
-    updateViewport(this.size,this.depthBuffer != undefined, new Vec4([1,0,0,0]));
+    updateViewport(this.size,this.depthBuffer != undefined, Vec.newF(1,0,0,0));
   }
 
   disable() {

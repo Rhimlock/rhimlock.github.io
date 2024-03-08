@@ -1,16 +1,16 @@
-import { Vec2, Vec4 } from "../../components/vectors.js";
+import { Vec } from "../../components/vec.js";
 import { Framebuffer } from "../buffer/framebuffer.js";
 import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Batch } from "./batch.js";
 
 interface Vertex {
-  pos: Vec2;
-  tex: Vec2;
+  pos: Vec;
+  tex: Vec;
 }
 export class Layer extends Batch {
   fbo: Framebuffer;
-  constructor(size: Vec2, depth = 0) {
+  constructor(size: Vec, depth = 0) {
 
     super(4, new Program(vertexShader, fragmentShader));
     this.mode = gl.TRIANGLE_FAN;
@@ -21,10 +21,10 @@ export class Layer extends Batch {
       [1, -1, 1, 0],
       [1, 1, 1, 1],
     ].forEach((coords) => {
-      let v = new Vec4(coords);
+      let v = Vec.newF(...coords);
       const vertex = this.createElement() as any as Vertex;
-      vertex.pos.setValues([v.x, v.y]);
-      vertex.tex.setValues([v.z, v.w]);
+      vertex.pos.assign(v.data);
+      vertex.tex.assign(v.data.subarray(2));
     });
     this.program.setUniform("uTex", this.fbo.tex.no);
     this.program.setUniform("uLayer", depth);

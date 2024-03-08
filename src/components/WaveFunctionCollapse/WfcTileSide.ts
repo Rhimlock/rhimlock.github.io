@@ -1,24 +1,21 @@
-import { Vec4, Vector} from "../vectors.js";
+import { Vec} from "../vec.js";
 
-const colors: Vec4[] = [];
+const colors: Vec[] = [];
 
-function addColor(color: Vec4) {
+function addColor(color: Vec) {
     let i = colors.findIndex(c => c.equals(color));
     if (i < 0) i = colors.push(color) - 1;
     return i;
 }
 
-function addColors(arr: Vec4[]){
-    return arr.map(color =>  addColor(color))
+function addColors(arr: Vec[]){
+    const indices = arr.map(color =>  addColor(color));
+    return new Int32Array(indices);
 };
 
-export class WfcTileSide extends Vector {
+export class WfcTileSide extends Vec {
     type: number = 0;
-    constructor(colors: Vec4[]) {
+    constructor(colors: Vec[]) {
         super(addColors(colors));
-    }
-
-    equals(side: WfcTileSide): boolean {
-        return this.data.every((c,i) => c === side.data[i]);
     }
 }

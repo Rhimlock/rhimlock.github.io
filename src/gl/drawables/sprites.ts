@@ -1,4 +1,4 @@
-import { Vec2, Vec3, Vec4 } from "../../components/vectors.js";
+import { Vec } from "../../components/vec.js";
 import { view } from "../../helper/view.js";
 import { gl } from "../gl.js";
 import { Program } from "../shader/program.js";
@@ -6,9 +6,9 @@ import { Texture } from "../texture.js";
 import { Batch } from "./batch.js";
 
 export interface Sprite {
-  pos: Vec2;
-  tex: Vec3;
-  color: Vec4;
+  pos: Vec;
+  tex: Vec;
+  color: Vec;
 }
 
 export class Sprites extends Batch {
@@ -34,7 +34,7 @@ export class Sprites extends Batch {
     spr.pos.y = y;
     spr.tex.z = 16;
     spr.tex.y = 0;
-    spr.color.setValues([255, 255, 255, 255]);
+    spr.color.assign([255, 255, 255, 255]);
     return spr;
   }
 }

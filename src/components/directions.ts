@@ -1,4 +1,4 @@
-import { Vec2 } from "./vectors.js";
+import { Vec } from "./vec.js";
 export const enum DIR {
     up = 0,
     right = 1,
@@ -7,16 +7,16 @@ export const enum DIR {
 }
 export const VDIR = {
     get up() {
-        return new Vec2([0,-1])
+        return Vec.newI(0,-1)
     },
     get right() {
-        return new Vec2([1,0]);
+        return Vec.newI(1,0)
     },
     get down() {
-        return new Vec2([0,1]);
+        return Vec.newI(0,1)
     },
     get left() {
-        return new Vec2([-1,0]);
+        return Vec.newI(-1,0)
     },
 
     get all() {

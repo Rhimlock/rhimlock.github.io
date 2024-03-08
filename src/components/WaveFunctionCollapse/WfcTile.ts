@@ -1,20 +1,20 @@
 import { DIR } from "../directions.js";
-import { Vec2, Vec4 } from "../vectors.js";
+import { Vec } from "../vec.js";
 import { WfcTileSide } from "./WfcTileSide.js";
 
 
-export class WfcTile extends Vec2 {
+export class WfcTile extends Vec {
     sides: WfcTileSide[];
-    pixels: Vec4[];
-    constructor (pixels: Vec4[], texPos: Vec2) {
-        super ([texPos.x,texPos.y]);
+    pixels: Vec[];
+    constructor (pixels: Vec[], texPos: Vec) {
+        super (texPos.data);
         this.pixels = pixels;
         this.sides = [];
         if (pixels.length == 4) {
-            const topLeft = pixels[0] as Vec4;
-            const topRight = pixels[1]as Vec4;
-            const bottomLeft = pixels[3]as Vec4;
-            const bottomRight = pixels[2] as Vec4;
+            const topLeft = pixels[0] as Vec;
+            const topRight = pixels[1]as Vec;
+            const bottomLeft = pixels[3]as Vec;
+            const bottomRight = pixels[2] as Vec;
 
             this.sides.push(new WfcTileSide([topLeft, topRight]));
             this.sides.push(new WfcTileSide([topRight, bottomRight]));
