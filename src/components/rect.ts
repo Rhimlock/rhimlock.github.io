@@ -14,4 +14,12 @@ export class Rect extends Vec {
             this.y < r.y + r.h &&
             this.y + this.h > r.y)
     }
+
+    asCoords() {
+        return [
+            this.x, this.y, 
+            this.x+this.w, this.y, 
+            this.x, this.y+this.h, 
+            this.x+this.w, this.y + this.h];
+    }
 }

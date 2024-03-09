@@ -30,7 +30,7 @@ export class Vec {
   }
 
   toString() {
-    return (this.data as any as number[]).join(" / ");
+    return this.data.join(" / ");
   }
 
   get length() {
