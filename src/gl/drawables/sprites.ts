@@ -1,5 +1,5 @@
 import { Vec } from "../../components/vec.js";
-import { gl,view } from "../gl.js";
+import { gl, view } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { Batch } from "./batch.js";

@@ -9,7 +9,7 @@ class Info {
     dom.playerPos.innerHTML = `x: ${Math.round(this.player?.x || 0)} , y: ${Math.round(this.player?.y || 0)}`;
     dom.worldPos.innerHTML = Vec.newI(
       window.scrollX,
-      window.scrollY
+      window.scrollY,
     ).toString();
     dom.mousePos.innerHTML = mousePos.toString();
   }

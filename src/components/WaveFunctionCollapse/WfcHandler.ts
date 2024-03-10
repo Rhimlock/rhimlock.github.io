@@ -4,56 +4,80 @@ import { WfcField } from "./WfcField.js";
 import { WfcTile } from "./WfcTile.js";
 
 export class WfcHandler {
-    tiles: WfcTile[] = []
-    todo: WfcField[] = []
-    grid: Grid
-    done = false
-    constructor(image: HTMLImageElement, tileSize: number, mapSize: Vec) {
-        const canvas = document.createElement('canvas') as HTMLCanvasElement;
-        const ctx = canvas.getContext('2d');
-        ctx?.drawImage(image, 0, 0);
+  tiles: WfcTile[] = [];
+  todo: WfcField[] = [];
+  grid: Grid;
+  done = false;
+  constructor(image: HTMLImageElement, tileSize: number, mapSize: Vec) {
+    const canvas = document.createElement("canvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
+    ctx?.drawImage(image, 0, 0);
 
-        for (let y = 0; y < image.height; y += tileSize) {
-            for (let x = 0; x < image.width; x += tileSize) {
-                const pixels: Vec[] = [
-                        new Vec(ctx?.getImageData(x,y,1,1).data as Uint8ClampedArray),
-                        new Vec(ctx?.getImageData(x+tileSize-1,y,1,1).data as Uint8ClampedArray),
-                        new Vec(ctx?.getImageData(x+tileSize-1,y+tileSize-1,1,1).data as Uint8ClampedArray),
-                        new Vec(ctx?.getImageData(x,y+tileSize-1,1,1).data as Uint8ClampedArray)
-                ];
-                this.tiles.push(new WfcTile(pixels, Vec.newI(x / tileSize, y / tileSize)));
-            }
+    for (let y = 0; y < image.height; y += tileSize) {
+      for (let x = 0; x < image.width; x += tileSize) {
+        const pixels: Vec[] = [
+          new Vec(ctx?.getImageData(x, y, 1, 1).data as Uint8ClampedArray),
+          new Vec(
+            ctx?.getImageData(x + tileSize - 1, y, 1, 1)
+              .data as Uint8ClampedArray,
+          ),
+          new Vec(
+            ctx?.getImageData(x + tileSize - 1, y + tileSize - 1, 1, 1)
+              .data as Uint8ClampedArray,
+          ),
+          new Vec(
+            ctx?.getImageData(x, y + tileSize - 1, 1, 1)
+              .data as Uint8ClampedArray,
+          ),
+        ];
+        this.tiles.push(
+          new WfcTile(pixels, Vec.newI(x / tileSize, y / tileSize)),
+        );
+      }
+    }
+    this.grid = new Grid(mapSize);
+    for (let i = 0; i < mapSize.x * mapSize.y; i++)
+      this.todo.push(
+        new WfcField(
+          Vec.newI(i % mapSize.x, Math.floor(i / mapSize.x)),
+          this.tiles,
+          this.grid,
+        ),
+      );
+    this.grid.cells = [...this.todo];
+  }
+
+  wave(pos: Vec | undefined = undefined) {
+    if (this.done) return;
+    if (this.todo.length == 0) {
+      this.done = this.checkIfAllFieldsOk();
+      return;
+    }
+    const field = (pos ? this.grid.getCell(pos) : this.todo[0]) as WfcField;
+    if (!field || field.tile) return;
+    field.pickRandom();
+    this.todo = this.todo.sort(() => 0.5 - Math.random());
+    this.todo = this.todo.sort((a, b) =>
+      a.tiles.length <= b.tiles.length ? -1 : 1,
+    );
+    this.todo = this.todo.filter((a) => a.tiles.length > 1);
+  }
+
+  private checkIfAllFieldsOk(): boolean {
+    console.log("look for missing tiles");
+    const missing = (this.grid.cells as WfcField[]).filter(
+      (field) => field.tiles.length === 0,
+    );
+    if (missing.length === 0) return true;
+    this.todo = [...missing];
+    missing.forEach((m) =>
+      m.neighbors.forEach((n) => {
+        if (n && this.todo.indexOf(n) < 0) {
+          this.todo.push(n);
         }
-        this.grid = new Grid(mapSize);
-        for (let i = 0; i < (mapSize.x * mapSize.y); i++) this.todo.push( new WfcField(Vec.newI(i % mapSize.x, Math.floor(i / mapSize.x)), this.tiles, this.grid));
-        this.grid.cells = [...this.todo];
-    }
-
-    wave(pos : Vec | undefined = undefined) {
-        if (this.done) return;
-        if (this.todo.length == 0) {
-            this.done = this.checkIfAllFieldsOk();
-            return
-        } 
-        const field = (pos ? this.grid.getCell(pos) : this.todo[0]) as WfcField;
-        if (!field || field.tile) return;
-        field.pickRandom();
-        this.todo = this.todo.sort(() => 0.5 - Math.random());
-        this.todo = this.todo.sort((a,b) => (a.tiles.length <= b.tiles.length ? -1 : 1));
-        this.todo = this.todo.filter(a => a.tiles.length > 1);
-    }
-   
-    private checkIfAllFieldsOk(): boolean {
-        console.log("look for missing tiles");
-        const missing = (this.grid.cells as WfcField[]).filter(field => field.tiles.length === 0);
-        if (missing.length === 0) return true;
-        this.todo = [...missing];
-        missing.forEach(m => m.neighbors.forEach(n =>  {
-            if (n && this.todo.indexOf(n) < 0) {
-                this.todo.push(n)
-            }
-        }));
-        this.todo.forEach(field => field.tiles = [...this.tiles]);
-        return false;
-    }
+      }),
+    );
+    this.todo.forEach((field) => (field.tiles = [...this.tiles]));
+    return false;
+  }
 }

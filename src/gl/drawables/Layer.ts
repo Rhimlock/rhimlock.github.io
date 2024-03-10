@@ -11,10 +11,9 @@ interface Vertex {
 export class Layer extends Batch {
   fbo: Framebuffer;
   constructor(size: Vec, depth = 0) {
-
     super(4, new Program(vertexShader, fragmentShader));
     this.mode = gl.TRIANGLE_FAN;
-    this.fbo = new Framebuffer(size,true);
+    this.fbo = new Framebuffer(size, true);
     [
       [-1, 1, 0, 1],
       [-1, -1, 0, 0],
@@ -38,7 +37,7 @@ export class Layer extends Batch {
     this.fbo.disable();
   }
   updateUniforms(_progress: number): void {
-    const zoom = view.getZoom();
+    const zoom = view.getZoom().multiply(window.devicePixelRatio);
     this.program.setUniform("zoom", [zoom.x, zoom.y]);
   }
 }

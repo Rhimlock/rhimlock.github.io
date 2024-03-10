@@ -21,9 +21,8 @@ export class Framebuffer {
       0,
     );
     if (depth) {
-
       this.depthBuffer = gl.createRenderbuffer() as WebGLRenderbuffer;
-    
+
       gl.bindRenderbuffer(gl.RENDERBUFFER, this.depthBuffer);
       gl.renderbufferStorage(
         gl.RENDERBUFFER,
@@ -43,7 +42,11 @@ export class Framebuffer {
 
   use() {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.id);
-    view.updateViewport(this.size,this.depthBuffer != undefined, Vec.newF(1,0,0,0));
+    view.updateViewport(
+      this.size,
+      this.depthBuffer != undefined,
+      Vec.newF(1, 0, 0, 0),
+    );
   }
 
   disable() {

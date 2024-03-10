@@ -5,10 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf ./js tsc && tsc -p tsconfig.json"
+    "build": "rm -rf ./js tsc && tsc -p tsconfig.json",
+    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  }
 }

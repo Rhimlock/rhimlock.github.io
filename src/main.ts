@@ -17,7 +17,7 @@ const tilemap = new TileMap(mapSize, dom.tiles);
 const batch = new Sprites(5000, dom.humans);
 const layerTilemap = new Layer(view.sizeFramebuffer);
 
-wfc.wave(Vec.newI(mapSize.x/2, mapSize.y/2));
+wfc.wave(Vec.newI(mapSize.x / 2, mapSize.y / 2));
 const tick = (_elapsedTime: number) => {
   info.update(timer.elapsedTime);
 
@@ -32,28 +32,23 @@ const tick = (_elapsedTime: number) => {
 const timer = new Timer(tick, 0);
 timer.start();
 
-const createDummy = () => {
-};
+const createDummy = () => {};
 
 const doWaveFunctionCollapseStep = () => {
   wfc.wave();
-  wfc.grid.cells.forEach(f => {
-    tilemap.setTile((f as WfcField), (f as WfcField).tiles[0] || Vec.newI(0,0) as Vec)
+  wfc.grid.cells.forEach((f) => {
+    tilemap.setTile(
+      f as WfcField,
+      (f as WfcField).tiles[0] || (Vec.newI(0, 0) as Vec),
+    );
   });
-}
+};
 
 createDummy();
 input.bindCall(timer.toggle, input.keys.pause, timer);
 
 window.onblur = () => timer.toggle.bind(timer);
-input.bindCall(
-  () => {
-
-
-  },
-  input.keys.middleClick,
-  null,
-);
+input.bindCall(() => {}, input.keys.middleClick, null);
 
 input.bindCall(createDummy, input.keys.click, null);
 

@@ -6,10 +6,7 @@ export class Texture {
   no: number = counter++;
   sizeInv = new Float32Array([1, 1]);
 
-  constructor(
-    img: HTMLImageElement | null,
-    size: Vec | undefined = undefined,
-  ) {
+  constructor(img: HTMLImageElement | null, size: Vec | undefined = undefined) {
     this.id = gl.createTexture();
     gl.activeTexture(gl.TEXTURE0 + this.no);
     gl.bindTexture(gl.TEXTURE_2D, this.id);

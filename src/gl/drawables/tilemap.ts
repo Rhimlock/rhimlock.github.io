@@ -1,5 +1,5 @@
 import { Vec } from "../../components/vec.js";
-import { gl,view } from "../gl.js";
+import { gl, view } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { Batch } from "./batch.js";
@@ -25,18 +25,12 @@ export class TileMap extends Batch {
     this.program.setUniform("uTileSize", view.tileSize);
     this.program.setUniform("uMapSize", this.width);
   }
-  draw() {
-    this.program.setUniform("green",new Float32Array([Math.random()]));
-    this.program.setUniform("red",new Float32Array([Math.random()]));
-    super.draw(0);
-
-  }
 
   getTile(pos: Vec) {
     const tile = this.getElement(pos.x + pos.y * this.width) as any as Tile;
     return tile;
   }
-  setTile(pos:Vec, tex: Vec){
+  setTile(pos: Vec, tex: Vec) {
     const tile = this.getTile(pos);
     tile.texPos?.assign(tex.data);
   }
@@ -73,12 +67,6 @@ void main() {
 
 const fragmentShader = glsl`#version 300 es    
 precision mediump float;
-    uniform setting {
-      float red;
-    };
-    uniform setting2 {
-      float green;
-    };
     uniform sampler2D uTex;
     in vec2 vTex;
     in float tileSizeInv;
@@ -86,7 +74,5 @@ precision mediump float;
 
 void main() {    
     outColor = texture(uTex, vTex + gl_PointCoord * tileSizeInv);
-    outColor.r *= red;
-    outColor.g *= green;
 }
 `;

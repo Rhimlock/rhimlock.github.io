@@ -3,7 +3,7 @@ import { UBO } from "../buffer/ubo.js";
 import { gl } from "../gl.js";
 import { Attribute, fetchAttributes } from "./attribute.js";
 import { Shader } from "./shader.js";
-import { Uniform, getUniforms, getUniformBlocks} from "./uniforms.js";
+import { Uniform, getUniforms, getUniformBlocks } from "./uniforms.js";
 let currentProgram: WebGLProgram | null;
 
 export class Program {
@@ -44,7 +44,7 @@ export class Program {
         uniform.func.call(gl, uniform.location, value);
       } else {
         if (!isNaN(value)) value = [value];
-        uniform.ubo?.updateUniform(uniform.info.name,new Float32Array(value));
+        uniform.ubo?.updateUniform(uniform.info.name, new Float32Array(value));
       }
     }
 

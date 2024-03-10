@@ -17,7 +17,7 @@ export class VAO {
         0,
         0,
       );
-    })
+    });
     gl.bindVertexArray(null);
   }
 }

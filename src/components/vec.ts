@@ -17,19 +17,25 @@ export class Vec {
     return new Vec(v1.data.map((e, i) => e - (v2.data[i] ?? 0)));
   }
   static resized(v: Vec, scale: number) {
-    return new Vec(v.data.map(e => e * scale));
+    return new Vec(v.data.map((e) => e * scale));
   }
 
   add(v: Vec) {
-    this.data.forEach((e, i) => this.data[i] = e + (v.data[i] ?? 0));
+    this.data.forEach((e, i) => (this.data[i] = e + (v.data[i] ?? 0)));
+    return this;
+  }
+
+  multiply(f: number) {
+    this.data.forEach((e, i) => (this.data[i] = e * f));
+    return this;
   }
 
   equals(v: Vec) {
-    return this.data.find((e,i) =>  e !== v.data[i]) === undefined;
+    return this.data.find((e, i) => e !== v.data[i]) === undefined;
   }
 
-  assign(values:TypedArray | number[]) {
-    this.data.forEach((_, i) => this.data[i] = (values[i] ?? 0));
+  assign(values: TypedArray | number[]) {
+    this.data.forEach((_, i) => (this.data[i] = values[i] ?? 0));
   }
 
   toString() {
@@ -38,10 +44,7 @@ export class Vec {
 
   get length() {
     return Math.sqrt(
-      (this.data as any as number[]).reduce(
-        (a, v) => a + v * v,
-        0,
-      ),
+      (this.data as any as number[]).reduce((a, v) => a + v * v, 0),
     );
   }
 
@@ -95,21 +98,19 @@ export class Vec {
   }
 }
 
-  // get rotatedLeft() {
-  //   return new Vec([this.y, -this.x]);
-  // }
-  // get rotatedRight() {
-  //   return new Vec([-this.y, this.x]);
-  // }
-  // get inverted() {
-  //   return new Vec(this.data.map((v: number) => -v));
-  // }
-  // get normalized(): Vec {
-  //   const l = this.length;
-  //   return l === 0 ? this : this.resized(1 / l);
-  // }
-  // resized(factor: number) {
-  //   return new Vec(this.data.map((v: number) => v * factor));
-  // }
-
-
+// get rotatedLeft() {
+//   return new Vec([this.y, -this.x]);
+// }
+// get rotatedRight() {
+//   return new Vec([-this.y, this.x]);
+// }
+// get inverted() {
+//   return new Vec(this.data.map((v: number) => -v));
+// }
+// get normalized(): Vec {
+//   const l = this.length;
+//   return l === 0 ? this : this.resized(1 / l);
+// }
+// resized(factor: number) {
+//   return new Vec(this.data.map((v: number) => v * factor));
+// }

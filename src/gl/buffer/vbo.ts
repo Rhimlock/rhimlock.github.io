@@ -1,9 +1,12 @@
 import { Vec } from "../../components/vec.js";
-import { TypedArray, createTypedArrayByGlType } from "../../helper/typedArray.js";
+import {
+  TypedArray,
+  createTypedArrayByGlType,
+} from "../../helper/typedArray.js";
 import { gl } from "../gl.js";
 import { Buffer } from "./buffer.js";
 
-export class VBO extends Buffer{
+export class VBO extends Buffer {
   public type: number;
   public normalized: boolean;
   public attribSize: number;
@@ -35,7 +38,7 @@ export class VBO extends Buffer{
     const begin = i * this.attribSize;
     const end = begin + this.attribSize;
     const a = (this.data as TypedArray).subarray(begin, end);
-    return(new Vec(a));
+    return new Vec(a);
   }
 
   // setVector(i: number, v: Vec) {
