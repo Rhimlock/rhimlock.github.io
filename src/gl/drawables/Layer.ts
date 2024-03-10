@@ -1,6 +1,6 @@
 import { Vec } from "../../components/vec.js";
 import { Framebuffer } from "../buffer/framebuffer.js";
-import { gl } from "../gl.js";
+import { gl, view } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Batch } from "./batch.js";
 
@@ -37,6 +37,10 @@ export class Layer extends Batch {
   disable() {
     this.fbo.disable();
   }
+  updateUniforms(_progress: number): void {
+    const zoom = view.getZoom();
+    this.program.setUniform("zoom", [zoom.x, zoom.y]);
+  }
 }
 
 //needed for glsl-literal plugin
@@ -48,9 +52,10 @@ precision mediump float;
   in vec2 tex;
   out vec2 vTexPos;
   uniform float uLayer;
+  uniform vec2 zoom;
 void main() {
   vTexPos = tex;
-  gl_Position = vec4(pos, uLayer, 1.0);
+  gl_Position = vec4(pos * zoom, uLayer, 1.0);
 }
 `;
 

@@ -1,6 +1,6 @@
 import { Vec } from "../components/vec.js";
+import { view } from "../gl/gl.js";
 import { dom } from "../helper/htmlElements.js";
-import { view } from "../helper/view.js";
 import { input } from "./input.js";
 import { terminal } from "./terminal.js";
 

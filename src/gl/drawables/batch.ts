@@ -1,6 +1,5 @@
 import { Vec } from "../../components/vec.js";
 import { Collection } from "../../helper/Collection.js";
-import { view } from "../../helper/view.js";
 import { VBO } from "../buffer/vbo.js";
 import { gl } from "../gl.js";
 import { Attribute } from "../shader/attribute.js";
@@ -65,8 +64,6 @@ export class Batch {
   }
 
   updateUniforms(progress: number) {
-    this.program.setUniform("uResInv", [2 / gl.drawingBufferWidth, 2/gl.drawingBufferHeight]);
-    this.program.setUniform("uView", [view.x, view.y]);
     this.program.setUniform("uProgress", progress);
   }
 

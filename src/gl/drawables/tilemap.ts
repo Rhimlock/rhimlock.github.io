@@ -1,6 +1,5 @@
 import { Vec } from "../../components/vec.js";
-import { view } from "../../helper/view.js";
-import { gl } from "../gl.js";
+import { gl,view } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { Batch } from "./batch.js";
@@ -50,17 +49,19 @@ const vertexShader = glsl`#version 300 es
 precision mediump float;
   in vec2 texPos;
   uniform vec2 uTexInv;
-  uniform vec2 uView;
-  uniform vec2 uResInv;
+  uniform config {
+    vec2 uView;
+    vec2 uResInv;
+  };
   uniform float uTileSize;
   uniform uint uMapSize;
   out vec2 vTex;
   out float tileSizeInv;
 
 void main() {    
-    uint y = uint(gl_VertexID) / uMapSize;
+    uint y = uint(gl_VertexID) / uMapSize ;
     uint x = uint(gl_VertexID ) - uMapSize * y;
-    vec2 v = round((vec2(x,y) - uView.xy) * uTileSize)* uResInv ;
+    vec2 v = round((vec2(x,y)) * uTileSize - uView.xy)* uResInv ;
     v.y *= -1.0;
     v += vec2(-1.0,1.0);
     gl_Position = vec4(v, 0.99999, 1.0);

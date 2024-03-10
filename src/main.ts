@@ -8,31 +8,25 @@ import { Layer } from "./gl/drawables/Layer.js";
 import { Vec } from "./components/vec.js";
 import { WfcHandler } from "./components/WaveFunctionCollapse/WfcHandler.js";
 import { WfcField } from "./components/WaveFunctionCollapse/WfcField.js";
+import { view } from "./gl/gl.js";
 
-const mapSize = Vec.newI(50,30);
+const mapSize = view.mapSize;
 
 const wfc = new WfcHandler(dom.tiles, 8, mapSize);
 const tilemap = new TileMap(mapSize, dom.tiles);
 const batch = new Sprites(5000, dom.humans);
-const layer = new Layer(
-  Vec.newI(dom.canvas.width, dom.canvas.height), 0.9
-);
-const layer2 = new Layer(
-  Vec.newI(dom.canvas.width, dom.canvas.height), -1
-);
+const layerTilemap = new Layer(view.sizeFramebuffer);
 
 wfc.wave(Vec.newI(mapSize.x/2, mapSize.y/2));
-const tick = (elapsedTime: number) => {
+const tick = (_elapsedTime: number) => {
   info.update(timer.elapsedTime);
 
   doWaveFunctionCollapseStep();
-  layer.use();
+  layerTilemap.use();
   tilemap.draw();
-  layer2.use();
-  batch.draw(elapsedTime);
-  layer2.disable();
-  layer.draw();
-  layer2.draw();
+  //batch.draw(elapsedTime);
+  layerTilemap.disable();
+  layerTilemap.draw();
 };
 
 const timer = new Timer(tick, 0);

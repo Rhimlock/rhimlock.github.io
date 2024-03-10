@@ -2,7 +2,6 @@ import { DIR } from "../directions.js";
 import { Vec } from "../vec.js";
 import { WfcTileSide } from "./WfcTileSide.js";
 
-
 export class WfcTile extends Vec {
     sides: WfcTileSide[];
     pixels: Vec[];

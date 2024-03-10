@@ -8,6 +8,10 @@ export class Rect extends Vec {
         return this.data[3] as number;
     }
 
+    set w(v: number) {this.data[2] = v};
+
+    set h(v: number) {this.data[3] = v}
+
     collide(r : Rect) :boolean {
         return (this.x < r.x + r.w &&
             this.x + this.w > r.x &&

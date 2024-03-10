@@ -1,6 +1,5 @@
 import { Vec } from "../../components/vec.js";
-import { view } from "../../helper/view.js";
-import { gl } from "../gl.js";
+import { gl,view } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { Batch } from "./batch.js";
@@ -50,8 +49,10 @@ precision mediump float;
   out vec4 vColor;
   out vec3 vTex;
   uniform vec2 uTexInv;
-  uniform vec2 uView;
-  uniform vec2 uResInv;
+  uniform config {
+    vec2 uView;
+    vec2 uResInv;
+  };
   uniform float uTileSize;
 
 void main() {

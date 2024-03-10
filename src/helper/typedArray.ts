@@ -11,8 +11,6 @@ export type TypedArray =
   | Float32Array
   | Float64Array;
 
-
-
 export function createTypedArrayByGlType(type: number, size: number) {
   switch (type) {
     case gl.UNSIGNED_BYTE:

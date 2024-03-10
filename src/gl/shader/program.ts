@@ -42,9 +42,9 @@ export class Program {
     if (uniform) {
       if (uniform.location) {
         uniform.func.call(gl, uniform.location, value);
-
       } else {
-        uniform.ubo?.updateUniform(uniform.info.name,value);
+        if (!isNaN(value)) value = [value];
+        uniform.ubo?.updateUniform(uniform.info.name,new Float32Array(value));
       }
     }
 

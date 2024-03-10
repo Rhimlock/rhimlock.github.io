@@ -16,6 +16,9 @@ export class Vec {
   static diff(v1: Vec, v2: Vec) {
     return new Vec(v1.data.map((e, i) => e - (v2.data[i] ?? 0)));
   }
+  static resized(v: Vec, scale: number) {
+    return new Vec(v.data.map(e => e * scale));
+  }
 
   add(v: Vec) {
     this.data.forEach((e, i) => this.data[i] = e + (v.data[i] ?? 0));

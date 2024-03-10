@@ -1,5 +1,5 @@
 import { Vec } from "../../components/vec.js";
-import { gl, updateViewport } from "../gl.js";
+import { gl, view } from "../gl.js";
 import { Texture } from "../texture.js";
 
 export class Framebuffer {
@@ -43,11 +43,11 @@ export class Framebuffer {
 
   use() {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.id);
-    updateViewport(this.size,this.depthBuffer != undefined, Vec.newF(1,0,0,0));
+    view.updateViewport(this.size,this.depthBuffer != undefined, Vec.newF(1,0,0,0));
   }
 
   disable() {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    updateViewport();
+    view.updateViewport();
   }
 }

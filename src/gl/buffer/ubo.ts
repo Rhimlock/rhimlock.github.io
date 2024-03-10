@@ -1,12 +1,11 @@
 import { Collection } from "../../helper/Collection.js";
 import { TypedArray } from "../../helper/typedArray.js";
-import { gl } from "../gl.js";
+import { gl, UBOS } from "../gl.js";
 import { Uniform, getBlockUniforms } from "../shader/uniforms.js";
 import { Buffer } from "./buffer.js";
 
 
 
-const UBOS: Collection<UBO> = {};
 
 let baseIndex = 0;
 export class UBO extends Buffer {
