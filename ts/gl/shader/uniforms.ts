@@ -48,7 +48,6 @@ export function getUniformBlocks(program: WebGLProgram) {
         if (blockName) {
           ubos[blockName] = UBO.byName(program, blockName);
         } else {
-          console.log("no blockName for n = " + blockIndex);
         }
       });
   }

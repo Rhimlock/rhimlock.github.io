@@ -1,3 +1,4 @@
+import { Tile, TileMap } from "../../gl/drawables/tilemap.js";
 import { Grid } from "../grid.js";
 import { Vec } from "../vec.js";
 import { WfcField } from "./WfcField.js";
@@ -7,8 +8,10 @@ export class WfcHandler {
   tiles: WfcTile[] = [];
   todo: WfcField[] = [];
   grid: Grid;
+  tileMap: TileMap;
   done = false;
-  constructor(image: HTMLImageElement, tileSize: number, mapSize: Vec) {
+  constructor(image: HTMLImageElement, tileSize: number, mapSize: Vec, tileMap: TileMap) {
+    this.tileMap = tileMap;
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
     ctx?.drawImage(image, 0, 0);
@@ -42,6 +45,7 @@ export class WfcHandler {
           Vec.newI(i % mapSize.x, Math.floor(i / mapSize.x)),
           this.tiles,
           this.grid,
+          tileMap.getElement(i) as any as Tile
         ),
       );
     this.grid.cells = [...this.todo];
@@ -64,7 +68,6 @@ export class WfcHandler {
   }
 
   private checkIfAllFieldsOk(): boolean {
-    console.log("look for missing tiles");
     const missing = (this.grid.cells as WfcField[]).filter(
       (field) => field.tiles.length === 0,
     );

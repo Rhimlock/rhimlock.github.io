@@ -37,7 +37,6 @@ export class View {
     gl.canvas.width = dom.canvas.clientWidth;
     gl.canvas.height = dom.canvas.clientHeight;
     this.updateViewport();
-    console.log(this.rect.w, this.rect.h);
     terminal.showLastLine();
   }
 

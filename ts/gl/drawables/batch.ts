@@ -12,7 +12,7 @@ export interface BufferInfo {
 }
 
 export class Batch {
-  private buffers: VBO[] = [];
+  protected buffers: VBO[] = [];
   private vao: VAO;
   protected program: Program;
   private elements: any[] = [];
