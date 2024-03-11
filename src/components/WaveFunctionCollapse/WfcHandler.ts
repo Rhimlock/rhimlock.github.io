@@ -47,20 +47,20 @@ export class WfcHandler {
     this.grid.cells = [...this.todo];
   }
 
-  wave(pos: Vec | undefined = undefined) {
-    if (this.done) return;
+  wave(pos: Vec | undefined = undefined): boolean {
+    if (this.done) return true;
     if (this.todo.length == 0) {
       this.done = this.checkIfAllFieldsOk();
-      return;
+      return this.done;
     }
     const field = (pos ? this.grid.getCell(pos) : this.todo[0]) as WfcField;
-    if (!field || field.tile) return;
     field.pickRandom();
     this.todo = this.todo.sort(() => 0.5 - Math.random());
     this.todo = this.todo.sort((a, b) =>
       a.tiles.length <= b.tiles.length ? -1 : 1,
     );
     this.todo = this.todo.filter((a) => a.tiles.length > 1);
+    return false;
   }
 
   private checkIfAllFieldsOk(): boolean {
