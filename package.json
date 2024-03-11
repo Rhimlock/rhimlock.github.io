@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json -clean",
     "serve": "tsc -p tsconfig.json --watch",
-    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
+    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\"",
+    "build:rust": "cd rust && cargo build && wasm-pack build --dev --target web && cd .."
   },
   "author": "",
   "license": "ISC",

@@ -106,3 +106,5 @@ dist
 Projects/
 
 js/
+rust/pkg/
+rust/target/

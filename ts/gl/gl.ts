@@ -15,5 +15,3 @@ if (!gl) {
 }
 export const view = new View();
 window.onresize = view.updateSize.bind(view);
-view.updateSize();
-view.updatePos();

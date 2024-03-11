@@ -33,7 +33,6 @@ fn get_size_from_type(t: u32) -> i32 {
     }
 }
 fn get_base_type(t:u32) -> u32 {
-    use web_sys::WebGl2RenderingContext::*;
     match t {
         WebGl2RenderingContext::FLOAT => WebGl2RenderingContext::FLOAT,
         WebGl2RenderingContext::FLOAT_VEC2 => WebGl2RenderingContext::FLOAT,

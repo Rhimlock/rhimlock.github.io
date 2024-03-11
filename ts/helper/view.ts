@@ -12,6 +12,10 @@ export class View {
   mapSize = Vec.newI(81, 61);
   sizeFramebuffer = Vec.newU(640, 480);
 
+  constructor() {
+    this.updatePos();
+    this.updateSize();
+  }
   getZoom() {
     return Vec.newF(
       gl.canvas.width / this.rect.w,
