@@ -2,29 +2,17 @@ import { Vec } from "../../components/vec.js";
 import { Framebuffer } from "../buffer/framebuffer.js";
 import { gl, view } from "../gl.js";
 import { Program } from "../shader/program.js";
-import { Batch } from "./batch.js";
+import { Drawable } from "./drawable.js";
 
-interface Vertex {
-  pos: Vec;
-  tex: Vec;
-}
-export class Layer extends Batch {
+export class Layer extends Drawable {
   fbo: Framebuffer;
   constructor(size: Vec, depth = 0) {
     super(4, new Program(vertexShader, fragmentShader));
     this.mode = gl.TRIANGLE_FAN;
     this.fbo = new Framebuffer(size, true);
-    [
-      [-1, 1, 0, 1],
-      [-1, -1, 0, 0],
-      [1, -1, 1, 0],
-      [1, 1, 1, 1],
-    ].forEach((coords) => {
-      let v = Vec.newF(...coords);
-      const vertex = this.createElement() as any as Vertex;
-      vertex.pos.assign(v.data);
-      vertex.tex.assign(v.data.subarray(2));
-    });
+    this.buffers[0]?.data.set([-1, 1, -1, -1, 1, -1, 1, 1]);
+    this.buffers[1]?.data.set([0, 1, 0, 0, 1, 0, 1, 1]);
+    new Array(4).fill(0).forEach((_) => this.createVertex());
     this.program.setUniform("uTex", this.fbo.tex.no);
     this.program.setUniform("uLayer", depth);
   }
@@ -37,7 +25,7 @@ export class Layer extends Batch {
     this.fbo.disable();
   }
   updateUniforms(_progress: number): void {
-    const zoom = view.getZoom().multiply(window.devicePixelRatio);
+    const zoom = view.getZoom();
     this.program.setUniform("zoom", [zoom.x, zoom.y]);
   }
 }

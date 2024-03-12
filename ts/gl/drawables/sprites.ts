@@ -2,7 +2,7 @@ import { Vec } from "../../components/vec.js";
 import { gl, view } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
-import { Batch } from "./batch.js";
+import { Drawable } from "./drawable.js";
 
 export interface Sprite {
   pos: Vec;
@@ -10,7 +10,7 @@ export interface Sprite {
   color: Vec;
 }
 
-export class Sprites extends Batch {
+export class Sprites extends Drawable {
   private tex: Texture;
 
   constructor(maxSprites: number, img: HTMLImageElement) {
@@ -27,7 +27,7 @@ export class Sprites extends Batch {
   }
 
   createSprite(x = 1, y = 1): Sprite {
-    const spr: Sprite = this.createElement() as any as Sprite;
+    const spr: Sprite = this.createVertex() as any as Sprite;
 
     spr.pos.x = x;
     spr.pos.y = y;

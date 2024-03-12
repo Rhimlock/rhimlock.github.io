@@ -1,4 +1,3 @@
-import { Vec } from "../../components/vec.js";
 import {
   TypedArray,
   createTypedArrayByGlType,
@@ -7,10 +6,10 @@ import { gl } from "../gl.js";
 import { Buffer } from "./buffer.js";
 
 export class VBO extends Buffer {
-  public type: number;
-  public normalized: boolean;
-  public attribSize: number;
-  private data: TypedArray;
+  type: number;
+  normalized: boolean;
+  attribSize: number;
+  data: TypedArray;
   constructor(
     type: number,
     attribSize: number,
@@ -34,24 +33,13 @@ export class VBO extends Buffer {
     super.update(this.data);
   }
 
-  getVector(i: number): Vec {
+  getVector(i: number): TypedArray {
     const begin = i * this.attribSize;
     const end = begin + this.attribSize;
-    const a = (this.data as TypedArray).subarray(begin, end);
-    return new Vec(a);
+    return this.data.subarray(begin, end);
   }
 
-  // setVector(i: number, v: Vec) {
-  //   const vec = this.getVector(i);
-  //   vec.assign(v);
-  //   ve.getValues().forEach((value, n) => {
-  //     this.data[(i + n) * ve.length] = value;
-  //   });
-  // }
-
-  overwrite(old: number, element: number) {
-    for (let i = 0; i < this.attribSize; i++) {
-      this.data[i + element] = this.data[i + old] as number;
-    }
+  setVector(i: number, v: TypedArray) {
+    this.data.set(v, i * this.attribSize);
   }
 }

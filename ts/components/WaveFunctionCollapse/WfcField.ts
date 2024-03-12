@@ -41,8 +41,7 @@ export class WfcField extends Vec {
     if (tile) {
       this.tile?.texPos.assign(tile.data);
     } else {
-      this.tile?.texPos.assign([0,0]);
-
+      this.tile?.texPos.assign([0, 0]);
     }
   }
 

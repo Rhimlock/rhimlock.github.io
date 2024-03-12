@@ -5,22 +5,22 @@ import { UBOS, gl } from "../gl/gl.js";
 import { dom } from "./htmlElements.js";
 
 export class View {
-  zoom = 1;
   tileSize = 8;
   rect = new Rect(new Float32Array(4));
   depthActive = false;
   mapSize = Vec.newI(81, 61);
   sizeFramebuffer = Vec.newU(640, 480);
+  baseZoom = 3;
 
   constructor() {
     this.updatePos();
     this.updateSize();
   }
+
   getZoom() {
-    return Vec.newF(
-      gl.canvas.width / this.rect.w,
-      gl.canvas.height / this.rect.h,
-    );
+    const ratio = Vec.multiply(Vec.newF(1/gl.canvas.width, 1/gl.canvas.height),this.sizeFramebuffer, );
+    ratio.scale(this.baseZoom);
+    return ratio;
   }
 
   convertPos(clientX: number, clientY: number): Vec {
@@ -42,6 +42,7 @@ export class View {
     gl.canvas.height = dom.canvas.clientHeight;
     this.updateViewport();
     terminal.showLastLine();
+    this.calcZoom();
   }
 
   updateViewport(

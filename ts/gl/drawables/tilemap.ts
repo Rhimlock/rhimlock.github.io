@@ -2,13 +2,13 @@ import { Vec } from "../../components/vec.js";
 import { gl, view } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
-import { Batch } from "./batch.js";
+import { Drawable } from "./drawable.js";
 
 export interface Tile {
   texPos: Vec;
 }
 
-export class TileMap extends Batch {
+export class TileMap extends Drawable {
   private tex: Texture;
   private width: number;
 
@@ -17,7 +17,7 @@ export class TileMap extends Batch {
       { type: gl.UNSIGNED_BYTE, normalized: false },
     ]);
     this.width = size.x;
-    for (let i = 0; i < size.x * size.y; i++) this.createElement();
+    for (let i = 0; i < size.x * size.y; i++) this.createVertex();
     this.tex = new Texture(img);
 
     this.program.setUniform("uTex", this.tex.no);
@@ -27,7 +27,7 @@ export class TileMap extends Batch {
   }
 
   getTile(pos: Vec) {
-    const tile = this.getElement(pos.x + pos.y * this.width) as any as Tile;
+    const tile = this.getVertex(pos.x + pos.y * this.width) as any as Tile;
     return tile;
   }
   setTile(pos: Vec, tex: Vec) {

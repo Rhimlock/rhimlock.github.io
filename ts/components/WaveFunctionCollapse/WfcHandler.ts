@@ -10,7 +10,12 @@ export class WfcHandler {
   grid: Grid;
   tileMap: TileMap;
   done = false;
-  constructor(image: HTMLImageElement, tileSize: number, mapSize: Vec, tileMap: TileMap) {
+  constructor(
+    image: HTMLImageElement,
+    tileSize: number,
+    mapSize: Vec,
+    tileMap: TileMap,
+  ) {
     this.tileMap = tileMap;
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
@@ -45,7 +50,7 @@ export class WfcHandler {
           Vec.newI(i % mapSize.x, Math.floor(i / mapSize.x)),
           this.tiles,
           this.grid,
-          tileMap.getElement(i) as any as Tile
+          tileMap.getVertex(i) as any as Tile,
         ),
       );
     this.grid.cells = [...this.todo];

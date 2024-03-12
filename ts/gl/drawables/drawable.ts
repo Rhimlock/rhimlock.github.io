@@ -11,13 +11,13 @@ export interface BufferInfo {
   normalized?: boolean;
 }
 
-export class Batch {
+export class Drawable {
   protected buffers: VBO[] = [];
   private vao: VAO;
   protected program: Program;
-  private elements: any[] = [];
+  private vertices: Collection<Vec>[] = [];
   protected mode: number = gl.POINTS;
-  private limit: number;
+  protected limit: number;
 
   constructor(count: number, program: Program, info: BufferInfo[] = []) {
     this.limit = count;
@@ -35,30 +35,29 @@ export class Batch {
     this.vao = new VAO(this.buffers);
   }
 
-  createElement(): Collection<Vec> {
-    if (this.elements.length >= this.limit)
+  createVertex(): Collection<Vec> {
+    if (this.vertices.length >= this.limit)
       throw "can't create Element, Batch reached limit";
-    const element: any = {};
-    const n = this.elements.push(element);
-    return this.getElement(n - 1);
+    const vertex: Collection<Vec> = {};
+    const n = this.vertices.push(vertex);
+    return this.getVertex(n - 1);
   }
 
-  removeElement(i: number = this.elements.length - 1) {
-    const last = this.elements.pop();
-    if (i == this.elements.length) return;
+  removeVertex(i: number = this.vertices.length - 1) {
+    const last = this.vertices.pop();
+    if (i == this.vertices.length) return;
 
-    this.buffers.forEach((vbo, n) => {
-      vbo.overwrite(i, this.elements.length);
-      last[i] = this.elements[i][n];
+    this.buffers.forEach((vbo) => {
+      vbo.setVector(i, vbo.getVector(this.vertices.length));
     });
-    this.elements[i] = last;
+    this.vertices[i] = last as Collection<Vec>;
   }
 
-  getElement(i: number) {
+  getVertex(i: number) {
     const element: Collection<Vec> = {};
     this.buffers.forEach((buffer, n) => {
       const a = this.program.attributes[n] as Attribute;
-      element[a.info.name ?? ""] = buffer.getVector(i);
+      element[a.info.name ?? ""] = new Vec(buffer.getVector(i));
     });
     return element;
   }
@@ -72,7 +71,7 @@ export class Batch {
     gl.useProgram(this.program.id);
     gl.bindVertexArray(this.vao.id);
     this.updateUniforms(progress);
-    gl.drawArrays(this.mode, 0, this.elements.length);
+    gl.drawArrays(this.mode, 0, this.vertices.length);
     gl.bindVertexArray(null);
   }
 }

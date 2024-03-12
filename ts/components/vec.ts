@@ -12,21 +12,31 @@ export class Vec {
   static sum(v1: Vec, v2: Vec) {
     return new Vec(v1.data.map((e, i) => e + (v2.data[i] ?? 0)));
   }
-
   static diff(v1: Vec, v2: Vec) {
     return new Vec(v1.data.map((e, i) => e - (v2.data[i] ?? 0)));
   }
   static resized(v: Vec, scale: number) {
     return new Vec(v.data.map((e) => e * scale));
   }
+  static inverted(v: Vec) {
+    return new Vec(v.data.map((v: number) => 1/v));
+  }
+  static multiply(v1: Vec, v2:Vec) {
+    return new Vec(v1.data.map((v,i) => v * (v2.data[i] ?? 1)));
+  }
 
-  add(v: Vec) {
-    this.data.forEach((e, i) => (this.data[i] = e + (v.data[i] ?? 0)));
+  add(values: TypedArray | number[]) {
+    this.data.set(values);
     return this;
   }
 
-  multiply(f: number) {
-    this.data.forEach((e, i) => (this.data[i] = e * f));
+  multiply(values: TypedArray | number[]) {
+    this.data.forEach((e, i) => (this.data[i] = e * (values[i] ?? 1)));
+    return this;
+  }
+  
+  scale(factor: number) {
+    this.data.forEach((e, i) => (this.data[i] = e * factor));
     return this;
   }
 
@@ -34,8 +44,8 @@ export class Vec {
     return this.data.find((e, i) => e !== v.data[i]) === undefined;
   }
 
-  assign(values: TypedArray | number[]) {
-    this.data.forEach((_, i) => (this.data[i] = values[i] ?? 0));
+  assign(array: TypedArray | number[]) {
+    this.data.set(array);
   }
 
   toString() {
@@ -103,9 +113,6 @@ export class Vec {
 // }
 // get rotatedRight() {
 //   return new Vec([-this.y, this.x]);
-// }
-// get inverted() {
-//   return new Vec(this.data.map((v: number) => -v));
 // }
 // get normalized(): Vec {
 //   const l = this.length;
