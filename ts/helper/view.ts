@@ -42,7 +42,6 @@ export class View {
     gl.canvas.height = dom.canvas.clientHeight;
     this.updateViewport();
     terminal.showLastLine();
-    this.calcZoom();
   }
 
   updateViewport(
