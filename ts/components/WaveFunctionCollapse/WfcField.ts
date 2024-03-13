@@ -1,5 +1,4 @@
 import { Tile } from "../../gl/drawables/tilemap.js";
-import { TypedArray } from "../../helper/typedArray.js";
 import { Grid } from "../grid.js";
 import { Vec } from "../vec.js";
 import { WfcTile } from "./WfcTile.js";
@@ -21,7 +20,7 @@ export class WfcField extends Vec {
         this.tiles[Math.ceil(this.tiles.length * Math.random() - 1)] as WfcTile,
       ];
       if (this.tiles[0]) {
-        this.tile.texPos.assign(this.tiles[0]?.data as TypedArray);
+        this.tile.texPos.assign(...this.tiles[0]?.data);
       }
     }
     this.neighbors.forEach((n: WfcField) => n?.clean());
@@ -39,9 +38,9 @@ export class WfcField extends Vec {
     });
     const tile = this.tiles[0];
     if (tile) {
-      this.tile?.texPos.assign(tile.data);
+      this.tile?.texPos.assign(...tile.data);
     } else {
-      this.tile?.texPos.assign([0, 0]);
+      this.tile?.texPos.assign(0, 0);
     }
   }
 

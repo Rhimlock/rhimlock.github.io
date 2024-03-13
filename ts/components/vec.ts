@@ -44,7 +44,7 @@ export class Vec {
     return this.data.find((e, i) => e !== v.data[i]) === undefined;
   }
 
-  assign(array: TypedArray | number[]) {
+  assign(...array: number[]) {
     this.data.set(array);
   }
 

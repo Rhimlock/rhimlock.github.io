@@ -22,7 +22,7 @@ export class Layer extends Drawable {
   }
 
   disable() {
-    this.fbo.disable();
+    Framebuffer.disable();
   }
   updateUniforms(_progress: number): void {
     const zoom = view.getZoom();

@@ -37,7 +37,7 @@ export class Drawable {
 
   createVertex(): Collection<Vec> {
     if (this.vertices.length >= this.limit)
-      throw "can't create Element, Batch reached limit";
+      throw "can't create Element, Buffer reached limit";
     const vertex: Collection<Vec> = {};
     const n = this.vertices.push(vertex);
     return this.getVertex(n - 1);

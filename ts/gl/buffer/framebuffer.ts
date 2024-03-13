@@ -49,7 +49,7 @@ export class Framebuffer {
     );
   }
 
-  disable() {
+  static disable() {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     view.updateViewport();
   }

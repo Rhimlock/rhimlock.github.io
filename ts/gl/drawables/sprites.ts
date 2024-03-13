@@ -33,7 +33,7 @@ export class Sprites extends Drawable {
     spr.pos.y = y;
     spr.tex.z = 16;
     spr.tex.y = 0;
-    spr.color.assign([255, 255, 255, 255]);
+    spr.color.assign(255, 255, 255, 255);
     return spr;
   }
 }

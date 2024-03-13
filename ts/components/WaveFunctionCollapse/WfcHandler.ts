@@ -38,9 +38,10 @@ export class WfcHandler {
               .data as Uint8ClampedArray,
           ),
         ];
-        this.tiles.push(
-          new WfcTile(pixels, Vec.newI(x / tileSize, y / tileSize)),
-        );
+        if (x+y > 0 )
+          this.tiles.push(
+            new WfcTile(pixels, Vec.newI(x / tileSize, y / tileSize)),
+          );
       }
     }
     this.grid = new Grid(mapSize);

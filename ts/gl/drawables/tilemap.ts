@@ -32,7 +32,7 @@ export class TileMap extends Drawable {
   }
   setTile(pos: Vec, tex: Vec) {
     const tile = this.getTile(pos);
-    tile.texPos?.assign(tex.data);
+    tile.texPos?.assign(...tex.data);
   }
 }
 

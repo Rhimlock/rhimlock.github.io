@@ -7,21 +7,24 @@ import { Layer } from "./gl/drawables/Layer.js";
 import { Vec } from "./components/vec.js";
 import { WfcHandler } from "./components/WaveFunctionCollapse/WfcHandler.js";
 import { view } from "./gl/gl.js";
+import { Lights } from "./gl/drawables/lights.js";
 
-const a = new Uint16Array([1,2]);
-const b = a.buffer;
-const c = new Uint8Array(b);
-
-console.log(a,c);
-c[0] = 128;
-console.log(a,c);
-const mapSize = view.mapSize;
-
-const tilemap = new TileMap(mapSize, dom.tiles);
-const wfc = new WfcHandler(dom.tiles, 8, mapSize, tilemap);
-const layerTilemap = new Layer(view.sizeFramebuffer);
-
-wfc.wave(Vec.newI(mapSize.x / 2, mapSize.y / 2));
+const tilemap = new TileMap(view.mapSize, dom.tiles);
+const wfc = new WfcHandler(dom.tiles, 8, view.mapSize, tilemap);
+const layerTilemap = new Layer(view.sizeFramebuffer,.9);
+const layerLight = new Layer(view.sizeFramebuffer,0);
+//const layerShadow = new Layer(view.sizeFramebuffer);
+ const shadows = new Lights(40);
+const lights = new Lights(40);
+const light = lights.createLight();
+ const shadow = shadows.createLight();
+light.pos.x = 40;
+light.pos.y = 30;
+light.radius.x = 200;
+shadow.pos.x = 30;
+shadow.pos.y = 35;
+shadow.radius.x = 50;
+wfc.wave(Vec.newI(view.mapSize.x / 2, view.mapSize.y / 2));
 const tick = (_elapsedTime: number) => {
   info.update(timer.elapsedTime);
 
@@ -29,8 +32,16 @@ const tick = (_elapsedTime: number) => {
 
   layerTilemap.use();
   tilemap.draw();
+  layerLight.use();
+  lights.draw();
+  //layerShadow.use();
+  shadows.draw();
   layerTilemap.disable();
   layerTilemap.draw();
+  layerLight.draw();
+  //layerShadow.draw();
+  //layerLight.disable();
+  //layerShadow.disable();
 };
 
 const timer = new Timer(tick, 0);
