@@ -1,5 +1,5 @@
 import { Vec } from "../../components/vec.js";
-import { gl, view } from "../gl.js";
+import { gl, glsl, view } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { Drawable } from "./drawable.js";
@@ -35,9 +35,6 @@ export class TileMap extends Drawable {
     tile.texPos?.assign(...tex.data);
   }
 }
-
-//needed for glsl-literal plugin
-const glsl = (x: any) => x as string;
 
 const vertexShader = glsl`#version 300 es  
 precision mediump float;

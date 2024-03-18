@@ -5,7 +5,11 @@ export class Vec {
   constructor(typedArray: TypedArray) {
     this.data = typedArray;
   }
+  static newI8 = (...elements: number[]) => new Vec(new Int8Array(elements));
+  static newI16 = (...elements: number[]) => new Vec(new Int16Array(elements));
   static newI = (...elements: number[]) => new Vec(new Int32Array(elements));
+  static newU8 = (...elements: number[]) => new Vec(new Uint8Array(elements));
+  static newU16 = (...elements: number[]) => new Vec(new Uint16Array(elements));
   static newU = (...elements: number[]) => new Vec(new Uint32Array(elements));
   static newF = (...elements: number[]) => new Vec(new Float32Array(elements));
 
@@ -19,10 +23,10 @@ export class Vec {
     return new Vec(v.data.map((e) => e * scale));
   }
   static inverted(v: Vec) {
-    return new Vec(v.data.map((v: number) => 1/v));
+    return new Vec(v.data.map((v: number) => 1 / v));
   }
-  static multiply(v1: Vec, v2:Vec) {
-    return new Vec(v1.data.map((v,i) => v * (v2.data[i] ?? 1)));
+  static multiply(v1: Vec, v2: Vec) {
+    return new Vec(v1.data.map((v, i) => v * (v2.data[i] ?? 1)));
   }
 
   add(values: TypedArray | number[]) {
@@ -34,7 +38,7 @@ export class Vec {
     this.data.forEach((e, i) => (this.data[i] = e * (values[i] ?? 1)));
     return this;
   }
-  
+
   scale(factor: number) {
     this.data.forEach((e, i) => (this.data[i] = e * factor));
     return this;

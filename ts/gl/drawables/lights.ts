@@ -1,31 +1,25 @@
 import { Vec } from "../../components/vec.js";
+import { glsl } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Drawable } from "./drawable.js";
 
 interface Light {
-    pos: Vec;
-    radius: Vec;
-
+  pos: Vec;
+  radius: Vec;
 }
 export class Lights extends Drawable {
-    lights: Light[] = [];
-    constructor(maxLights: number) {
-        super(maxLights, new Program(vertexShader, fragmentShader))
-    }
-    
-    createLight() {
-        const light = this.createVertex() as any as Light;
-        light.radius.x= 10;
-        light.pos.assign(10,10);
-        return light;
+  lights: Light[] = [];
+  constructor(maxLights: number) {
+    super(maxLights, new Program(vertexShader, fragmentShader));
+  }
 
-
-    }
+  createLight() {
+    const light = this.createVertex() as any as Light;
+    light.radius.x = 10;
+    light.pos.assign(10, 10);
+    return light;
+  }
 }
-
-
-//needed for glsl-literal plugin
-const glsl = (x: any) => x as string;
 
 const vertexShader = glsl`#version 300 es  
 precision mediump float;

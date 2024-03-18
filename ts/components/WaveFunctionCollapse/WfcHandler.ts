@@ -38,7 +38,7 @@ export class WfcHandler {
               .data as Uint8ClampedArray,
           ),
         ];
-        if (x+y > 0 )
+        if (x + y > 0)
           this.tiles.push(
             new WfcTile(pixels, Vec.newI(x / tileSize, y / tileSize)),
           );

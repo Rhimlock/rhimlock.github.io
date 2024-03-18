@@ -15,3 +15,6 @@ if (!gl) {
 }
 export const view = new View();
 window.onresize = view.updateSize.bind(view);
+
+//needed for glsl-literal plugin
+export const glsl = (x: any) => x as string;

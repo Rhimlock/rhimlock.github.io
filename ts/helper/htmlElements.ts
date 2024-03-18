@@ -7,6 +7,7 @@ export const dom = {
   commandLine: document.getElementById("commandLine") as HTMLInputElement,
   orks: document.getElementById("orks") as HTMLImageElement,
   humans: document.getElementById("humans") as HTMLImageElement,
+  humans_normal: document.getElementById("humans_normal") as HTMLImageElement,
   tiles: document.getElementById("tiles") as HTMLImageElement,
 
   worldTime: document.getElementById("worldTime") as HTMLSpanElement,

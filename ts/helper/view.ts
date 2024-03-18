@@ -18,13 +18,16 @@ export class View {
   }
 
   getZoom() {
-    const ratio = Vec.multiply(Vec.newF(1/gl.canvas.width, 1/gl.canvas.height),this.sizeFramebuffer, );
+    const ratio = Vec.multiply(
+      Vec.newF(1 / gl.canvas.width, 1 / gl.canvas.height),
+      this.sizeFramebuffer,
+    );
     ratio.scale(this.baseZoom);
     return ratio;
   }
 
   convertPos(clientX: number, clientY: number): Vec {
-    const n = this.tileSize; //* this.zoom;
+    const n = this.tileSize * this.baseZoom;
     return Vec.newF(
       (clientX + window.scrollX - n * 0.5) / n,
       (clientY + window.scrollY - n * 0.5) / n,
