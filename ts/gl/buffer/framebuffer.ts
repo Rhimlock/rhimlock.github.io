@@ -21,23 +21,9 @@ export class Framebuffer {
       0,
     );
     if (depth) {
-      this.depthBuffer = gl.createRenderbuffer() as WebGLRenderbuffer;
-
-      gl.bindRenderbuffer(gl.RENDERBUFFER, this.depthBuffer);
-      gl.renderbufferStorage(
-        gl.RENDERBUFFER,
-        gl.DEPTH_COMPONENT16,
-        size.x,
-        size.y,
-      );
-      gl.framebufferRenderbuffer(
-        gl.FRAMEBUFFER,
-        gl.DEPTH_ATTACHMENT,
-        gl.RENDERBUFFER,
-        this.depthBuffer,
-      );
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      this.depthBuffer = initDepthBuffer(size);
     }
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   }
 
   use() {
@@ -53,4 +39,23 @@ export class Framebuffer {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     view.updateViewport();
   }
+}
+
+function initDepthBuffer(size:Vec, ) {
+  const id = gl.createRenderbuffer() as WebGLRenderbuffer;
+
+      gl.bindRenderbuffer(gl.RENDERBUFFER, id);
+      gl.renderbufferStorage(
+        gl.RENDERBUFFER,
+        gl.DEPTH_COMPONENT16,
+        size.x,
+        size.y,
+      );
+      gl.framebufferRenderbuffer(
+        gl.FRAMEBUFFER,
+        gl.DEPTH_ATTACHMENT,
+        gl.RENDERBUFFER,
+        id,
+      )
+      return id;
 }

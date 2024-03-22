@@ -1,5 +1,6 @@
 import { Tile, TileMap } from "../../gl/drawables/tilemap.js";
 import { Grid } from "../grid.js";
+import { Rect } from "../rect.js";
 import { Vec } from "../vec.js";
 import { WfcField } from "./WfcField.js";
 import { WfcTile } from "./WfcTile.js";
@@ -23,21 +24,13 @@ export class WfcHandler {
 
     for (let y = 0; y < image.height; y += tileSize) {
       for (let x = 0; x < image.width; x += tileSize) {
-        const pixels: Vec[] = [
-          new Vec(ctx?.getImageData(x, y, 1, 1).data as Uint8ClampedArray),
-          new Vec(
-            ctx?.getImageData(x + tileSize - 1, y, 1, 1)
-              .data as Uint8ClampedArray,
-          ),
-          new Vec(
-            ctx?.getImageData(x + tileSize - 1, y + tileSize - 1, 1, 1)
-              .data as Uint8ClampedArray,
-          ),
-          new Vec(
-            ctx?.getImageData(x, y + tileSize - 1, 1, 1)
-              .data as Uint8ClampedArray,
-          ),
+        const rects = [
+          new Rect(new Int16Array([x, y, 1, 1])),
+          new Rect(new Int16Array([x + tileSize - 1, y, 1, 1])),
+          new Rect(new Int16Array([x + tileSize - 1, y + tileSize - 1, 1, 1])),
+          new Rect(new Int16Array([x, y + tileSize - 1, 1, 1])),
         ];
+        const pixels = rects.map(r => new Vec(ctx?.getImageData(r.x, r.y, r.w, r.h).data as Uint8ClampedArray))
         if (x + y > 0)
           this.tiles.push(
             new WfcTile(pixels, Vec.newI(x / tileSize, y / tileSize)),

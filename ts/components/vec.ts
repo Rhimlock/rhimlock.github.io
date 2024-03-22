@@ -9,6 +9,7 @@ export class Vec {
   static newI16 = (...elements: number[]) => new Vec(new Int16Array(elements));
   static newI = (...elements: number[]) => new Vec(new Int32Array(elements));
   static newU8 = (...elements: number[]) => new Vec(new Uint8Array(elements));
+  static newU8clamped = (...elements: number[]) => new Vec(new Uint8ClampedArray(elements));
   static newU16 = (...elements: number[]) => new Vec(new Uint16Array(elements));
   static newU = (...elements: number[]) => new Vec(new Uint32Array(elements));
   static newF = (...elements: number[]) => new Vec(new Float32Array(elements));

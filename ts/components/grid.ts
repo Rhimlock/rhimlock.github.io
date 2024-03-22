@@ -20,12 +20,7 @@ export class Grid {
   }
 
   getNeighbors(pos: Vec) {
-    return [
-      this.getCell(Vec.sum(pos, VDIR.up)),
-      this.getCell(Vec.sum(pos, VDIR.right)),
-      this.getCell(Vec.sum(pos, VDIR.down)),
-      this.getCell(Vec.sum(pos, VDIR.left)),
-    ];
+    return VDIR.all.map(dir => this.getCell(Vec.sum(pos, dir)));
   }
 
   isFieldInGrid(pos: Vec): boolean {

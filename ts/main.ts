@@ -43,9 +43,9 @@ const tick = (_elapsedTime: number) => {
   sprites.draw();
   tilemap.draw();
   layerLight.use();
-  lights.draw();
+  //lights.draw();
   //layerShadow.use();
-  shadows.draw();
+  //shadows.draw();
   layerTilemap.disable();
   layerTilemap.draw();
   layerLight.draw();

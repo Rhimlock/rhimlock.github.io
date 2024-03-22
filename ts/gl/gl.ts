@@ -2,6 +2,7 @@ import { dom } from "../helper/htmlElements.js";
 import { View } from "../helper/view.js";
 import { Collection } from "../helper/Collection.js";
 import { UBO } from "./buffer/ubo.js";
+
 export const UBOS: Collection<UBO> = {};
 
 export const gl = dom.canvas.getContext("webgl2", {

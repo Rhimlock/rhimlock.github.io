@@ -36,7 +36,6 @@ export class View {
 
   updatePos() {
     const pos = this.convertPos(0, 0);
-    this.rect.x = pos.x;
     this.rect.assign(...pos.data);
   }
 
