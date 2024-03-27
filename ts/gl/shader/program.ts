@@ -10,17 +10,21 @@ export class Program {
   id: WebGLProgram | null;
   vert: Shader;
   frag: Shader;
+  transformFeedback: WebGLTransformFeedback | undefined
   attributes = [] as Attribute[];
   uniforms = {} as Collection<Uniform>;
   ubos = {} as Collection<UBO>;
 
-  constructor(srcVertexShader: string, srcFragmentShader: string) {
+  constructor(srcVertexShader: string, srcFragmentShader: string, transformFeedbackOutputs: string[] | undefined = undefined) {
     this.id = gl.createProgram();
     this.vert = new Shader(gl.VERTEX_SHADER, srcVertexShader);
     this.frag = new Shader(gl.FRAGMENT_SHADER, srcFragmentShader);
     if (this.id && this.vert.id && this.frag.id) {
       gl.attachShader(this.id, this.vert.id);
       gl.attachShader(this.id, this.frag.id);
+      if (transformFeedbackOutputs) {
+        this.transformFeedback = this.initTransformFeedback(transformFeedbackOutputs);
+      } 
       gl.linkProgram(this.id);
       this.use();
       var err = gl.getProgramInfoLog(this.id);
@@ -49,5 +53,17 @@ export class Program {
     }
 
     return value;
+  }
+
+  private initTransformFeedback(outputs: string[]) : WebGLTransformFeedback
+  {
+    const tf = gl.createTransformFeedback() as WebGLTransformFeedback;
+    gl.transformFeedbackVaryings(
+      this.id as WebGLProgram,
+      outputs,
+      gl.SEPARATE_ATTRIBS,
+  );
+    return tf;
+
   }
 }
