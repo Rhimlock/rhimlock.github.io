@@ -9,6 +9,7 @@ import { VAO } from "../vao.js";
 export interface BufferInfo {
   type: number;
   normalized?: boolean;
+  instanced?:boolean;
 }
 
 export class Drawable {
@@ -29,6 +30,7 @@ export class Drawable {
           a.size,
           count,
           info[i]?.normalized,
+          info[i]?.instanced
         ),
       );
     });
@@ -72,6 +74,7 @@ export class Drawable {
     gl.bindVertexArray(this.vao.id);
     this.updateUniforms(progress);
     gl.drawArrays(this.mode, 0, this.vertices.length);
+    gl.drawArraysInstanced(this.mode,0,6,this.vertices.length);
     gl.bindVertexArray(null);
   }
 }

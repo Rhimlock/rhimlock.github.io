@@ -8,6 +8,7 @@ import { Buffer } from "./buffer.js";
 export class VBO extends Buffer {
   type: number;
   normalized: boolean;
+  instanced: boolean;
   attribSize: number;
   data: TypedArray;
   constructor(
@@ -15,6 +16,7 @@ export class VBO extends Buffer {
     attribSize: number,
     count: number,
     normalized = false,
+    instanced = false
   ) {
     super(gl.ARRAY_BUFFER, gl.STATIC_DRAW);
     this.type = (
@@ -24,6 +26,7 @@ export class VBO extends Buffer {
       : type;
 
     this.normalized = normalized;
+    this.instanced = instanced;
     this.attribSize = attribSize;
     this.data = createTypedArrayByGlType(this.type, attribSize * count);
     this.resize(this.data.byteLength);
