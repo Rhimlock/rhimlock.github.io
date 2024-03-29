@@ -2,59 +2,15 @@ import { Collection } from "../../helper/Collection.js";
 import { UBO } from "../buffer/ubo.js";
 import { gl } from "../gl.js";
 
-export interface Uniform {
-  info: WebGLActiveInfo;
-  location: WebGLUniformLocation | null;
-  offset: number | undefined;
-  ubo: UBO | undefined;
-  func: Function;
-}
-
-export function getUniforms(id: WebGLProgram): Collection<Uniform> {
-  const uniforms: Collection<Uniform> = {};
-
-  for (let i = 0; i < gl.getProgramParameter(id, gl.ACTIVE_UNIFORMS); i++) {
-    const info = gl.getActiveUniform(id, i);
-    if (info) {
-      const name = info.name;
-      const location = gl.getUniformLocation(id, name);
-
-      uniforms[name] = {
-        info,
-        location,
-        ubo: UBO.byUniformName(name),
-        func: lookupSetter(info.type),
-      } as Uniform;
-    }
-  }
-  return uniforms;
-}
-
 export function getUniformBlocks(program: WebGLProgram) {
   const ubos = {} as Collection<UBO>;
-  const indices = new Array(gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS))
-    .fill(-1)
-    .map((_, i) => i);
-  if (indices.length > 0) {
-    const blockIndices: number[] = gl.getActiveUniforms(
-      program,
-      indices,
-      gl.UNIFORM_BLOCK_INDEX,
-    );
-    blockIndices
-      .filter((i) => i >= 0)
-      .forEach((blockIndex) => {
-        const blockName = gl.getActiveUniformBlockName(program, blockIndex);
-        if (blockName) {
-          ubos[blockName] = UBO.byName(program, blockName);
-        } else {
-        }
-      });
-  }
+  Array(gl.getProgramParameter(program, gl.ACTIVE_UNIFORM_BLOCKS)).fill(undefined)
+  .map((_,i) => gl.getActiveUniformBlockName(program,i) as string)
+  .map(blockName => ubos[blockName] = UBO.byName(program, blockName));
   return ubos;
 }
 
-export function getBlockUniforms(program: WebGLProgram, ubo: UBO) {
+export function getBlockOffsets(program: WebGLProgram, ubo: UBO) {
   const blockIndex = gl.getUniformBlockIndex(program, ubo.blockName);
   const indices = gl.getActiveUniformBlockParameter(
     program,
@@ -66,49 +22,42 @@ export function getBlockUniforms(program: WebGLProgram, ubo: UBO) {
     indices,
     gl.UNIFORM_OFFSET,
   ) as number[];
-  const uniforms: Collection<Uniform> = {};
-  indices.forEach((index, i) => {
-    const info = gl.getActiveUniform(program, index);
-    if (info) {
-      uniforms[info.name] = {
-        info,
-        location: null,
-        offset: offsets[i],
-        ubo,
-      } as Uniform;
-    }
-  });
-  return uniforms;
+
+  const collection = {} as Collection<number>;
+  indices.forEach((index,i) => {
+    const info =  gl.getActiveUniform(program,index) as WebGLActiveInfo;
+    collection[info.name] = offsets[i] as number;
+  })
+  return collection
 }
 
-function lookupSetter(type: number): Function {
+export function lookupUniformSetter(type: number, location: WebGLUniformLocation): Function {
   switch (type) {
     case gl.SAMPLER_2D:
-      return gl.uniform1i;
-    case gl.UNSIGNED_INT:
-      return gl.uniform1ui;
-    case gl.UNSIGNED_INT_VEC2:
-      return gl.uniform2uiv;
-    case gl.UNSIGNED_INT_VEC3:
-      return gl.uniform3uiv;
-    case gl.UNSIGNED_INT_VEC3:
-      return gl.uniform4uiv;
     case gl.INT:
-      return gl.uniform1i;
+      return (value: number) => gl.uniform1i(location, value)
     case gl.INT_VEC2:
-      return gl.uniform2iv;
+      return (value: Iterable<number>) => gl.uniform2iv(location, value)
     case gl.INT_VEC3:
-      return gl.uniform3iv;
+      return (value: Iterable<number>) => gl.uniform3iv(location, value)
     case gl.INT_VEC3:
-      return gl.uniform4iv;
+      return (value: Iterable<number>) => gl.uniform4iv(location, value)
+    case gl.UNSIGNED_INT:
+      return (value: number) => gl.uniform1ui(location, value)
+    case gl.UNSIGNED_INT_VEC2:
+      return (value: Iterable<number>) => gl.uniform2uiv(location, value)
+    case gl.UNSIGNED_INT_VEC3:
+      return (value: Iterable<number>) => gl.uniform3uiv(location, value)
+    case gl.UNSIGNED_INT_VEC3:
+      return (value: Iterable<number>) => gl.uniform4uiv(location, value)
     case gl.FLOAT:
-      return gl.uniform1f;
+      return (value: number) => gl.uniform1f(location, value);
     case gl.FLOAT_VEC2:
-      return gl.uniform2fv;
+      return (value: Iterable<number>) => gl.uniform2fv(location, value)
     case gl.FLOAT_VEC3:
-      return gl.uniform3fv;
+      return (value: Iterable<number>) => gl.uniform3fv(location, value)
     case gl.FLOAT_VEC4:
-      return gl.uniform4fv;
+      return (value: Iterable<number>) => gl.uniform4fv(location, value)
     default:
       throw "Could not lookup uniform sett for type " + type;
   }

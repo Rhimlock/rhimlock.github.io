@@ -1,14 +1,14 @@
 import { Collection } from "../../helper/Collection.js";
 import { TypedArray } from "../../helper/typedArray.js";
 import { gl, UBOS } from "../gl.js";
-import { Uniform, getBlockUniforms } from "../shader/uniforms.js";
+import { getBlockOffsets } from "../shader/uniforms.js";
 import { Buffer } from "./buffer.js";
 
 let baseIndex = 0;
 export class UBO extends Buffer {
   blockName: string;
   blockSize: number;
-  uniforms: Collection<Uniform> = {};
+  uniformOffsets: Collection<number>
   baseIndex: number;
 
   private constructor(program: WebGLProgram, blockName: string) {
@@ -23,7 +23,7 @@ export class UBO extends Buffer {
     this.baseIndex = baseIndex++;
     this.resize(this.blockSize);
     gl.bindBufferBase(this.target, this.baseIndex, this.id);
-    this.uniforms = getBlockUniforms(program, this);
+    this.uniformOffsets = getBlockOffsets(program, this);
     UBOS[blockName] = this;
   }
 
@@ -33,8 +33,8 @@ export class UBO extends Buffer {
   }
 
   updateUniform(name: string, values: TypedArray) {
-    const uniform = this.uniforms[name] as Uniform;
-    this.update(values, uniform?.offset);
+    const offset = this.uniformOffsets[name] as number;
+    this.update(values, offset);
   }
 
   static byName(program: WebGLProgram, blockName: string) {
@@ -44,7 +44,7 @@ export class UBO extends Buffer {
   }
 
   static byUniformName(uniformName: string) {
-    const ubo = Object.values(UBOS).find((ubo) => ubo.uniforms[uniformName]);
+    const ubo = Object.values(UBOS).find((ubo) => ubo.uniformOffsets[uniformName] !== undefined);
     return ubo;
   }
 }

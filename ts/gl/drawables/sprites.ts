@@ -59,7 +59,7 @@ void main() {
   gl_Position = vec4(v, v.y, 1.0);
   gl_PointSize = tex.z;
   vTex = vec3(tex.xy * tex.z * uTexInv * uTileSize, tex.z  * uTexInv.x );
-  vColor = color;
+  vColor = color *1.1;
 }
 `;
 

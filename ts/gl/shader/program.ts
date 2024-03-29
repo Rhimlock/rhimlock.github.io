@@ -1,69 +1,68 @@
 import { Collection } from "../../helper/Collection.js";
 import { UBO } from "../buffer/ubo.js";
 import { gl } from "../gl.js";
-import { Attribute, fetchAttributes } from "./attribute.js";
-import { Shader } from "./shader.js";
-import { Uniform, getUniforms, getUniformBlocks } from "./uniforms.js";
+import {getUniformBlocks, lookupUniformSetter } from "./uniforms.js";
 let currentProgram: WebGLProgram | null;
 
 export class Program {
-  id: WebGLProgram | null;
-  vert: Shader;
-  frag: Shader;
-  transformFeedback: WebGLTransformFeedback | undefined
-  attributes = [] as Attribute[];
-  uniforms = {} as Collection<Uniform>;
+  id: WebGLProgram;
+  attributes: WebGLActiveInfo[]
+  uniformSetters: Collection<Function>;
   ubos = {} as Collection<UBO>;
 
-  constructor(srcVertexShader: string, srcFragmentShader: string, transformFeedbackOutputs: string[] | undefined = undefined) {
-    this.id = gl.createProgram();
-    this.vert = new Shader(gl.VERTEX_SHADER, srcVertexShader);
-    this.frag = new Shader(gl.FRAGMENT_SHADER, srcFragmentShader);
-    if (this.id && this.vert.id && this.frag.id) {
-      gl.attachShader(this.id, this.vert.id);
-      gl.attachShader(this.id, this.frag.id);
-      if (transformFeedbackOutputs) {
-        this.transformFeedback = this.initTransformFeedback(transformFeedbackOutputs);
-      } 
-      gl.linkProgram(this.id);
-      this.use();
-      var err = gl.getProgramInfoLog(this.id);
-      if (err) throw `linkingError: ${err}`;
-      this.attributes = fetchAttributes(this.id);
-      this.ubos = getUniformBlocks(this.id);
-      this.uniforms = getUniforms(this.id);
-    }
+  constructor(srcVertexShader: string, srcFragmentShader: string, transformFeedbackOutputs: string[] = []) {
+    this.id = initProgram(srcVertexShader, srcFragmentShader, transformFeedbackOutputs);
+    this.attributes = fetchAttributes(this.id);
+    this.ubos = getUniformBlocks(this.id);
+    this.uniformSetters = fetchUniformSetters(this.id);
   }
+
   use() {
     if (currentProgram != this.id) {
       gl.useProgram(this.id);
       currentProgram = this.id;
     }
   }
-  setUniform(name: string, value: any) {
+
+  setUniform(uniformName: string, value: any) {
     this.use();
-    const uniform = this.uniforms[name];
-    if (uniform) {
-      if (uniform.location) {
-        uniform.func.call(gl, uniform.location, value);
-      } else {
-        if (!isNaN(value)) value = [value];
-        uniform.ubo?.updateUniform(uniform.info.name, new Float32Array(value));
-      }
-    }
-
-    return value;
+    const setter = this.uniformSetters[uniformName];
+    if (setter) setter(value);
   }
+}
 
-  private initTransformFeedback(outputs: string[]) : WebGLTransformFeedback
-  {
-    const tf = gl.createTransformFeedback() as WebGLTransformFeedback;
-    gl.transformFeedbackVaryings(
-      this.id as WebGLProgram,
-      outputs,
-      gl.SEPARATE_ATTRIBS,
-  );
-    return tf;
+function initProgram(srcVS: string, srcFS: string, tfOutputs: string[]) {
+  const id = gl.createProgram() as WebGLProgram;
+  gl.attachShader(id, initShader(gl.VERTEX_SHADER, srcVS));
+  gl.attachShader(id, initShader(gl.FRAGMENT_SHADER, srcFS));
+  if (tfOutputs.length > 0) gl.transformFeedbackVaryings(id, tfOutputs, gl.SEPARATE_ATTRIBS);
+  gl.linkProgram(id);
+  var err = gl.getProgramInfoLog(id);
+  if (err) throw `linkingError: ${err}`;
+  return id;
+};
 
-  }
+function initShader(type: number, src: string) {
+  const id = gl.createShader(type) as WebGLShader;
+  gl.shaderSource(id, src);
+  gl.compileShader(id);
+  const err = gl.getShaderInfoLog(id);
+  if (err) throw `compileError: ${type} - ${err}`;
+  return id;
+}
+
+function fetchAttributes(id: WebGLProgram) {
+  return new Array(gl.getProgramParameter(id, gl.ACTIVE_ATTRIBUTES)).fill({})
+  .map((_,i) => gl.getActiveAttrib(id,i) as WebGLActiveInfo)
+}
+
+function fetchUniformSetters(id: WebGLProgram) {
+  const setters = {} as Collection<Function>;
+  new Array(gl.getProgramParameter(id, gl.ACTIVE_UNIFORMS)).fill({})
+  .map((_,i) => gl.getActiveUniform(id,i) as WebGLActiveInfo)
+  .forEach(info => {
+    const location = gl.getUniformLocation(id, info.name);
+    if (location) setters[info.name] = lookupUniformSetter(info.type,location);
+  })
+  return setters
 }
