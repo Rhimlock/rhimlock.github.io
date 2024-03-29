@@ -54,6 +54,7 @@ function initShader(type: number, src: string) {
 function fetchAttributes(id: WebGLProgram) {
   return new Array(gl.getProgramParameter(id, gl.ACTIVE_ATTRIBUTES)).fill({})
   .map((_,i) => gl.getActiveAttrib(id,i) as WebGLActiveInfo)
+  .filter(info => gl.getAttribLocation(id, info.name) >= 0)
 }
 
 function fetchUniformSetters(id: WebGLProgram) {
