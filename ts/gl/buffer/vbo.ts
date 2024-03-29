@@ -1,6 +1,4 @@
-import {
-  TypedArray,
-} from "../../helper/typedArray.js";
+import { TypedArray } from "../../helper/typedArray.js";
 import { gl } from "../gl.js";
 import { createTypedArrayByGlType } from "../mapper.js";
 import { Buffer } from "./buffer.js";

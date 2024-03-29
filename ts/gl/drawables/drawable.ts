@@ -42,7 +42,6 @@ export class Drawable {
       );
     });
     this.vao = new VAO(this.buffers);
-
   }
 
   createVertex(): Collection<Vec> {
@@ -96,6 +95,6 @@ export class Drawable {
     this.postDraw();
   }
 
-  preDraw() { }
-  postDraw() { }
+  preDraw() {}
+  postDraw() {}
 }

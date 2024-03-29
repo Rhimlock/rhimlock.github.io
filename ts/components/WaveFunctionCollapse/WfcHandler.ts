@@ -30,7 +30,12 @@ export class WfcHandler {
           new Rect(new Int16Array([x + tileSize - 1, y + tileSize - 1, 1, 1])),
           new Rect(new Int16Array([x, y + tileSize - 1, 1, 1])),
         ];
-        const pixels = rects.map(r => new Vec(ctx?.getImageData(r.x, r.y, r.w, r.h).data as Uint8ClampedArray))
+        const pixels = rects.map(
+          (r) =>
+            new Vec(
+              ctx?.getImageData(r.x, r.y, r.w, r.h).data as Uint8ClampedArray,
+            ),
+        );
         if (x + y > 0)
           this.tiles.push(
             new WfcTile(pixels, Vec.newI(x / tileSize, y / tileSize)),

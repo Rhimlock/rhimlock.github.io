@@ -8,7 +8,7 @@ let baseIndex = 0;
 export class UBO extends Buffer {
   blockName: string;
   blockSize: number;
-  uniformOffsets: Collection<number>
+  uniformOffsets: Collection<number>;
   baseIndex: number;
 
   private constructor(program: WebGLProgram, blockName: string) {
@@ -44,7 +44,9 @@ export class UBO extends Buffer {
   }
 
   static byUniformName(uniformName: string) {
-    const ubo = Object.values(UBOS).find((ubo) => ubo.uniformOffsets[uniformName] !== undefined);
+    const ubo = Object.values(UBOS).find(
+      (ubo) => ubo.uniformOffsets[uniformName] !== undefined,
+    );
     return ubo;
   }
 }

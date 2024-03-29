@@ -14,15 +14,15 @@ const tilemap = new TileMap(view.mapSize, dom.tiles);
 const wfc = new WfcHandler(dom.tiles, 8, view.mapSize, tilemap);
 const layerTilemap = new Layer(view.sizeFramebuffer, 0.9);
 const layerLight = new Layer(view.sizeFramebuffer, 0);
-const sprites = new Sprites(1024,dom.humans_normal);
+const sprites = new Sprites(1024, dom.humans_normal);
 
-for(let y= 0; y < 10; y++) {
-  for(let x= 0; x < 14; x++) {
-    const spr = sprites.createSprite(x*20,y*20);
+for (let y = 0; y < 10; y++) {
+  for (let x = 0; x < 14; x++) {
+    const spr = sprites.createSprite(x * 20, y * 20);
     spr.tex.x = x;
     spr.tex.y = y;
-    spr.color.assign(100,0,100,255);
-  } 
+    spr.color.assign(100, 0, 100, 255);
+  }
 }
 const shadows = new Lights(40);
 const lights = new Lights(40);
