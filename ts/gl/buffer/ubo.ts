@@ -23,7 +23,7 @@ export class UBO extends Buffer {
     this.baseIndex = baseIndex++;
     this.resize(this.blockSize);
     gl.bindBufferBase(this.target, this.baseIndex, this.id);
-    this.uniformOffsets = getBlockOffsets(program, this);
+    this.uniformOffsets = getBlockOffsets(program, blockIndex);
     UBOS[blockName] = this;
   }
 

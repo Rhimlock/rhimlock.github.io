@@ -17,9 +17,6 @@ export class VAO {
         0,
         0,
       );
-      // if (buffer.instanced) {
-      //   gl.vertexAttribDivisor(i,1);
-      // }
     });
     gl.bindVertexArray(null);
   }

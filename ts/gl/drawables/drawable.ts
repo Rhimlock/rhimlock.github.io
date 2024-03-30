@@ -9,8 +9,6 @@ import { VAO } from "../vao.js";
 export interface BufferInfo {
   type: number;
   normalized?: boolean;
-  //instanced?: boolean;
-  //transformFeedbackIndex?: number;
 }
 
 export class Drawable {
@@ -18,17 +16,12 @@ export class Drawable {
   private vao: VAO;
   protected program: Program;
   private vertices: Collection<Vec>[] = [];
-  //private transformFeedback: WebGLTransformFeedback | undefined;
   protected mode: number = gl.POINTS;
   protected limit: number;
 
   constructor(count: number, program: Program, info: BufferInfo[] = []) {
     this.limit = count;
     this.program = program;
-    // if (info.some(i => i.transformFeedbackIndex !== undefined)) {
-    //   this.transformFeedback = gl.createTransformFeedback() as WebGLTransformFeedback;
-    //   gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, this.transformFeedback);
-    // }
     program.attributes.forEach((a, i) => {
       this.buffers.push(
         new VBO(
@@ -36,8 +29,6 @@ export class Drawable {
           lookupSize(a.type),
           count,
           info[i]?.normalized,
-          //info[i]?.instanced,
-          //info[i]?.transformFeedbackIndex,
         ),
       );
     });
@@ -80,17 +71,7 @@ export class Drawable {
     gl.useProgram(this.program.id);
     gl.bindVertexArray(this.vao.id);
     this.updateUniforms(progress);
-    // this.preDraw();
-    // if (this.transformFeedback) {
-    //   gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, this.transformFeedback);
-    //   gl.beginTransformFeedback(gl.POINTS);
-    // }
     gl.drawArrays(this.mode, 0, this.vertices.length);
-    //gl.drawArraysInstanced(this.mode,0,6,this.vertices.length);
-    // if (this.transformFeedback) {
-    //   gl.endTransformFeedback();
-    //   gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, null);
-    // }
     gl.bindVertexArray(null);
     this.postDraw();
   }

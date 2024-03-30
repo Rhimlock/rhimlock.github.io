@@ -11,8 +11,7 @@ export function getUniformBlocks(program: WebGLProgram) {
   return ubos;
 }
 
-export function getBlockOffsets(program: WebGLProgram, ubo: UBO) {
-  const blockIndex = gl.getUniformBlockIndex(program, ubo.blockName);
+export function getBlockOffsets(program: WebGLProgram, blockIndex: number) {
   const indices = gl.getActiveUniformBlockParameter(
     program,
     blockIndex,

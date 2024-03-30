@@ -6,7 +6,6 @@ import { Buffer } from "./buffer.js";
 export class VBO extends Buffer {
   type: number;
   normalized: boolean;
-  //instanced: boolean;
   attribSize: number;
   data: TypedArray;
   constructor(
@@ -14,8 +13,6 @@ export class VBO extends Buffer {
     attribSize: number,
     count: number,
     normalized = false,
-    //instanced = false,
-    //transformFeedback: number | undefined = undefined
   ) {
     super(gl.ARRAY_BUFFER, gl.STATIC_DRAW);
     this.type = (
@@ -25,13 +22,9 @@ export class VBO extends Buffer {
       : type;
 
     this.normalized = normalized;
-    //this.instanced = instanced;
     this.attribSize = attribSize;
     this.data = createTypedArrayByGlType(this.type, attribSize * count);
     this.resize(this.data.byteLength);
-    // if (transformFeedback != undefined) {
-    //   gl.bindBufferBase(gl.TRANSFORM_FEEDBACK_BUFFER,transformFeedback, this.id);
-    // }
   }
 
   update() {
