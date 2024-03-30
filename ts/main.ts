@@ -7,13 +7,12 @@ import { Layer } from "./gl/drawables/Layer.js";
 import { Vec } from "./components/vec.js";
 import { WfcHandler } from "./components/WaveFunctionCollapse/WfcHandler.js";
 import { view } from "./gl/gl.js";
-import { Lights } from "./gl/drawables/lights.js";
 import { Sprites } from "./gl/drawables/sprites.js";
 
 const tilemap = new TileMap(view.mapSize, dom.tiles);
 const wfc = new WfcHandler(dom.tiles, 8, view.mapSize, tilemap);
 const layerTilemap = new Layer(view.sizeFramebuffer, 0.9);
-const layerLight = new Layer(view.sizeFramebuffer, 0);
+const layerSprites = new Layer(view.sizeFramebuffer, 0);
 const sprites = new Sprites(1024, dom.humans_normal);
 
 for (let y = 0; y < 10; y++) {
@@ -24,16 +23,6 @@ for (let y = 0; y < 10; y++) {
     spr.color.assign(100, 0, 100, 255);
   }
 }
-const shadows = new Lights(40);
-const lights = new Lights(40);
-const light = lights.createLight();
-const shadow = shadows.createLight();
-light.pos.x = 40;
-light.pos.y = 30;
-light.radius.x = 200;
-shadow.pos.x = 30;
-shadow.pos.y = 35;
-shadow.radius.x = 50;
 wfc.wave(Vec.newI(view.mapSize.x / 2, view.mapSize.y / 2));
 const tick = (_elapsedTime: number) => {
   info.update(timer.elapsedTime);
@@ -41,18 +30,13 @@ const tick = (_elapsedTime: number) => {
   if (!wfc.done) wfc.wave();
 
   layerTilemap.use();
-  sprites.draw();
+
   tilemap.draw();
-  layerLight.use();
-  //lights.draw();
-  //layerShadow.use();
-  //shadows.draw();
-  layerTilemap.disable();
+  layerSprites.use();
+  sprites.draw();
+  Layer.disable();
   layerTilemap.draw();
-  layerLight.draw();
-  //layerShadow.draw();
-  //layerLight.disable();
-  //layerShadow.disable();
+  layerSprites.draw();
 };
 
 const timer = new Timer(tick, 0);

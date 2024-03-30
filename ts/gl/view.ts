@@ -1,8 +1,8 @@
 import { Rect } from "../components/rect.js";
 import { Vec } from "../components/vec.js";
 import { terminal } from "../controls/terminal.js";
-import { UBOS, gl } from "../gl/gl.js";
-import { dom } from "./htmlElements.js";
+import { UBOS, gl } from "./gl.js";
+import { dom } from "../helper/htmlElements.js";
 
 export class View {
   tileSize = 8;

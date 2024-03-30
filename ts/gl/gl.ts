@@ -1,5 +1,5 @@
 import { dom } from "../helper/htmlElements.js";
-import { View } from "../helper/view.js";
+import { View } from "./view.js";
 import { Collection } from "../helper/Collection.js";
 import { UBO } from "./buffer/ubo.js";
 

@@ -21,7 +21,7 @@ export class Layer extends Drawable {
     this.fbo.use();
   }
 
-  disable() {
+  static disable() {
     Framebuffer.disable();
   }
   updateUniforms(_progress: number): void {
