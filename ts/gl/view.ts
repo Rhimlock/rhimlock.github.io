@@ -8,7 +8,7 @@ export class View {
   tileSize = 8;
   rect = new Rect(0,0,0,0);
   depthActive = false;
-  mapSize = Vec.newI(128, 128);
+  mapSize = Vec.newI(64, 64);
   sizeFramebuffer = Vec.newU(512, 512);
   baseZoom = 1;
 

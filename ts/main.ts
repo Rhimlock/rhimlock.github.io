@@ -23,13 +23,17 @@ for (let y = 0; y < 10; y++) {
     spr.color.assign(100, 0, 100, 255);
   }
 }
-//while (!wfc.done) wfc.wave();
 wfc.wave(Vec.newI(view.mapSize.x / 2, view.mapSize.y / 2));
 const tick = (_elapsedTime: number) => {
   info.update(timer.elapsedTime);
 
-  if (!wfc.done) wfc.wave();
+  if (!wfc.done) {
+    wfc.wave();
+    wfc.wave();
+    wfc.wave();
+    wfc.wave();
 
+  }
   layerTilemap.use();
 
   tilemap.draw();
