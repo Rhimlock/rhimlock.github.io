@@ -3,12 +3,13 @@ import { UBO } from "../buffer/ubo.js";
 import { gl } from "../gl.js";
 
 export function getUniformBlocks(program: WebGLProgram) {
-  const ubos = {} as Collection<UBO>;
-  Array(gl.getProgramParameter(program, gl.ACTIVE_UNIFORM_BLOCKS))
+  return Array(gl.getProgramParameter(program, gl.ACTIVE_UNIFORM_BLOCKS))
     .fill(undefined)
     .map((_, i) => gl.getActiveUniformBlockName(program, i) as string)
-    .map((blockName) => (ubos[blockName] = UBO.byName(program, blockName)));
-  return ubos;
+    .reduce((ubos, blockName) => 
+    (ubos[blockName] = UBO.byName(program, blockName)
+    , ubos)
+      , {} as Collection<UBO>)
 }
 
 export function getBlockOffsets(program: WebGLProgram, blockIndex: number) {

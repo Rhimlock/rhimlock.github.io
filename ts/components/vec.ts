@@ -60,7 +60,7 @@ export class Vec {
 
   get length() {
     return Math.sqrt(
-      (this.data as any as number[]).reduce((a, v) => a + v * v, 0),
+      (this.data as any as number[]).reduce((len, v) => len + v * v, 0),
     );
   }
 

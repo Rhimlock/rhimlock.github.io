@@ -6,7 +6,7 @@ import { dom } from "../helper/htmlElements.js";
 
 export class View {
   tileSize = 8;
-  rect = new Rect(new Float32Array(4));
+  rect = new Rect(0,0,0,0);
   depthActive = false;
   mapSize = Vec.newI(81, 61);
   sizeFramebuffer = Vec.newU(640, 480);
@@ -49,7 +49,7 @@ export class View {
   updateViewport(
     size: Vec = Vec.newI(gl.drawingBufferWidth, gl.drawingBufferHeight),
     depth = true,
-    color: Vec = Vec.newF(0.1, 0.1, 1, 1),
+    color: Vec = Vec.newF(0.1, 0.1, 0.1, 0),
   ) {
     gl.clearColor(color.r, color.g, color.b, color.a);
     this.setDepth(depth);

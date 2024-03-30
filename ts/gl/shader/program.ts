@@ -20,9 +20,9 @@ export class Program {
       srcFragmentShader,
       transformFeedbackOutputs,
     );
-    this.attributes = fetchAttributes(this.id);
+    this.attributes = getAttributes(this.id);
     this.ubos = getUniformBlocks(this.id);
-    this.uniformSetters = fetchUniformSetters(this.id);
+    this.uniformSetters = getUniformSetters(this.id);
   }
 
   use() {
@@ -60,14 +60,14 @@ function initShader(type: number, src: string) {
   return id;
 }
 
-function fetchAttributes(id: WebGLProgram) {
+function getAttributes(id: WebGLProgram) {
   return new Array(gl.getProgramParameter(id, gl.ACTIVE_ATTRIBUTES))
     .fill({})
     .map((_, i) => gl.getActiveAttrib(id, i) as WebGLActiveInfo)
     .filter((info) => gl.getAttribLocation(id, info.name) >= 0);
 }
 
-function fetchUniformSetters(id: WebGLProgram) {
+function getUniformSetters(id: WebGLProgram) {
   const setters = {} as Collection<Function>;
   new Array(gl.getProgramParameter(id, gl.ACTIVE_UNIFORMS))
     .fill({})

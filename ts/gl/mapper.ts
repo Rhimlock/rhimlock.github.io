@@ -1,6 +1,6 @@
 import { gl } from "./gl.js";
 
-export function lookupSize(type: number): number {
+export function getNumComponents(type: number): number {
   switch (type) {
     case gl.FLOAT:
     case gl.UNSIGNED_INT:

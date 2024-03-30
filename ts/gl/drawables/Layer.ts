@@ -1,3 +1,4 @@
+import { Rect } from "../../components/rect.js";
 import { Vec } from "../../components/vec.js";
 import { Framebuffer } from "../buffer/framebuffer.js";
 import { gl, glsl, view } from "../gl.js";
@@ -10,8 +11,8 @@ export class Layer extends Drawable {
     super(4, new Program(vertexShader, fragmentShader));
     this.mode = gl.TRIANGLE_FAN;
     this.fbo = new Framebuffer(size, true);
-    this.buffers[0]?.data.set([-1, 1, -1, -1, 1, -1, 1, 1]);
-    this.buffers[1]?.data.set([0, 1, 0, 0, 1, 0, 1, 1]);
+    this.buffers[0]?.data.set(new Rect(-1,-1,2,2).asCoords());
+    this.buffers[1]?.data.set(new Rect(0,0,1,1).asCoords());
     new Array(4).fill(0).forEach((_) => this.createVertex());
     this.program.setUniform("uTex", this.fbo.tex.no);
     this.program.setUniform("uLayer", depth);

@@ -25,10 +25,10 @@ export class WfcHandler {
     for (let y = 0; y < image.height; y += tileSize) {
       for (let x = 0; x < image.width; x += tileSize) {
         const rects = [
-          new Rect(new Int16Array([x, y, 1, 1])),
-          new Rect(new Int16Array([x + tileSize - 1, y, 1, 1])),
-          new Rect(new Int16Array([x + tileSize - 1, y + tileSize - 1, 1, 1])),
-          new Rect(new Int16Array([x, y + tileSize - 1, 1, 1])),
+          new Rect(x, y, 1, 1),
+          new Rect(x + tileSize - 1, y, 1, 1),
+          new Rect(x + tileSize - 1, y + tileSize - 1, 1, 1),
+          new Rect(x, y + tileSize - 1, 1, 1),
         ];
         const pixels = rects.map(
           (r) =>

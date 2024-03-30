@@ -2,7 +2,7 @@ import { Vec } from "../../components/vec.js";
 import { Collection } from "../../helper/Collection.js";
 import { VBO } from "../buffer/vbo.js";
 import { gl } from "../gl.js";
-import { lookupSize } from "../mapper.js";
+import { getNumComponents } from "../mapper.js";
 import { Program } from "../shader/program.js";
 import { VAO } from "../vao.js";
 
@@ -26,7 +26,7 @@ export class Drawable {
       this.buffers.push(
         new VBO(
           info[i]?.type ?? a.type,
-          lookupSize(a.type),
+          getNumComponents(a.type),
           count,
           info[i]?.normalized,
         ),
