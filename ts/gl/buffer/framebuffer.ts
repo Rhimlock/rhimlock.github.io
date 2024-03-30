@@ -31,7 +31,7 @@ export class Framebuffer {
     view.updateViewport(
       this.size,
       this.depthBuffer != undefined,
-      Vec.newF(1, 0, 0, 0),
+      Vec.newF(0, 0, 0, 0),
     );
   }
 

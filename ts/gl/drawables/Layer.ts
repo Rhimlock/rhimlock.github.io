@@ -52,5 +52,6 @@ in vec2 vTexPos;
 
 void main() {    
   outColor = texture(uTex,vTexPos);
+  if (vTexPos.x <= 0.001) outColor.r = 1.0;
 }
 `;

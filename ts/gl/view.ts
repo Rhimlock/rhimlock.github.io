@@ -8,9 +8,9 @@ export class View {
   tileSize = 8;
   rect = new Rect(0,0,0,0);
   depthActive = false;
-  mapSize = Vec.newI(81, 61);
-  sizeFramebuffer = Vec.newU(640, 480);
-  baseZoom = 3;
+  mapSize = Vec.newI(128, 128);
+  sizeFramebuffer = Vec.newU(512, 512);
+  baseZoom = 1;
 
   constructor() {
     this.updatePos();
@@ -35,13 +35,16 @@ export class View {
   }
 
   updatePos() {
-    const pos = this.convertPos(0, 0);
+    const pos = this.convertPos(window.scrollX, window.scrollY);
     this.rect.assign(...pos.data);
   }
 
   updateSize() {
+    console.log("this.updateSize");
+    
     gl.canvas.width = dom.canvas.clientWidth;
     gl.canvas.height = dom.canvas.clientHeight;
+    this.baseZoom = Math.ceil(gl.canvas.width *window.devicePixelRatio/ this.sizeFramebuffer.x);
     this.updateViewport();
     terminal.showLastLine();
   }
