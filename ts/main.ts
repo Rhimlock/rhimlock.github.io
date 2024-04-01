@@ -20,6 +20,13 @@ for (let y = 0; y < 3; y++) {
     spr.color.assign(100, 0, 100, 255);
   }
 }
+
+const layers : Layer[] = [];
+
+
+layers.push(new Layer([tilemap]));
+layers.push(new Layer([sprites]));
+
 wfc.wave(Vec.newI(view.mapSize.x / 2, view.mapSize.y / 2));
 const tick = (_elapsedTime: number) => {
   info.update(timer.elapsedTime);
@@ -31,14 +38,12 @@ const tick = (_elapsedTime: number) => {
     wfc.wave();
 
   }
-  //layerTilemap.use();
+  layers.forEach(layer => layer.use());
 
-  //layerSprites.use();
   Layer.disable();
-  tilemap.draw();
-  sprites.draw();
-  //layerTilemap.draw();
-  //layerSprites.draw();
+  //tilemap.draw();
+  //sprites.draw();
+  layers.forEach(layer => layer.draw());
 };
 
 const timer = new Timer(tick, 0);

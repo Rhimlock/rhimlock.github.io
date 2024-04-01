@@ -1,25 +1,30 @@
 import { Rect } from "../../components/rect.js";
-import { Vec } from "../../components/vec.js";
 import { Framebuffer } from "../buffer/framebuffer.js";
 import { gl, glsl, view } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Drawable } from "./drawable.js";
 
+let counter = 0;
 export class Layer extends Drawable {
   fbo: Framebuffer;
-  constructor(size: Vec, depth = 0) {
+  drawables: Drawable[]
+  layerNo = -(++counter/10);
+  constructor(drawables: Drawable[] = []) {
     super(4, new Program(vertexShader, fragmentShader));
     this.mode = gl.TRIANGLE_FAN;
-    this.fbo = new Framebuffer(size, true);
-    this.buffers[0]?.data.set(new Rect(-1,-1,2,2).asCoords());
+    this.fbo = new Framebuffer(view.sizeFramebuffer, true);
+    this.buffers[0]?.data.set(new Rect(-1, -1, 2, 2).asCoords());
     this.buffers[1]?.data.set(new Rect(0,0,1,1).asCoords());
     new Array(4).fill(0).forEach((_) => this.createVertex());
-    this.program.setUniform("uTex", this.fbo.tex.no);
-    this.program.setUniform("uLayer", depth);
+    this.drawables = drawables;
+
   }
 
   use() {
     this.fbo.use();
+    this.drawables.forEach(d => {
+      d.draw();
+    })
   }
 
   static disable() {
@@ -27,7 +32,9 @@ export class Layer extends Drawable {
   }
   updateUniforms(_progress: number): void {
     const zoom = view.getZoom();
-    this.program.setUniform("zoom", [zoom.x, zoom.y]);
+    this.program.setUniform("zoom", zoom.data);
+    this.program.setUniform("uTex", this.fbo.tex.no);
+    this.program.setUniform("uLayer", this.layerNo);
   }
 }
 
@@ -39,8 +46,9 @@ precision mediump float;
   uniform float uLayer;
   uniform vec2 zoom;
 void main() {
-  vTexPos = tex;
-  gl_Position = vec4(pos * zoom, uLayer, 1.0);
+  vTexPos = vec2(tex.x, tex.y);
+  gl_Position = vec4(pos * zoom , uLayer, 1.0);
+  //gl_Position.y *= -1.0;
 }
 `;
 
@@ -53,5 +61,5 @@ in vec2 vTexPos;
 void main() {    
   outColor = texture(uTex,vTexPos);
   if (vTexPos.x <= 0.001) outColor.r = 1.0;
-}
+  }
 `;
