@@ -47,8 +47,9 @@ precision mediump float;
   uniform vec2 zoom;
 void main() {
   vTexPos = vec2(tex.x, tex.y);
-  gl_Position = vec4(pos * zoom , uLayer, 1.0);
-  //gl_Position.y *= -1.0;
+  vec2 off = zoom - vec2(1.0, 1.0);
+  off.y = -off.y;
+  gl_Position = vec4(pos * zoom + off, uLayer, 1.0);
 }
 `;
 

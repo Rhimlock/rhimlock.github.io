@@ -8,8 +8,8 @@ export class View {
   tileSize = 8;
   rect = new Rect(0, 0, 0, 0);
   depthActive = false;
-  mapSize = Vec.newI(64, 32);
-  sizeFramebuffer = Vec.newU(512, 256);
+  mapSize = Vec.newI(64, 64);
+  sizeFramebuffer = Vec.newU(512, 512);
   baseZoom = 1;
 
   constructor() {
@@ -29,22 +29,28 @@ export class View {
   convertPos(clientX: number, clientY: number): Vec {
     const n = this.tileSize * this.baseZoom;
     return Vec.newF(
-      (clientX + window.scrollX) / n,
-      (clientY + window.scrollY) / n,
+      Math.floor((clientX + window.scrollX) / n),
+      Math.floor((clientY + window.scrollY) / n),
     );
   }
 
   updatePos() {
-    const pos = this.convertPos(window.scrollX, window.scrollY);
+    const pos = this.convertPos(0,0);
     this.rect.assign(...pos.data);
   }
 
   updateSize() {
     gl.canvas.width = dom.canvas.clientWidth;
     gl.canvas.height = dom.canvas.clientHeight;
-    this.baseZoom = Math.ceil(gl.canvas.width * window.devicePixelRatio / this.sizeFramebuffer.x);
-    this.updateViewport();
+    this.updateBaseZoom();
+   this.updateViewport();
     terminal.showLastLine();
+  }
+  updateBaseZoom() {
+    const x = Math.ceil(gl.canvas.width * window.devicePixelRatio / this.sizeFramebuffer.x);
+    const y = Math.ceil(gl.canvas.height * window.devicePixelRatio / this.sizeFramebuffer.y);
+    this.baseZoom = Math.max(x,y);
+    
   }
 
   updateViewport(

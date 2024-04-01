@@ -52,7 +52,7 @@ precision mediump float;
 
   void main() {   
     vec2 scale = tileSize * 2.0/ rect.zw;
-    vec2 translate = rect.xy - vec2(1.0,1.0) + scale / 2.0;
+    vec2 translate = -rect.xy * scale - vec2(1.0,1.0) + scale / 2.0;
     uint y = uint(gl_VertexID) / uMapSize ;
     uint x = (uint(gl_VertexID ) - uMapSize * y);
     vec2 v = vec2(x,y) * scale + translate;
