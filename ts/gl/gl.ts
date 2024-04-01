@@ -15,6 +15,8 @@ if (!gl) {
   throw new Error("webgl2 context could not be initialized");
 }
 export const view = new View();
+// dom.canvas.style.width = view.sizeFramebuffer.x + "px";
+// dom.canvas.style.height = view.sizeFramebuffer.y + "px";
 window.onresize = view.updateSize.bind(view);
 window.onscroll = view.updatePos.bind(view);
 

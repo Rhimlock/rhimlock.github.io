@@ -1,5 +1,5 @@
 import { Vec } from "../../components/vec.js";
-import { gl, glsl, view } from "../gl.js";
+import { gl, glsl } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { Drawable } from "./drawable.js";
@@ -23,7 +23,6 @@ export class Sprites extends Drawable {
 
     this.program.setUniform("uTex", this.tex.no);
     this.program.setUniform("uTexInv", this.tex.sizeInv);
-    this.program.setUniform("uTileSize", view.tileSize);
   }
 
   createSprite(x = 1, y = 1): Sprite {
@@ -46,19 +45,18 @@ precision mediump float;
   out vec4 vColor;
   out vec3 vTex;
   uniform vec2 uTexInv;
-  uniform config {
-    vec2 uView;
-    vec2 uResInv;
+  uniform viewport {
+    vec4 rect;
+    float tileSize;
   };
-  uniform float uTileSize;
 
-void main() {
-  vec2 v = round(pos.xy *8.0 - uView.xy * uTileSize )* uResInv ;
-  v.y *= -1.0;
-  v += vec2(-1.0,1.0);
-  gl_Position = vec4(v, v.y, 1.0);
-  gl_PointSize = tex.z;
-  vTex = vec3(tex.xy * tex.z * uTexInv * uTileSize, tex.z  * uTexInv.x );
+void main() {   
+    vec2 scale = tileSize * 2.0/ rect.zw;
+    vec2 translate = rect.xy - vec2(1.0,1.0) + scale / 2.0;
+    vec2 v = (pos - vec2(0.0, 0.5)) * scale + translate;
+    gl_Position = vec4(v.x, -v.y, 0.1, 1.0);
+    gl_PointSize = tex.z;
+  vTex = vec3(tex.xy * tex.z * uTexInv * tileSize, tex.z  * uTexInv.x );
   vColor = color *1.1;
 }
 `;

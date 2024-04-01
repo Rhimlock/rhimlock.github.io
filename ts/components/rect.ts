@@ -1,3 +1,4 @@
+import { TypedArray } from "../helper/typedArray.js";
 import { Vec } from "./vec.js";
 
 export class Rect extends Vec {
@@ -28,7 +29,7 @@ export class Rect extends Vec {
     );
   }
 
-  asCoords() {
+  asCoords() : TypedArray{
     const values = [
       this.x,
       this.y,
@@ -42,12 +43,4 @@ export class Rect extends Vec {
     return Reflect.construct(this.data.constructor, [values])
   }
 
-  asMatrix() {
-    const values = [
-      this.x, 0, 0,
-      0, this.y, 0,
-      1/this.w, 1/this.h, 1
-    ];
-    return Reflect.construct(this.data.constructor, [values])
-  }
 }
