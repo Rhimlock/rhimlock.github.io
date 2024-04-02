@@ -8,7 +8,7 @@ let counter = 0;
 export class Layer extends Drawable {
   fbo: Framebuffer;
   drawables: Drawable[]
-  layerNo = -(++counter/10);
+  layerNo = -(++counter);
   constructor(drawables: Drawable[] = []) {
     super(4, new Program(vertexShader, fragmentShader));
     this.mode = gl.TRIANGLE_FAN;
@@ -49,7 +49,7 @@ void main() {
   vTexPos = vec2(tex.x, tex.y);
   vec2 off = zoom - vec2(1.0, 1.0);
   off.y = -off.y;
-  gl_Position = vec4(pos * zoom + off, uLayer, 1.0);
+  gl_Position = vec4(pos * zoom + off, uLayer * 0.01, 1.0);
 }
 `;
 

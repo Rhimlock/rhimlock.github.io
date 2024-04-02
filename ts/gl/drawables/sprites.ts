@@ -50,10 +50,14 @@ precision mediump float;
     float tileSize;
   };
 
-void main() {   
+  vec2 convertPos(vec2 pos) {
     vec2 scale = tileSize * 2.0/ rect.zw;
-    vec2 translate = rect.xy - vec2(1.0,1.0) + scale / 2.0;
-    vec2 v = (pos - vec2(0.0, 0.5)) * scale + translate;
+    vec2 translate = -rect.xy * scale - vec2(1.0,1.0) + scale / 2.0;
+    return pos * scale + translate;
+  }
+
+void main() {   
+    vec2 v = convertPos(pos - vec2(0.0, 0.5));
     gl_Position = vec4(v.x, -v.y, 0.1, 1.0);
     gl_PointSize = tex.z;
   vTex = vec3(tex.xy * tex.z * uTexInv * tileSize, tex.z  * uTexInv.x );

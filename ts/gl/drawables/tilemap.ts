@@ -50,12 +50,20 @@ precision mediump float;
     float tileSize;
   };
 
-  void main() {   
+  vec2 getCoord(uint id) {
+    uint y = id / uMapSize ;
+    uint x = id - uMapSize * y;
+    return vec2(x,y);
+  }
+
+  vec2 convertPos(vec2 pos) {
     vec2 scale = tileSize * 2.0/ rect.zw;
     vec2 translate = -rect.xy * scale - vec2(1.0,1.0) + scale / 2.0;
-    uint y = uint(gl_VertexID) / uMapSize ;
-    uint x = (uint(gl_VertexID ) - uMapSize * y);
-    vec2 v = vec2(x,y) * scale + translate;
+    return pos * scale + translate;
+  }
+
+  void main() {   
+    vec2 v = convertPos(getCoord(uint(gl_VertexID)));
     gl_Position = vec4(v.x, -v.y, 0.1, 1.0);
     gl_PointSize = tileSize ;
     vTex = texPos * tileSize * uTexInv.x;
@@ -72,8 +80,5 @@ precision mediump float;
 
 void main() {  
   outColor = texture(uTex, vTex + gl_PointCoord * tileSizeInv);
-    if ((gl_PointCoord.x < tileSizeInv)  || (gl_PointCoord.y < tileSizeInv)) {
-      outColor = vec4(1.0,1.0,1.0,1.0);
-    }
 }
 `;
