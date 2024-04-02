@@ -29,13 +29,13 @@ export class View {
   convertPos(clientX: number, clientY: number): Vec {
     const n = this.tileSize * this.baseZoom;
     return Vec.newF(
-      Math.floor((clientX + window.scrollX) / n),
-      Math.floor((clientY + window.scrollY) / n),
+      Math.floor((clientX + window.scrollX) / n * this.tileSize) / this.tileSize,
+      Math.floor((clientY + window.scrollY) / n * this.tileSize) /this.tileSize,
     );
   }
 
   updatePos() {
-    const pos = this.convertPos(0,0);
+    const pos = this.convertPos(0, 0);
     this.rect.assign(...pos.data);
   }
 
@@ -43,14 +43,17 @@ export class View {
     gl.canvas.width = dom.canvas.clientWidth;
     gl.canvas.height = dom.canvas.clientHeight;
     this.updateBaseZoom();
-   this.updateViewport();
+    this.updateViewport();
     terminal.showLastLine();
   }
+
   updateBaseZoom() {
     const x = Math.ceil(gl.canvas.width * window.devicePixelRatio / this.sizeFramebuffer.x);
     const y = Math.ceil(gl.canvas.height * window.devicePixelRatio / this.sizeFramebuffer.y);
-    this.baseZoom = Math.max(x,y);
-    
+    this.baseZoom = Math.max(x, y);
+    dom.world.style.width = this.mapSize.x * this.tileSize * this.baseZoom + "px";
+    dom.world.style.height = this.mapSize.y * this.tileSize * this.baseZoom + "px";
+
   }
 
   updateViewport(
