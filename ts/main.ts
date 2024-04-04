@@ -28,8 +28,8 @@ layers.push(new Layer([tilemap]));
 layers.push(new Layer([sprites]));
 
 wfc.wave(Vec.newI(view.mapSize.x / 2, view.mapSize.y / 2));
-const tick = (_elapsedTime: number) => {
-  info.update(timer.elapsedTime);
+const tick = (elapsedTime: number) => {
+  info.update(elapsedTime);
 
   if (!wfc.done) {
     wfc.wave();
@@ -38,11 +38,9 @@ const tick = (_elapsedTime: number) => {
     wfc.wave();
 
   }
-  layers.forEach(layer => layer.use());
+  layers.forEach(layer => layer.renderTexture());
 
   Layer.disable();
-  //tilemap.draw();
-  //sprites.draw();
   layers.forEach(layer => layer.draw());
 };
 

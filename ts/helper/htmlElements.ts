@@ -11,6 +11,7 @@ export const dom = {
   tiles: document.getElementById("tiles") as HTMLImageElement,
 
   worldTime: document.getElementById("worldTime") as HTMLSpanElement,
+  frameTime: document.getElementById("frameTime") as HTMLSpanElement,
   mousePos: document.getElementById("mousePos") as HTMLSpanElement,
   playerPos: document.getElementById("playerPos") as HTMLSpanElement,
   worldPos: document.getElementById("worldPos") as HTMLSpanElement,
