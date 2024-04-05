@@ -7,24 +7,23 @@ import { Drawable } from "./drawable.js";
 let counter = 0;
 export class Layer extends Drawable {
   fbo: Framebuffer;
-  drawables: Drawable[]
-  layerNo = -(++counter);
+  drawables: Drawable[];
+  layerNo = -++counter;
   constructor(drawables: Drawable[] = []) {
     super(4, new Program(vertexShader, fragmentShader));
     this.mode = gl.TRIANGLE_FAN;
     this.fbo = new Framebuffer(view.sizeFramebuffer, true);
     this.buffers[0]?.data.set(new Rect(-1, -1, 2, 2).asCoords());
-    this.buffers[1]?.data.set(new Rect(0,0,1,1).asCoords());
+    this.buffers[1]?.data.set(new Rect(0, 0, 1, 1).asCoords());
     new Array(4).fill(0).forEach((_) => this.createVertex());
     this.drawables = drawables;
-
   }
 
   renderTexture() {
     this.fbo.use();
-    this.drawables.forEach(d => {
+    this.drawables.forEach((d) => {
       d.draw();
-    })
+    });
   }
 
   static disable() {

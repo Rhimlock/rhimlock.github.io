@@ -3,7 +3,7 @@ import { Vec } from "./vec.js";
 
 export class Rect extends Vec {
   constructor(x: number, y: number, w: number, h: number) {
-    super(new Float32Array([x, y, w, h]))
+    super(new Float32Array([x, y, w, h]));
   }
   get w() {
     return this.data[2] as number;
@@ -29,7 +29,7 @@ export class Rect extends Vec {
     );
   }
 
-  asCoords() : TypedArray{
+  asCoords(): TypedArray {
     const values = [
       this.x,
       this.y,
@@ -40,7 +40,6 @@ export class Rect extends Vec {
       this.x + this.w,
       this.y,
     ];
-    return Reflect.construct(this.data.constructor, [values])
+    return Reflect.construct(this.data.constructor, [values]);
   }
-
 }

@@ -14,15 +14,14 @@ const sprites = new Sprites(1024, dom.humans_normal);
 
 for (let y = 0; y < 3; y++) {
   for (let x = 0; x < 4; x++) {
-    const spr = sprites.createSprite(x, y );
+    const spr = sprites.createSprite(x, y);
     spr.tex.x = x;
     spr.tex.y = y;
     spr.color.assign(100, 0, 100, 255);
   }
 }
 
-const layers : Layer[] = [];
-
+const layers: Layer[] = [];
 
 layers.push(new Layer([tilemap]));
 layers.push(new Layer([sprites]));
@@ -36,12 +35,11 @@ const tick = (elapsedTime: number) => {
     wfc.wave();
     wfc.wave();
     wfc.wave();
-
   }
-  layers.forEach(layer => layer.renderTexture());
+  layers.forEach((layer) => layer.renderTexture());
 
   Layer.disable();
-  layers.forEach(layer => layer.draw());
+  layers.forEach((layer) => layer.draw());
 };
 
 const timer = new Timer(tick, 0);

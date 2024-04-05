@@ -6,10 +6,12 @@ export function getUniformBlocks(program: WebGLProgram) {
   return Array(gl.getProgramParameter(program, gl.ACTIVE_UNIFORM_BLOCKS))
     .fill(undefined)
     .map((_, i) => gl.getActiveUniformBlockName(program, i) as string)
-    .reduce((ubos, blockName) => 
-    (ubos[blockName] = UBO.byName(program, blockName)
-    , ubos)
-      , {} as Collection<UBO>)
+    .reduce(
+      (ubos, blockName) => (
+        (ubos[blockName] = UBO.byName(program, blockName)), ubos
+      ),
+      {} as Collection<UBO>,
+    );
 }
 
 export function getBlockOffsets(program: WebGLProgram, blockIndex: number) {

@@ -29,8 +29,10 @@ export class View {
   convertPos(clientX: number, clientY: number): Vec {
     const n = this.tileSize * this.baseZoom;
     return Vec.newF(
-      Math.floor((clientX + window.scrollX) / n * this.tileSize) / this.tileSize,
-      Math.floor((clientY + window.scrollY) / n * this.tileSize) /this.tileSize,
+      Math.floor(((clientX + window.scrollX) / n) * this.tileSize) /
+        this.tileSize,
+      Math.floor(((clientY + window.scrollY) / n) * this.tileSize) /
+        this.tileSize,
     );
   }
 
@@ -48,12 +50,17 @@ export class View {
   }
 
   updateBaseZoom() {
-    const x = Math.ceil(gl.canvas.width * window.devicePixelRatio / this.sizeFramebuffer.x);
-    const y = Math.ceil(gl.canvas.height * window.devicePixelRatio / this.sizeFramebuffer.y);
+    const x = Math.ceil(
+      (gl.canvas.width * window.devicePixelRatio) / this.sizeFramebuffer.x,
+    );
+    const y = Math.ceil(
+      (gl.canvas.height * window.devicePixelRatio) / this.sizeFramebuffer.y,
+    );
     this.baseZoom = Math.max(x, y);
-    dom.world.style.width = this.mapSize.x * this.tileSize * this.baseZoom + "px";
-    dom.world.style.height = this.mapSize.y * this.tileSize * this.baseZoom + "px";
-
+    dom.world.style.width =
+      this.mapSize.x * this.tileSize * this.baseZoom + "px";
+    dom.world.style.height =
+      this.mapSize.y * this.tileSize * this.baseZoom + "px";
   }
 
   updateViewport(
@@ -67,14 +74,8 @@ export class View {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     this.rect.w = size.x;
     this.rect.h = size.y;
-    UBOS.viewport?.updateUniform(
-      "rect",
-      this.rect.data
-    )
-    UBOS.viewport?.updateUniform(
-      "tileSize",
-      new Float32Array([this.tileSize])
-    )
+    UBOS.viewport?.updateUniform("rect", this.rect.data);
+    UBOS.viewport?.updateUniform("tileSize", new Float32Array([this.tileSize]));
   }
 
   private setDepth(use = true) {

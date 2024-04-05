@@ -73,7 +73,8 @@ export class WfcHandler {
 
   private checkIfAllFieldsOk(): boolean {
     const missing = (this.grid.cells as WfcField[]).filter(
-      (field) => (field.tiles.length === 0 || field.tile.texPos.equals(Vec.newI(0,0))),
+      (field) =>
+        field.tiles.length === 0 || field.tile.texPos.equals(Vec.newI(0, 0)),
     );
     if (missing.length === 0) return true;
     this.todo = [...missing];
