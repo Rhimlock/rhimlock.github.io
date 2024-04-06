@@ -34,7 +34,7 @@ export function getBlockOffsets(program: WebGLProgram, blockIndex: number) {
   return collection;
 }
 
-export function lookupUniformSetter(
+export function getUniformSetter(
   type: number,
   location: WebGLUniformLocation,
 ): Function {

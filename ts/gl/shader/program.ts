@@ -1,7 +1,7 @@
 import { Collection } from "../../helper/Collection.js";
 import { UBO } from "../buffer/ubo.js";
 import { gl } from "../gl.js";
-import { getUniformBlocks, lookupUniformSetter } from "./uniforms.js";
+import { getUniformBlocks, getUniformSetter } from "./uniforms.js";
 let currentProgram: WebGLProgram | null;
 
 export class Program {
@@ -75,7 +75,7 @@ function getUniformSetters(id: WebGLProgram) {
     .forEach((info) => {
       const location = gl.getUniformLocation(id, info.name);
       if (location)
-        setters[info.name] = lookupUniformSetter(info.type, location);
+        setters[info.name] = getUniformSetter(info.type, location);
     });
   return setters;
 }
