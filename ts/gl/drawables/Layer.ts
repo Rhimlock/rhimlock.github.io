@@ -19,7 +19,7 @@ export class Layer extends Drawable {
     this.drawables = drawables;
   }
 
-  renderTexture() {
+  update() {
     this.fbo.use();
     this.drawables.forEach((d) => {
       d.draw();

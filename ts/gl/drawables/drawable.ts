@@ -8,6 +8,7 @@ import { VAO } from "../vao.js";
 
 export interface BufferInfo {
   type: number;
+  numComponents?: number;
   normalized?: boolean;
 }
 
@@ -26,7 +27,7 @@ export class Drawable {
       this.buffers.push(
         new VBO(
           info[i]?.type ?? a.type,
-          getNumComponents(a.type),
+          info[i]?.numComponents ?? getNumComponents(a.type),
           count,
           info[i]?.normalized,
         ),
@@ -68,14 +69,11 @@ export class Drawable {
 
   draw(progress: number = 0): void {
     this.buffers.forEach((b) => b.update());
-    gl.useProgram(this.program.id);
-    gl.bindVertexArray(this.vao.id);
+    this.program.use();
+    this.vao.bind();
     this.updateUniforms(progress);
     gl.drawArrays(this.mode, 0, this.vertices.length);
-    gl.bindVertexArray(null);
-    this.postDraw();
+    this.vao.unbind();
   }
 
-  preDraw() {}
-  postDraw() {}
 }

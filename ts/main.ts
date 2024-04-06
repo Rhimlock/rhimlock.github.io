@@ -36,10 +36,10 @@ const tick = (elapsedTime: number) => {
     wfc.wave();
     wfc.wave();
   }
-  layers.forEach((layer) => layer.renderTexture());
+  layers.forEach(layer => layer.update());
 
   Layer.disable();
-  layers.forEach((layer) => layer.draw());
+  layers.forEach((layer) => layer.draw(elapsedTime));
 };
 
 const timer = new Timer(tick, 0);

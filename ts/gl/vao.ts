@@ -24,6 +24,23 @@ export class VAO {
     gl.bindVertexArray(null);
   }
 
+  bind() {
+    gl.bindVertexArray(this.id);
+    if (this.transformFeedback) {
+      gl.enable(gl.RASTERIZER_DISCARD);
+      gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, this.transformFeedback);
+    }
+  }
+
+  unbind() {
+    gl.bindVertexArray(null);
+    if (this.transformFeedback) {
+      gl.endTransformFeedback();
+      gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, null);
+      gl.disable(gl.RASTERIZER_DISCARD);
+    }
+  }
+
   clone(): VAO {
     const buffers = this.buffers.map((vbo) => vbo.clone());
     return new VAO(buffers);
