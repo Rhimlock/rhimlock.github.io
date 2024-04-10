@@ -1,5 +1,5 @@
 import { Vec } from "../../components/vec.js";
-import { gl, glsl, view } from "../gl.js";
+import { gl, glsl, VIEW } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { Drawable } from "./drawable.js";
@@ -13,16 +13,16 @@ export class TileMap extends Drawable {
   private width: number;
 
   constructor(size: Vec, img: HTMLImageElement) {
-    super(size.x * size.y, new Program(vertexShader, fragmentShader), [
-      { type: gl.UNSIGNED_BYTE, normalized: false },
-    ]);
+    super(size.x * size.y, new Program(vertexShader, fragmentShader), {
+      texPos: { type: gl.UNSIGNED_BYTE },
+    });
     this.width = size.x;
     for (let i = 0; i < size.x * size.y; i++) this.createVertex();
     this.tex = new Texture(img);
 
     this.program.setUniform("uTex", this.tex.no);
     this.program.setUniform("uTexInv", this.tex.sizeInv);
-    this.program.setUniform("uTileSize", view.tileSize);
+    this.program.setUniform("uTileSize", VIEW.tileSize);
     this.program.setUniform("uMapSize", this.width);
   }
 

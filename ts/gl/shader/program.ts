@@ -9,6 +9,7 @@ export class Program {
   attributes: WebGLActiveInfo[];
   uniformSetters: Collection<Function>;
   ubos = {} as Collection<UBO>;
+  transformFeedbackOutputs: string[]
 
   constructor(
     srcVertexShader: string,
@@ -23,6 +24,7 @@ export class Program {
     this.attributes = getAttributes(this.id);
     this.ubos = getUniformBlocks(this.id);
     this.uniformSetters = getUniformSetters(this.id);
+    this.transformFeedbackOutputs = transformFeedbackOutputs;
   }
 
   use() {
@@ -74,8 +76,7 @@ function getUniformSetters(id: WebGLProgram) {
     .map((_, i) => gl.getActiveUniform(id, i) as WebGLActiveInfo)
     .forEach((info) => {
       const location = gl.getUniformLocation(id, info.name);
-      if (location)
-        setters[info.name] = getUniformSetter(info.type, location);
+      if (location) setters[info.name] = getUniformSetter(info.type, location);
     });
   return setters;
 }

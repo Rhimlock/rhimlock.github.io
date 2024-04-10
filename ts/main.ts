@@ -5,11 +5,11 @@ import { dom } from "./helper/htmlElements.js";
 import { TileMap } from "./gl/drawables/tilemap.js";
 import { Layer } from "./gl/drawables/Layer.js";
 import { WfcHandler } from "./components/WaveFunctionCollapse/WfcHandler.js";
-import { view } from "./gl/gl.js";
+import { VIEW } from "./gl/gl.js";
 import { Sprites } from "./gl/drawables/sprites.js";
 import { Vec } from "./components/vec.js";
-const tilemap = new TileMap(view.mapSize, dom.tiles);
-const wfc = new WfcHandler(dom.tiles, 8, view.mapSize, tilemap);
+const tilemap = new TileMap(VIEW.mapSize, dom.tiles);
+const wfc = new WfcHandler(dom.tiles, 8, VIEW.mapSize, tilemap);
 const sprites = new Sprites(1024, dom.humans_normal);
 
 for (let y = 0; y < 3; y++) {
@@ -26,7 +26,7 @@ const layers: Layer[] = [];
 layers.push(new Layer([tilemap]));
 layers.push(new Layer([sprites]));
 
-wfc.wave(Vec.newI(view.mapSize.x / 2, view.mapSize.y / 2));
+wfc.wave(Vec.newI(VIEW.mapSize.x / 2, VIEW.mapSize.y / 2));
 const tick = (elapsedTime: number) => {
   info.update(elapsedTime);
 
@@ -36,7 +36,7 @@ const tick = (elapsedTime: number) => {
     wfc.wave();
     wfc.wave();
   }
-  layers.forEach(layer => layer.update());
+  layers.forEach((layer) => layer.update());
 
   Layer.disable();
   layers.forEach((layer) => layer.draw(elapsedTime));

@@ -26,8 +26,8 @@ export class VBO extends Buffer {
     this.resize(this.data.byteLength);
   }
 
-  update() {
-    super.update(this.data);
+  update(_length: number) {
+    super.subData(this.data.subarray(0, _length*this.numComponents));
   }
 
   getVector(i: number): TypedArray {

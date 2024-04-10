@@ -6,12 +6,12 @@ export function getNumComponents(type: number): number {
     case gl.UNSIGNED_INT_VEC2:
     case gl.FLOAT_VEC2:
       return 2;
-      case gl.INT_VEC3:
-      case gl.UNSIGNED_INT_VEC3:
+    case gl.INT_VEC3:
+    case gl.UNSIGNED_INT_VEC3:
     case gl.FLOAT_VEC3:
       return 3;
-      case gl.INT_VEC4:
-      case gl.UNSIGNED_INT_VEC4:
+    case gl.INT_VEC4:
+    case gl.UNSIGNED_INT_VEC4:
     case gl.FLOAT_VEC4:
       return 4;
     default:
@@ -50,9 +50,9 @@ export function createTypedArrayByGlType(type: number, length: number) {
     case gl.SHORT:
       return new Int16Array(length);
     case gl.UNSIGNED_INT:
-      case gl.UNSIGNED_INT_VEC2:
-      case gl.UNSIGNED_INT_VEC3:
-      case gl.UNSIGNED_INT_VEC4:
+    case gl.UNSIGNED_INT_VEC2:
+    case gl.UNSIGNED_INT_VEC3:
+    case gl.UNSIGNED_INT_VEC4:
       return new Uint32Array(length);
     case gl.INT:
     case gl.INT_VEC2:

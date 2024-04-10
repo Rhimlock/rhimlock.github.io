@@ -34,7 +34,7 @@ export class UBO extends Buffer {
 
   updateUniform(name: string, values: TypedArray) {
     const offset = this.uniformOffsets[name] as number;
-    this.update(values, offset);
+    this.subData(values, offset);
   }
 
   static byName(program: WebGLProgram, blockName: string) {

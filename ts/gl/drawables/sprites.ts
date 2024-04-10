@@ -14,11 +14,11 @@ export class Sprites extends Drawable {
   private tex: Texture;
 
   constructor(maxSprites: number, img: HTMLImageElement) {
-    super(maxSprites, new Program(vertexShader, fragmentShader), [
-      { type: gl.FLOAT, normalized: false },
-      { type: gl.SHORT, normalized: false },
-      { type: gl.UNSIGNED_BYTE, normalized: true },
-    ]);
+    super(maxSprites, new Program(vertexShader, fragmentShader), {
+      pos: { type: gl.FLOAT },
+      tex: { type: gl.SHORT },
+      color: { type: gl.UNSIGNED_BYTE, normalized: true },
+    });
     this.tex = new Texture(img);
 
     this.program.setUniform("uTex", this.tex.no);

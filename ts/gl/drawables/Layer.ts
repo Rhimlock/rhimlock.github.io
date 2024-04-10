@@ -1,6 +1,6 @@
 import { Rect } from "../../components/rect.js";
 import { Framebuffer } from "../buffer/framebuffer.js";
-import { gl, glsl, view } from "../gl.js";
+import { gl, glsl, VIEW } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Drawable } from "./drawable.js";
 
@@ -12,7 +12,7 @@ export class Layer extends Drawable {
   constructor(drawables: Drawable[] = []) {
     super(4, new Program(vertexShader, fragmentShader));
     this.mode = gl.TRIANGLE_FAN;
-    this.fbo = new Framebuffer(view.sizeFramebuffer, true);
+    this.fbo = new Framebuffer(VIEW.sizeFramebuffer, true);
     this.buffers[0]?.data.set(new Rect(-1, -1, 2, 2).asCoords());
     this.buffers[1]?.data.set(new Rect(0, 0, 1, 1).asCoords());
     new Array(4).fill(0).forEach((_) => this.createVertex());
@@ -30,7 +30,7 @@ export class Layer extends Drawable {
     Framebuffer.disable();
   }
   updateUniforms(_progress: number): void {
-    const zoom = view.getZoom();
+    const zoom = VIEW.getZoom();
     this.program.setUniform("zoom", zoom.data);
     this.program.setUniform("uTex", this.fbo.tex.no);
     this.program.setUniform("uLayer", this.layerNo);

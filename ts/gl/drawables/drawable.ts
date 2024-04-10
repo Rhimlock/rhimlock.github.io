@@ -8,7 +8,6 @@ import { VAO } from "../vao.js";
 
 export interface BufferInfo {
   type: number;
-  numComponents?: number;
   normalized?: boolean;
 }
 
@@ -20,16 +19,21 @@ export class Drawable {
   protected mode: number = gl.POINTS;
   protected limit: number;
 
-  constructor(count: number, program: Program, info: BufferInfo[] = []) {
+  constructor(
+    count: number,
+    program: Program,
+    infos: Collection<BufferInfo> = {},
+  ) {
     this.limit = count;
     this.program = program;
-    program.attributes.forEach((a, i) => {
+    program.attributes.forEach(attr => {
+      const info = infos[attr.name];
       this.buffers.push(
         new VBO(
-          info[i]?.type ?? a.type,
-          info[i]?.numComponents ?? getNumComponents(a.type),
+          info?.type ?? attr.type,
+          getNumComponents(attr.type),
           count,
-          info[i]?.normalized,
+          info?.normalized ?? false,
         ),
       );
     });
@@ -68,12 +72,11 @@ export class Drawable {
   }
 
   draw(progress: number = 0): void {
-    this.buffers.forEach((b) => b.update());
+    this.buffers.forEach((b) => b.update(this.vertices.length));
     this.program.use();
     this.vao.bind();
     this.updateUniforms(progress);
     gl.drawArrays(this.mode, 0, this.vertices.length);
     this.vao.unbind();
   }
-
 }

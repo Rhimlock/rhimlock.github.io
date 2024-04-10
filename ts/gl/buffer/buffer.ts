@@ -27,7 +27,7 @@ export class Buffer {
     gl.bufferData(this.target, sizeInByte, this.usage);
   }
 
-  update(data: TypedArray, offset = 0) {
+  subData(data: TypedArray, offset = 0) {
     this.bind();
     gl.bufferSubData(this.target, offset, data);
   }

@@ -14,11 +14,9 @@ export const gl = dom.canvas.getContext("webgl2", {
 if (!gl) {
   throw new Error("webgl2 context could not be initialized");
 }
-export const view = new View();
-// dom.canvas.style.width = view.sizeFramebuffer.x + "px";
-// dom.canvas.style.height = view.sizeFramebuffer.y + "px";
-window.onresize = view.updateSize.bind(view);
-window.onscroll = view.updatePos.bind(view);
+export const VIEW = new View();
+window.onresize = VIEW.updateSize.bind(VIEW);
+window.onscroll = VIEW.updatePos.bind(VIEW);
 
 //needed for glsl-literal plugin
 export const glsl = (x: any) => x as string;
