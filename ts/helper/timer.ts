@@ -12,7 +12,7 @@ export class Timer {
     this.delta += delta;
     if (this.delta > this.tickTime) {
       this.func.call(this, this.delta);
-      this.delta = this.tickTime == 0 ? 0 : this.delta % this.tickTime;
+      this.delta = this.tickTime == 0 ? 0 : (this.delta % this.tickTime);
     }
   }
   stop() {

@@ -3,13 +3,11 @@ import { Vec } from "../components/vec.js";
 import { terminal } from "../controls/terminal.js";
 import { UBOS, gl } from "./gl.js";
 import { dom } from "../helper/htmlElements.js";
+import { CONFIG } from "../global.js";
 
 export class View {
-  tileSize = 8;
   rect = new Rect(0, 0, 0, 0);
   depthActive = false;
-  mapSize = Vec.newI(64, 64);
-  sizeFramebuffer = Vec.newU(512, 512);
   baseZoom = 1;
 
   constructor() {
@@ -20,19 +18,19 @@ export class View {
   getZoom() {
     const ratio = Vec.multiply(
       Vec.newF(1 / gl.canvas.width, 1 / gl.canvas.height),
-      this.sizeFramebuffer,
+      CONFIG.frameSize,
     );
     ratio.scale(this.baseZoom);
     return ratio;
   }
 
   convertPos(clientX: number, clientY: number): Vec {
-    const n = this.tileSize * this.baseZoom;
+    const n = CONFIG.tileSize * this.baseZoom;
     return Vec.newF(
-      Math.floor(((clientX + window.scrollX) / n) * this.tileSize) /
-        this.tileSize,
-      Math.floor(((clientY + window.scrollY) / n) * this.tileSize) /
-        this.tileSize,
+      Math.floor(((clientX + window.scrollX) / n) * CONFIG.tileSize) /
+      CONFIG.tileSize,
+      Math.floor(((clientY + window.scrollY) / n) * CONFIG.tileSize) /
+      CONFIG.tileSize,
     );
   }
 
@@ -51,16 +49,16 @@ export class View {
 
   updateBaseZoom() {
     const x = Math.ceil(
-      (gl.canvas.width * window.devicePixelRatio) / this.sizeFramebuffer.x,
+      (gl.canvas.width * window.devicePixelRatio) / CONFIG.frameSize.x,
     );
     const y = Math.ceil(
-      (gl.canvas.height * window.devicePixelRatio) / this.sizeFramebuffer.y,
+      (gl.canvas.height * window.devicePixelRatio) / CONFIG.frameSize.y,
     );
     this.baseZoom = Math.max(x, y);
     dom.world.style.width =
-      this.mapSize.x * this.tileSize * this.baseZoom + "px";
+    CONFIG.mapSize.x * CONFIG.tileSize * this.baseZoom + "px";
     dom.world.style.height =
-      this.mapSize.y * this.tileSize * this.baseZoom + "px";
+    CONFIG.mapSize.y * CONFIG.tileSize * this.baseZoom + "px";
   }
 
   updateViewport(
@@ -75,7 +73,7 @@ export class View {
     this.rect.w = size.x;
     this.rect.h = size.y;
     UBOS.viewport?.updateUniform("rect", this.rect.data);
-    UBOS.viewport?.updateUniform("tileSize", new Float32Array([this.tileSize]));
+    UBOS.viewport?.updateUniform("tileSize", new Float32Array([CONFIG.tileSize]));
   }
 
   private setDepth(use = true) {

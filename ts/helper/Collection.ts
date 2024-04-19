@@ -1,3 +1,3 @@
-export interface Collection<Type> {
+export type Collection<Type> ={
   [key: string]: Type;
 }

@@ -1,10 +1,11 @@
 import { Vec } from "../../components/vec.js";
-import { gl, glsl, VIEW } from "../gl.js";
+import { CONFIG } from "../../global.js";
+import { gl, glsl } from "../gl.js";
 import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { Drawable } from "./drawable.js";
 
-export interface Tile {
+export type Tile = {
   texPos: Vec;
 }
 
@@ -22,7 +23,7 @@ export class TileMap extends Drawable {
 
     this.program.setUniform("uTex", this.tex.no);
     this.program.setUniform("uTexInv", this.tex.sizeInv);
-    this.program.setUniform("uTileSize", VIEW.tileSize);
+    this.program.setUniform("uTileSize", CONFIG.tileSize);
     this.program.setUniform("uMapSize", this.width);
   }
 

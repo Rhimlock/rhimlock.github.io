@@ -4,7 +4,7 @@ import { Program } from "../shader/program.js";
 import { Texture } from "../texture.js";
 import { Drawable } from "./drawable.js";
 
-export interface Sprite {
+export type Sprite = {
   pos: Vec;
   tex: Vec;
   color: Vec;

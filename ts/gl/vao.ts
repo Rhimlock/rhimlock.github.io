@@ -4,10 +4,9 @@ import { VBO } from "./buffer/vbo.js";
 export class VAO {
   id: WebGLVertexArrayObject | null;
   transformFeedback?: WebGLTransformFeedback | null;
-  buffers: VBO[];
-  constructor(buffers: VBO[], maketransformFeedback?: boolean) {
+
+  constructor(public buffers: VBO[], maketransformFeedback?: boolean) {
     this.id = gl.createVertexArray();
-    this.buffers = buffers;
     if (maketransformFeedback) {
       this.transformFeedback = gl.createTransformFeedback();
       gl.bindTransformFeedback(gl.TRANSFORM_FEEDBACK, this.transformFeedback);

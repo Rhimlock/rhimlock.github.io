@@ -5,11 +5,11 @@ import { dom } from "./helper/htmlElements.js";
 import { TileMap } from "./gl/drawables/tilemap.js";
 import { Layer } from "./gl/drawables/Layer.js";
 import { WfcHandler } from "./components/WaveFunctionCollapse/WfcHandler.js";
-import { VIEW } from "./gl/gl.js";
 import { Sprites } from "./gl/drawables/sprites.js";
 import { Vec } from "./components/vec.js";
-const tilemap = new TileMap(VIEW.mapSize, dom.tiles);
-const wfc = new WfcHandler(dom.tiles, 8, VIEW.mapSize, tilemap);
+import { CONFIG } from "./global.js";
+const tilemap = new TileMap(CONFIG.mapSize, dom.tiles);
+const wfc = new WfcHandler(dom.tiles, 8, CONFIG.mapSize, tilemap);
 const sprites = new Sprites(1024, dom.humans_normal);
 
 for (let y = 0; y < 3; y++) {
@@ -26,7 +26,7 @@ const layers: Layer[] = [];
 layers.push(new Layer([tilemap]));
 layers.push(new Layer([sprites]));
 
-wfc.wave(Vec.newI(VIEW.mapSize.x / 2, VIEW.mapSize.y / 2));
+wfc.wave(Vec.newI(CONFIG.mapSize.x / 2, CONFIG.mapSize.y / 2));
 const tick = (elapsedTime: number) => {
   info.update(elapsedTime);
 

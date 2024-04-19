@@ -1,4 +1,5 @@
 import { Rect } from "../../components/rect.js";
+import { CONFIG } from "../../global.js";
 import { Framebuffer } from "../buffer/framebuffer.js";
 import { gl, glsl, VIEW } from "../gl.js";
 import { Program } from "../shader/program.js";
@@ -7,16 +8,14 @@ import { Drawable } from "./drawable.js";
 let counter = 0;
 export class Layer extends Drawable {
   fbo: Framebuffer;
-  drawables: Drawable[];
   layerNo = -++counter;
-  constructor(drawables: Drawable[] = []) {
+  constructor(public drawables: Drawable[] = []) {
     super(4, new Program(vertexShader, fragmentShader));
     this.mode = gl.TRIANGLE_FAN;
-    this.fbo = new Framebuffer(VIEW.sizeFramebuffer, true);
+    this.fbo = new Framebuffer(CONFIG.frameSize, true);
     this.buffers[0]?.data.set(new Rect(-1, -1, 2, 2).asCoords());
     this.buffers[1]?.data.set(new Rect(0, 0, 1, 1).asCoords());
     new Array(4).fill(0).forEach((_) => this.createVertex());
-    this.drawables = drawables;
   }
 
   update() {

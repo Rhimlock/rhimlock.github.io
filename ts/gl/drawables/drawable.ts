@@ -6,7 +6,7 @@ import { getNumComponents } from "../mapper.js";
 import { Program } from "../shader/program.js";
 import { VAO } from "../vao.js";
 
-export interface BufferInfo {
+export type BufferInfo = {
   type: number;
   normalized?: boolean;
 }

@@ -9,12 +9,11 @@ export class Program {
   attributes: WebGLActiveInfo[];
   uniformSetters: Collection<Function>;
   ubos = {} as Collection<UBO>;
-  transformFeedbackOutputs: string[]
 
   constructor(
     srcVertexShader: string,
     srcFragmentShader: string,
-    transformFeedbackOutputs: string[] = [],
+    public transformFeedbackOutputs: string[] = [],
   ) {
     this.id = initProgram(
       srcVertexShader,
@@ -24,7 +23,6 @@ export class Program {
     this.attributes = getAttributes(this.id);
     this.ubos = getUniformBlocks(this.id);
     this.uniformSetters = getUniformSetters(this.id);
-    this.transformFeedbackOutputs = transformFeedbackOutputs;
   }
 
   use() {
