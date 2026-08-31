@@ -488,7 +488,7 @@ Shut the reactor down, or override and hold at critical — an override burns on
         style=${`transform:rotate(${a}deg);transform-origin:22px 22px`}
       />
       <circle class="gauge-hub" cx=${22} cy=${22} r="2.6" />
-    </svg>`}render(){var a,r,o,i;const t=r2(this.card),e=this.disabled,s=`--card-bg-image: url("/images/${encodeURIComponent(this.card.name)}.png")`;return l`
+    </svg>`}render(){var a,r,o,i;const t=r2(this.card),e=this.disabled,s=`--card-bg-image: url("images/${encodeURIComponent(this.card.name)}.png")`;return l`
       <article
         class="state-${this.stateClass}"
         data-disabled=${e}
