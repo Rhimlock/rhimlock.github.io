@@ -844,15 +844,16 @@ Shut the reactor down, or override and hold at critical — an override burns on
             <p>
               The target rolls <strong>one die per incoming hit</strong>. Each success
               <strong>cancels one hit</strong>; the rest carry through. The TN is set by
-              how the <em>target</em> moved:
+              how the <em>target</em> moved — the faster it ran, the harder it is to pin
+              down (for any stance, attack TN + defense TN = 7):
             </p>
             <dl class="modes">
               <dt>Stood still</dt>
-              <dd>${A(3)}</dd>
+              <dd>${A(5)}</dd>
               <dt>Move</dt>
               <dd>${A(4)}</dd>
-              <dt>Run / Jump</dt>
-              <dd>${A(5)}</dd>
+              <dt>Run 6 hexes/ Jump</dt>
+              <dd>${A(3)}</dd>
             </dl>
             <ul class="mods">
               <li>
